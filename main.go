@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/blinkops/blink-cli/gen"
-	"github.com/spf13/cobra"
 	"os"
 	"regexp"
 	"strings"
-)
 
+	"github.com/blinkops/blink-go-cli/gen/cli"
+	"github.com/spf13/cobra"
+)
 
 const (
 	ICON = `
@@ -35,7 +35,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	rootCmd.Long =  ICON
+	rootCmd.Long = ICON
 
 	SetupOperations(rootCmd.Commands())
 
@@ -50,9 +50,9 @@ func main() {
 
 }
 
-func setGlobalWorkspace(){
+func setGlobalWorkspace() {
 	for _, val := range rootCmd.Commands() {
-		for _, subCmds := range val.Commands(){
+		for _, subCmds := range val.Commands() {
 			ws := subCmds.PersistentFlags().Lookup("ws_id")
 			if ws != nil {
 				ws.Changed = true
@@ -63,9 +63,9 @@ func setGlobalWorkspace(){
 	}
 }
 
-func unsetGlobalWorkspace(){
+func unsetGlobalWorkspace() {
 	for _, val := range rootCmd.Commands() {
-		for _, subCmds := range val.Commands(){
+		for _, subCmds := range val.Commands() {
 			ws := subCmds.PersistentFlags().Lookup("ws_id")
 			if ws != nil {
 				ws.Changed = false
@@ -86,7 +86,7 @@ func SetupOperations(operations []*cobra.Command) {
 		commands := operation.Commands()
 		for c := range commands {
 			command := commands[c]
-			if !isCommandEnabled(operation.Use, command.Use){
+			if !isCommandEnabled(operation.Use, command.Use) {
 				// hide the command
 				command.Hidden = true
 				continue
@@ -99,14 +99,14 @@ func SetupOperations(operations []*cobra.Command) {
 
 // provide example with configured
 func isOperationEnabled(op string) bool {
-	spaced := strings.ReplaceAll(op, "_", " " )
+	spaced := strings.ReplaceAll(op, "_", " ")
 	titled := strings.Title(spaced)
 	_, exists := OpenAPIEnabledOperations[titled]
 	return exists
 }
 
 func isCommandEnabled(op, cmd string) bool {
-	spaced := strings.ReplaceAll(op, "_", " " )
+	spaced := strings.ReplaceAll(op, "_", " ")
 	titled := strings.Title(spaced)
 	_, exists := OpenAPIEnabledOperations[titled][cmd]
 	return exists
@@ -122,8 +122,3 @@ func toSnakeCase(str string) string {
 	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
 	return strings.ToLower(snake)
 }
-
-
-
-
-
