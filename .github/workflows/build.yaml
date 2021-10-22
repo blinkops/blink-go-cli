@@ -22,8 +22,10 @@ jobs:
         run: |
           mkdir gen && swagger generate cli -f swagger.yaml -t gen
           rm gen/cli/models_runner_group_model.go
-      - name: Run GoReleaser
+      - name: Go Releaser
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
-          args: release --snapshot --rm-dist
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
