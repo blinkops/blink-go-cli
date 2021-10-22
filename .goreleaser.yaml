@@ -4,6 +4,8 @@ builds:
     flags:
       - -mod=vendor
     goos:
+      - linux
+      - windows
       - darwin
     goarch:
       - amd64
