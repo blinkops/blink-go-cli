@@ -1,0 +1,11 @@
+name: build
+on: push
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/goswagger/swagger:latest
+    steps:
+      - name: "Generating CLI Code"
+        run: generate --help
