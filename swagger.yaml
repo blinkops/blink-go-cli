@@ -40,6 +40,8 @@ definitions:
         type: integer
       updated_by:
         type: string
+      updated_on:
+        type: string
     type: object
   models.Connection:
     properties:
