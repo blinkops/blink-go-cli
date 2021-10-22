@@ -4,16 +4,13 @@ on: push
 jobs:
   generate:
     runs-on: ubuntu-latest
+    container: golang:1.17.2-alpine3.14
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: Setup go
-        uses: actions/setup-go@v2
-        with:
-          go-version: "1.17.1"
       - name: "Download Go Swagger Executable"
         run: |
-          sudo apt update && sudo apt-get install -y jq
+          apk update && apk add jq curl git
           download_url=$(curl -s https://api.github.com/repos/go-swagger/go-swagger/releases/latest | \
             jq -r '.assets[] | select(.name | contains("'"$(uname | tr '[:upper:]' '[:lower:]')"'_amd64")) | .browser_download_url')
           curl -o /usr/local/bin/swagger -L'#' "$download_url"
@@ -22,6 +19,11 @@ jobs:
         run: |
           mkdir gen && swagger generate cli -f swagger.yaml -t gen
           rm gen/cli/models_runner_group_model.go
+      - name: Go Build
+        run: |
+          ls
+          pwd
+          go build
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
