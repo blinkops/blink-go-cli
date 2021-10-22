@@ -1,5 +1,7 @@
 project_name: blink-cli
 before:
+  hooks:
+  - go get ./...
 builds:
   - env: [CGO_ENABLED=0]
     goos:
