@@ -79,6 +79,10 @@ func unsetGlobalWorkspace() {
 func SetupOperations(operations []*cobra.Command) {
 	for o := range operations {
 		operation := operations[o]
+		// always keep this
+		if operation.Use == "completion [bash|zsh|fish|powershell]" {
+			continue
+		}
 		if !isOperationEnabled(operation.Use) {
 			operation.Hidden = true
 			continue
