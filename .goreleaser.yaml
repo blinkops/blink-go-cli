@@ -17,6 +17,21 @@ brews:
     homepage: https://www.blinkops.com/
     license: "MIT"
     description: "Awesome CLI for the blink ops platform"
+artifactories:
+  # You can have multiple Artifactory instances.
+  -
+    # Unique name of your artifactory instance. Used to identify the instance
+    name: public
+    # Upload mode. Valid options are `binary` and `archive`.
+    # If mode is `archive`, variables _Os_, _Arch_ and _Arm_ for target name are not supported.
+    # In that case these variables are empty.
+    # Default is `archive`.
+    mode: binary
+    # URL of your Artifactory instance + path to deploy to
+    target: https://blinkops.jfrog.io/artifactory/generic-prod-local/{{ .ProjectName }}/{{ .Version }}/
+    # User that will be used for the deployment
+    username: jenkins
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
