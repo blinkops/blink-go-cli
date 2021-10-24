@@ -41,7 +41,7 @@ func main() {
 
 	// maybe just check the config file?
 	if true {
-		setGlobalWorkspace()
+		//setGlobalWorkspace()
 	}
 
 	if err := rootCmd.Execute(); err != nil {
@@ -84,16 +84,16 @@ func SetupOperations(operations []*cobra.Command) {
 			continue
 		}
 		if !isOperationEnabled(operation.Use) {
-			operation.Hidden = true
-			continue
+			//operation.Hidden = true
+			//continue
 		}
 		commands := operation.Commands()
 		for c := range commands {
 			command := commands[c]
 			if !isCommandEnabled(operation.Use, command.Use) {
 				// hide the command
-				command.Hidden = true
-				continue
+				//command.Hidden = true
+				//continue
 			}
 			stripped := removeGroupNameFromOperation(operation.Use, command.Use)
 			command.Use = toSnakeCase(stripped)
