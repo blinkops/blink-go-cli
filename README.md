@@ -68,7 +68,7 @@ At a minimum you should set the following values in your config file.
 ```json
 {
   "hostname": "<blink-address>", 
-  "BLINK-API-KEY": "<apikey>",
+  "blink-api-key": "<apikey>",
   "scheme": "https"
 }
 ```
