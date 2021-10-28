@@ -1,4 +1,4 @@
-//go:generate swagger generate cli -f swagger.yaml -t gen
+//go:generate go run gen/generate.go
 
 package main
 
@@ -93,37 +93,18 @@ func SetupOperations(operations []*cobra.Command) {
 		if operation.Use == "completion [bash|zsh|fish|powershell]" {
 			continue
 		}
-		if !isOperationEnabled(operation.Use) {
-			//operation.Hidden = true
-			//continue
-		}
+		//operation.Hidden = true
+		//continue
 		commands := operation.Commands()
 		for c := range commands {
 			command := commands[c]
-			if !isCommandEnabled(operation.Use, command.Use) {
-				// hide the command
-				//command.Hidden = true
-				//continue
-			}
+			// hide the command
+			// command.Hidden = true
+			// continue
 			stripped := removeGroupNameFromOperation(operation.Use, command.Use)
 			command.Use = toSnakeCase(stripped)
 		}
 	}
-}
-
-// provide example with configured
-func isOperationEnabled(op string) bool {
-	spaced := strings.ReplaceAll(op, "_", " ")
-	titled := strings.Title(spaced)
-	_, exists := OpenAPIEnabledOperations[titled]
-	return exists
-}
-
-func isCommandEnabled(op, cmd string) bool {
-	spaced := strings.ReplaceAll(op, "_", " ")
-	titled := strings.Title(spaced)
-	_, exists := OpenAPIEnabledOperations[titled][cmd]
-	return exists
 }
 
 func removeGroupNameFromOperation(groupName, operation string) string {
