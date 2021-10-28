@@ -40,8 +40,6 @@ definitions:
         type: integer
       updated_by:
         type: string
-      updated_on:
-        type: string
     type: object
   models.Connection:
     properties:
@@ -92,6 +90,8 @@ definitions:
         type: string
       name:
         type: string
+      oauth_supported:
+        type: boolean
       plugin_name:
         type: string
       tenant_id:
@@ -155,6 +155,10 @@ definitions:
         description: 'optional: "input"|"checkbox"|"dropdown"|"textarea" - default
           "input"'
         type: integer
+      format:
+        description: 'optional: format of the field for example -> type: date, format:
+          date_epoch'
+        type: string
       index:
         description: 'optional: the ordinal number of the parameter in the parameter
           list'
@@ -163,6 +167,9 @@ definitions:
         description: 'optional: "text"|"password"|email"|"number"|"url" in case of
           input component - default "text"'
         type: string
+      is_multi:
+        description: 'optional: is this a multi-select field'
+        type: boolean
       options:
         description: 'optional: the option list in case of dropdown\checkbox'
         items:
@@ -206,7 +213,9 @@ definitions:
       playbook:
         type: string
       tags:
-        type: string
+        items:
+          type: string
+        type: array
       tenant_id:
         type: string
       type:
@@ -577,6 +586,26 @@ paths:
       summary: Display blink controller version
       tags:
       - Controller
+  /apikey:
+    get:
+      description: Generate api key for user
+      operationId: GenerateAPIKey
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Failed to generate api key
+          schema:
+            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Generate api key for user
+      tags:
+      - APIKey
   /connection_types:
     get:
       consumes:
@@ -795,7 +824,7 @@ paths:
       - ApiKeyAuth: []
       summary: Set user settings key/value
       tags:
-      - User Settings
+      - UserSettings
   /webhooks/{id}:
     post:
       consumes:
@@ -1847,14 +1876,9 @@ paths:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  items:
-                    $ref: '#/definitions/models.Runner'
-                  type: array
-              type: object
+            items:
+              $ref: '#/definitions/models.Runner'
+            type: array
       security:
       - ApiKeyAuth: []
       summary: get all Runners

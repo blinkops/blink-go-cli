@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/blinkops/blink-go-cli/pkg/commands/playbooks"
+
 	"github.com/blinkops/blink-go-cli/gen/cli"
 	"github.com/spf13/cobra"
 )
@@ -36,8 +38,14 @@ func main() {
 	}
 
 	rootCmd.Long = ICON
-
 	SetupOperations(rootCmd.Commands())
+
+	cmds := rootCmd.Commands()
+	for i := range cmds {
+		if cmds[i].Use == "playbooks" {
+			playbooks.RegisterCommands(cmds[i])
+		}
+	}
 
 	// maybe just check the config file?
 	if true {
