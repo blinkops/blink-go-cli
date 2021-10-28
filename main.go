@@ -1,3 +1,5 @@
+//go:generate swagger generate cli -f swagger.yaml -t gen
+
 package main
 
 import (
