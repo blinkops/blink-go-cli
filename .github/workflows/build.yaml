@@ -18,10 +18,6 @@ jobs:
             jq -r '.assets[] | select(.name | contains("'"$(uname | tr '[:upper:]' '[:lower:]')"'_amd64")) | .browser_download_url')
           curl -o /usr/local/bin/swagger -L'#' "$download_url"
           chmod +x /usr/local/bin/swagger
-      - name: Generating cli
-        run: |
-          mkdir gen && swagger generate cli -f swagger.yaml -t gen
-          rm gen/cli/models_runner_group_model.go
       - name: Go Releaser
         uses: goreleaser/goreleaser-action@v2
         with:

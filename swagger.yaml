@@ -1,5 +1,30 @@
 basePath: /api/v1
 definitions:
+  RGroup:
+    properties:
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      id:
+        type: string
+      name:
+        description: Name should be unique per tenant
+        type: string
+      tenant_id:
+        type: string
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+      workspace_id:
+        type: string
+    type: object
+  api_responses.RegisterIntegrationAPIResponse:
+    properties:
+      number_of_integrations:
+        type: integer
+    type: object
   context_wrapper.ErrorWrapper:
     properties:
       message:
@@ -345,26 +370,6 @@ definitions:
       updated_by:
         type: string
       user_name:
-        type: string
-      workspace_id:
-        type: string
-    type: object
-  models.RunnerGroup:
-    properties:
-      created_at:
-        type: integer
-      created_by:
-        type: string
-      id:
-        type: string
-      name:
-        description: Name should be unique per tenant
-        type: string
-      tenant_id:
-        type: string
-      updated_at:
-        type: integer
-      updated_by:
         type: string
       workspace_id:
         type: string
@@ -725,6 +730,26 @@ paths:
       summary: Gets a Connection type by id
       tags:
       - Connections
+  /integrations/check_for_new:
+    get:
+      consumes:
+      - application/json
+      description: Checks which new plugins needs to be pushed and synced to the runner
+      operationId: CheckForNewlyAddedPlugins
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/api_responses.RegisterIntegrationAPIResponse'
+        "404":
+          description: Cannot find Runner
+          schema:
+            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+      summary: Should be called by a runner to sync the newly added plugins
+      tags:
+      - Runners
   /invite:
     get:
       description: Returns all the invitations for the current tenant
@@ -1815,7 +1840,7 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/models.RunnerGroup'
+            $ref: '#/definitions/RGroup'
         "400":
           description: Cannot create runner group
           schema:
