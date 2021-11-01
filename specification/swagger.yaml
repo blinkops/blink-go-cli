@@ -20,20 +20,31 @@ definitions:
       workspace_id:
         type: string
     type: object
-  api_responses.RegisterIntegrationAPIResponse:
+  api_responses.ErrorWrapper:
     properties:
-      number_of_integrations:
-        type: integer
-    type: object
-  context_wrapper.ErrorWrapper:
-    properties:
+      details:
+        type: string
       message:
         type: string
       status:
         example: 404
         type: integer
     type: object
-  context_wrapper.PagingInfo:
+  api_responses.PagingInfo:
+    properties:
+      limit:
+        type: integer
+      offset:
+        type: integer
+      total:
+        type: integer
+    type: object
+  api_responses.RegisterIntegrationAPIResponse:
+    properties:
+      number_of_integrations:
+        type: integer
+    type: object
+  api_responses.ResponseWrapper:
     properties:
       limit:
         type: integer
@@ -546,11 +557,11 @@ paths:
   /api/readiness:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Show controller GetReadiness status
       operationId: GetReadiness
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -558,15 +569,15 @@ paths:
             type: string
       summary: Show controller readiness status
       tags:
-      - Controller
+        - Controller
   /api/stats:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Show controller status
       operationId: GetStats
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -574,15 +585,15 @@ paths:
             type: string
       summary: Show controller status
       tags:
-      - Controller
+        - Controller
   /api/version:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Display blink controller version
       operationId: GetVersion
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -590,13 +601,13 @@ paths:
             type: string
       summary: Display blink controller version
       tags:
-      - Controller
+        - Controller
   /apikey:
     get:
       description: Generate api key for user
       operationId: GenerateAPIKey
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -605,62 +616,62 @@ paths:
         "400":
           description: Failed to generate api key
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Generate api key for user
       tags:
-      - APIKey
+        - APIKey
   /connection_types:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns connection types by a filter
       operationId: ConnectionTypeFindByFilter
       parameters:
-      - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
+        - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
           ''$gt'': ''k8s'', } } }'
-        in: query
-        name: q
-        required: true
-        type: string
+          in: query
+          name: q
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
           schema:
             allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  items:
-                    $ref: '#/definitions/models.ConnectionType'
-                  type: array
-              type: object
+              - $ref: '#/definitions/api_responses.PagingInfo'
+              - properties:
+                  results:
+                    items:
+                      $ref: '#/definitions/models.ConnectionType'
+                    type: array
+                type: object
         "404":
           description: Can not find Connection Types
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns connection types by a filter
       tags:
-      - Connections
+        - Connections
     post:
       consumes:
-      - application/json
+        - application/json
       description: Creates a new Connection type
       operationId: ConnectionTypeCreate
       parameters:
-      - description: add connection type
-        in: body
-        name: connection_type
-        required: true
-        schema:
-          $ref: '#/definitions/models.ConnectionType'
+        - description: add connection type
+          in: body
+          name: connection_type
+          required: true
+          schema:
+            $ref: '#/definitions/models.ConnectionType'
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -669,26 +680,26 @@ paths:
         "400":
           description: Cannot create Connection type
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Creates a new Connection type
       tags:
-      - Connections
+        - Connections
   /connection_types/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Deletes a Connection type
       operationId: ConnectionTypeDelete
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: connection type id
@@ -697,25 +708,25 @@ paths:
         "400":
           description: Cannot delete Connection type
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Deletes a Connection type
       tags:
-      - Connections
+        - Connections
     get:
       consumes:
-      - application/json
+        - application/json
       description: Gets a Connection type by id
       operationId: ConnectionTypeGetById
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -724,20 +735,20 @@ paths:
         "404":
           description: Cannot find Connection type
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Gets a Connection type by id
       tags:
-      - Connections
+        - Connections
   /integrations/check_for_new:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Checks which new plugins needs to be pushed and synced to the runner
       operationId: CheckForNewlyAddedPlugins
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -746,96 +757,96 @@ paths:
         "404":
           description: Cannot find Runner
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       summary: Should be called by a runner to sync the newly added plugins
       tags:
-      - Runners
+        - Runners
   /invite:
     get:
       description: Returns all the invitations for the current tenant
       operationId: GetInvitations
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ""
         "400":
           description: Failed to get invitations
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns all the invitations for the current tenant
       tags:
-      - Invites
+        - Invites
     post:
       description: Inviting a user
       operationId: Invite
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ""
         "400":
           description: Failed to invite user
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Inviting a user
       tags:
-      - Invites
+        - Invites
   /invite/:invitation:
     post:
       description: Accepting invitation by code
       operationId: InvitationAccept
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ""
         "400":
           description: Failed to accept invitation
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Accepting invitation by code
       tags:
-      - Invites
+        - Invites
   /uninvite/:email:
     post:
       description: Uninviting a user
       operationId: UnInvite
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ""
         "400":
           description: Failed to un invite user
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Uninviting a user
       tags:
-      - Invites
+        - Invites
   /user_settings:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Set user settings key/value. Creates a new one or updates an existing
       operationId: UserSettingsSetValue
       parameters:
-      - description: set value
-        in: body
-        name: userSetting
-        required: true
-        schema:
-          $ref: '#/definitions/models.UserSettings'
+        - description: set value
+          in: body
+          name: userSetting
+          required: true
+          schema:
+            $ref: '#/definitions/models.UserSettings'
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -844,26 +855,26 @@ paths:
         "400":
           description: Can not set value
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Set user settings key/value
       tags:
-      - UserSettings
+        - UserSettings
   /webhooks/{id}:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Executes a webhook
       operationId: ExecuteWebhook
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: execution id
@@ -872,72 +883,72 @@ paths:
         "404":
           description: Can not execute webhook
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Executes a webhook
       tags:
-      - Webhook
+        - Webhook
   /workspace/{ws_id}/connections:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns connections by a filter
       operationId: ConnectionFindByFilter
       parameters:
-      - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
+        - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
           ''$gt'': ''k8s'', } } }'
-        in: query
-        name: q
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+          in: query
+          name: q
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
           schema:
             allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  items:
-                    $ref: '#/definitions/models.ConnectionWithTypeName'
-                  type: array
-              type: object
+              - $ref: '#/definitions/api_responses.ResponseWrapper'
+              - properties:
+                  results:
+                    items:
+                      $ref: '#/definitions/models.ConnectionWithTypeName'
+                    type: array
+                type: object
         "404":
           description: Can not find Connections
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns connections by a filter
       tags:
-      - Connections
+        - Connections
     post:
       consumes:
-      - application/json
+        - application/json
       description: Creates a new Connection
       operationId: ConnectionCreate
       parameters:
-      - description: add connection
-        in: body
-        name: connection
-        required: true
-        schema:
-          $ref: '#/definitions/models.Connection'
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: add connection
+          in: body
+          name: connection
+          required: true
+          schema:
+            $ref: '#/definitions/models.Connection'
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -946,31 +957,31 @@ paths:
         "400":
           description: Cannot create Connection
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Creates a new Connection
       tags:
-      - Connections
+        - Connections
   /workspace/{ws_id}/connections/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Deletes a Connection
       operationId: ConnectionDelete
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: connection id
@@ -979,30 +990,30 @@ paths:
         "400":
           description: Cannot delete Connection
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Deletes a Connection
       tags:
-      - Connections
+        - Connections
     get:
       consumes:
-      - application/json
+        - application/json
       description: Gets a Connection by id
       operationId: ConnectionGetById
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1011,32 +1022,32 @@ paths:
         "404":
           description: Cannot find Connection
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Gets a Connection by id
       tags:
-      - Connections
+        - Connections
   /workspace/{ws_id}/connections/test:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Tests a new Connection
       operationId: TestConnection
       parameters:
-      - description: test connection
-        in: body
-        name: connection
-        required: true
-        schema:
-          $ref: '#/definitions/models.Connection'
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: test connection
+          in: body
+          name: connection
+          required: true
+          schema:
+            $ref: '#/definitions/models.Connection'
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1045,72 +1056,72 @@ paths:
         "400":
           description: Cannot create Connection
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Tests a new Connection
       tags:
-      - Connections
+        - Connections
   /workspace/{ws_id}/executions:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns playbooks execution by a filter
       operationId: PlaybookExecutionFindByFilter
       parameters:
-      - description: '{ ֿֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'':
+        - description: '{ ֿֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'':
           { ''$gt'': ''k8s'', } } }'
-        in: query
-        name: q
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+          in: query
+          name: q
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  items:
-                    $ref: '#/definitions/models.PlaybookExecution'
-                  type: array
-              type: object
+              - $ref: '#/definitions/api_responses.PagingInfo'
+              - properties:
+                  results:
+                    items:
+                      $ref: '#/definitions/models.PlaybookExecution'
+                    type: array
+                type: object
         "404":
           description: Can not find Executions
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns playbooks execution by a filter
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/executions/{id}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Gets a playbook execution session by id
       operationId: PlaybookExecutionGetById
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1119,75 +1130,75 @@ paths:
         "404":
           description: Can not find Playbook execution
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Gets a playbook execution session by id
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/executions/{id}/action_history:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns the list of audit commands per an execution
       operationId: GetActionHistory
       parameters:
-      - description: execution id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: execution id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  items:
-                    $ref: '#/definitions/models.ActionHistory'
-                  type: array
-              type: object
+              - $ref: '#/definitions/api_responses.ResponseWrapper'
+              - properties:
+                  results:
+                    items:
+                      $ref: '#/definitions/models.ActionHistory'
+                    type: array
+                type: object
         "400":
           description: Execution id is mandatory
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find Execution
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns the list of audit commands per an execution
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/executions/{id}/cancel:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Cancels/Aborts an execution
       operationId: PlaybookExecutionCancel
       parameters:
-      - description: execution id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: execution id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -1196,35 +1207,35 @@ paths:
         "400":
           description: Cannot cancel execution, it is not in a running state
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find Execution
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Cancels/Aborts an execution
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/executions/{id}/complete:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Completes/Finished an execution
       operationId: PlaybookExecutionComplete
       parameters:
-      - description: execution id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: execution id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -1233,35 +1244,35 @@ paths:
         "400":
           description: Cannot complete execution, it is not in a running state
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find Execution
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Completes/Finished an execution
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/executions/{id}/outputs:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Gets playbook outputs by id
       operationId: PlaybookExecutionGetOutputs
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1270,96 +1281,95 @@ paths:
         "404":
           description: Can not find Playbook execution
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Gets playbook outputs by id
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/executions/{id}/steps:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns a playbook execution steps details (inputs/outputs)
       operationId: GetStepsExecutionDetails
       parameters:
-      - description: execution id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: execution id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  items:
-                    $ref: '#/definitions/models.StepExecution'
-                  type: array
-              type: object
+              - $ref: '#/definitions/api_responses.ResponseWrapper'
+              - properties:
+                  results:
+                    items:
+                      $ref: '#/definitions/models.StepExecution'
+                    type: array
+                type: object
         "404":
           description: Can not find Executions
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns a playbook execution steps details (inputs/outputs)
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/integrations:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Register new integration
       operationId: IntegrationRegister
       parameters:
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
           schema:
             $ref: '#/definitions/models.Plugin'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Register new integration
       tags:
-      - Integrations
+        - Integrations
   /workspace/{ws_id}/integrations/{id}:
     delete:
-      x-cobra-command: { "use": "ws-elie-p-integration", "aliases": ["integ", "integ2"], "short": "", "example": "" }
       consumes:
-      - application/json
+        - application/json
       description: Delete an integration pack with all its actions, params etc.
       operationId: IntegrationDelete
       parameters:
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: integration pack id
@@ -1368,36 +1378,35 @@ paths:
         "400":
           description: Can not delete integration pack
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find integration pack
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Delete an integration pack
       tags:
-      - Integrations
+        - Integrations
   /workspace/{ws_id}/integrations/name/{name}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete an integration pack with all its actions, params etc.
       operationId: IntegrationDeleteByName
-      x-cobra-command: {"use": "ws-elie-p-del", "aliases": ["da","dab"], "short":"", "example": ""}
       parameters:
-      - description: name
-        in: path
-        name: name
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: name
+          in: path
+          name: name
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: integration pack id
@@ -1406,35 +1415,35 @@ paths:
         "400":
           description: Can not delete integration pack
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find integration pack
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Delete an integration pack
       tags:
-      - Integrations
+        - Integrations
   /workspace/{ws_id}/integrations/sync_to_runner/{id}/{name}:
     post:
       description: Sync an integration to a given runner
       parameters:
-      - description: Runner Id to push to
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Integration name
-        in: path
-        name: name
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: Runner Id to push to
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: Integration name
+          in: path
+          name: name
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       responses:
         "200":
           description: integration pack id
@@ -1443,82 +1452,82 @@ paths:
         "400":
           description: Can not push integration pack
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find integration pack
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Sync an integration to a given runner
       tags:
-      - Integrations
-      - Runners
+        - Integrations
+        - Runners
   /workspace/{ws_id}/playbooks:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns playbooks by a filter
       operationId: PlaybookFindByFilter
       parameters:
-      - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
+        - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
           ''$gt'': ''k8s'', } } }'
-        in: query
-        name: q
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+          in: query
+          name: q
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
           schema:
             allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  items:
-                    $ref: '#/definitions/models.Playbook'
-                  type: array
-              type: object
+              - $ref: '#/definitions/api_responses.PagingInfo'
+              - properties:
+                  results:
+                    items:
+                      $ref: '#/definitions/models.Playbook'
+                    type: array
+                type: object
         "404":
           description: Can not find Playbooks
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns playbooks by a filter
       tags:
-      - Playbooks
+        - Playbooks
     post:
       consumes:
-      - application/json
+        - application/json
       description: Creates a new Playbook
       operationId: CreatePlaybook
       parameters:
-      - description: add playbook
-        in: body
-        name: playbook
-        required: true
-        schema:
-          $ref: '#/definitions/models.Playbook'
-      - description: http://someurl/somefile.yaml
-        in: query
-        name: playbook_content_url
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: add playbook
+          in: body
+          name: playbook
+          required: true
+          schema:
+            $ref: '#/definitions/models.Playbook'
+        - description: http://someurl/somefile.yaml
+          in: query
+          name: playbook_content_url
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1527,31 +1536,31 @@ paths:
         "400":
           description: Can not create Playbook
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Creates a new Playbook
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/playbooks/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Deletes a Playbook
       operationId: DeletePlaybook
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: playbook id
@@ -1560,34 +1569,34 @@ paths:
         "400":
           description: Can not delete Playbook
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find Playbook
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Deletes a Playbook
       tags:
-      - Playbooks
+        - Playbooks
     get:
       consumes:
-      - application/json
+        - application/json
       description: Gets a playbook by id
       operationId: PlaybookGetById
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1596,36 +1605,36 @@ paths:
         "404":
           description: Can not find Playbook
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Gets a playbook by id
       tags:
-      - Playbooks
+        - Playbooks
     put:
       consumes:
-      - application/json
+        - application/json
       description: Updates a Playbook
       operationId: UpdatePlaybook
       parameters:
-      - description: add playbook
-        in: body
-        name: playbook
-        required: true
-        schema:
-          $ref: '#/definitions/models.Playbook'
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: add playbook
+          in: body
+          name: playbook
+          required: true
+          schema:
+            $ref: '#/definitions/models.Playbook'
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1634,35 +1643,35 @@ paths:
         "400":
           description: Can not update Playbook
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find Playbook
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Updates a Playbook
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/playbooks/{id}/execute:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Executes a complete playbook - in a sync or async mode
       operationId: ExecutePlaybook
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: execution id
@@ -1671,37 +1680,37 @@ paths:
         "404":
           description: Can not find Playbook
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Executes a complete playbook - in a sync or async mode
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/playbooks/{id}/start:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Starts a playbook execution
       operationId: PlaybookStartExecution
       parameters:
-      - description: playbook id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: playbook and its input params
-        in: body
-        name: execution
-        required: true
-        schema:
-          $ref: '#/definitions/models.Playbook'
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: playbook id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: playbook and its input params
+          in: body
+          name: execution
+          required: true
+          schema:
+            $ref: '#/definitions/models.Playbook'
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1710,70 +1719,70 @@ paths:
         "400":
           description: Execution creation failed
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find Playbook
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Starts a playbook execution
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/playbooks/tags:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns a list of unique tags used by all playbooks
       operationId: GetAllTags
       parameters:
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  items:
-                    type: string
-                  type: array
-              type: object
+              - $ref: '#/definitions/api_responses.ResponseWrapper'
+              - properties:
+                  results:
+                    items:
+                      type: string
+                    type: array
+                type: object
         "400":
           description: Error getting tags
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns a list of unique tags used by all playbooks
       tags:
-      - Playbooks
+        - Playbooks
   /workspace/{ws_id}/runner/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Deletes a Runner
       operationId: RunnerDelete
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: runner id
@@ -1782,62 +1791,62 @@ paths:
         "400":
           description: Cannot delete Runner
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Deletes a Runner
       tags:
-      - Runners
+        - Runners
   /workspace/{ws_id}/runner_groups:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns a list of all runner groups
       operationId: RunnerGroupsFindAll
       parameters:
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  items:
-                    $ref: '#/definitions/v1.RunnerGroupResponse'
-                  type: array
-              type: object
+              - $ref: '#/definitions/api_responses.PagingInfo'
+              - properties:
+                  results:
+                    items:
+                      $ref: '#/definitions/v1.RunnerGroupResponse'
+                    type: array
+                type: object
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Get all the runner groups
       tags:
-      - Runners
+        - Runners
     post:
       consumes:
-      - application/json
+        - application/json
       description: Creates a new runner group
       operationId: RunnerGroupCreate
       parameters:
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
-      - description: Add runner group
-        in: body
-        name: name
-        required: true
-        schema:
-          $ref: '#/definitions/models.CreateRunnerGroupRequest'
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
+        - description: Add runner group
+          in: body
+          name: name
+          required: true
+          schema:
+            $ref: '#/definitions/models.CreateRunnerGroupRequest'
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1846,31 +1855,31 @@ paths:
         "400":
           description: Cannot create runner group
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Creates a new runner group
       tags:
-      - Runners
+        - Runners
   /workspace/{ws_id}/runner_groups/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Deletes a runner group
       operationId: RunnerGroupDelete
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: runner group id
@@ -1879,57 +1888,62 @@ paths:
         "400":
           description: Cannot delete runner group
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Deletes a runner group
       tags:
-      - Runners
+        - Runners
   /workspace/{ws_id}/runners:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns a list of all Runners
       operationId: RunnerFindAll
       parameters:
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.Runner'
-            type: array
+            allOf:
+              - $ref: '#/definitions/api_responses.PagingInfo'
+              - properties:
+                  results:
+                    items:
+                      $ref: '#/definitions/models.Runner'
+                    type: array
+                type: object
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: get all Runners
       tags:
-      - Runners
+        - Runners
     post:
       consumes:
-      - application/json
+        - application/json
       description: Creates a new Runner
       operationId: RunnerCreate
       parameters:
-      - description: Create runner request
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/models.CreateRunnerRequest'
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: Create runner request
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/models.CreateRunnerRequest'
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1938,31 +1952,31 @@ paths:
         "400":
           description: Cannot create Runner
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Creates a new Runner
       tags:
-      - Runners
+        - Runners
   /workspace/{ws_id}/runners/{id}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Gets a Runner by id
       operationId: RunnerGetById
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -1971,84 +1985,84 @@ paths:
         "404":
           description: Cannot find Runner
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Gets a Runner by id
       tags:
-      - Runners
+        - Runners
   /workspace/{ws_id}/table/{table}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns table records by a filter
       operationId: TableFindRecord
       parameters:
-      - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
+        - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
           ''$gt'': ''k8s'', } } }'
-        in: query
-        name: q
-        required: true
-        type: string
-      - description: table name
-        in: path
-        name: table
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+          in: query
+          name: q
+          required: true
+          type: string
+        - description: table name
+          in: path
+          name: table
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/context_wrapper.PagingInfo'
-            - properties:
-                results:
-                  additionalProperties:
-                    items:
-                      type: string
-                    type: array
-                  type: object
-              type: object
+              - $ref: '#/definitions/api_responses.PagingInfo'
+              - properties:
+                  results:
+                    additionalProperties:
+                      items:
+                        type: string
+                      type: array
+                    type: object
+                type: object
         "404":
           description: Can not find record
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns table records by a filter
       tags:
-      - Table
+        - Table
   /workspace/{ws_id}/table/{table}/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Deletes a record
       operationId: TableDeleteRecord
       parameters:
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: table name
-        in: path
-        name: table
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: table name
+          in: path
+          name: table
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -2057,39 +2071,39 @@ paths:
         "400":
           description: Missing argument ID
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find record
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Deletes a record
       tags:
-      - Table
+        - Table
     get:
       consumes:
-      - application/json
+        - application/json
       description: Returns a record by id
       operationId: TableGetRecord
       parameters:
-      - description: record id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: table name
-        in: path
-        name: table
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: record id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: table name
+          in: path
+          name: table
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -2098,45 +2112,45 @@ paths:
         "400":
           description: Id is mandatory
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find Execution
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Returns a record by id
       tags:
-      - Table
+        - Table
     post:
       consumes:
-      - application/json
+        - application/json
       description: Creates a new record
       operationId: TableCreateRecord
       parameters:
-      - description: record
-        in: body
-        name: playbook
-        required: true
-        schema:
-          $ref: '#/definitions/models.TenantBase'
-      - description: record id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: table name
-        in: path
-        name: table
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: record
+          in: body
+          name: playbook
+          required: true
+          schema:
+            $ref: '#/definitions/models.TenantBase'
+        - description: record id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: table name
+          in: path
+          name: table
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -2145,41 +2159,41 @@ paths:
         "400":
           description: Can not create Record
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Creates a new record
       tags:
-      - Table
+        - Table
     put:
       consumes:
-      - application/json
+        - application/json
       description: Updates a record
       operationId: TableUpdateRecord
       parameters:
-      - description: Updates a record
-        in: body
-        name: record
-        required: true
-        schema:
-          $ref: '#/definitions/models.TenantBase'
-      - description: table name
-        in: path
-        name: table
-        required: true
-        type: string
-      - description: ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
+        - description: Updates a record
+          in: body
+          name: record
+          required: true
+          schema:
+            $ref: '#/definitions/models.TenantBase'
+        - description: table name
+          in: path
+          name: table
+          required: true
+          type: string
+        - description: ID
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: workspace ID
+          in: path
+          name: ws_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -2188,31 +2202,31 @@ paths:
         "400":
           description: Can not update record
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
           description: Can not find record
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Updates a record
       tags:
-      - Table
+        - Table
   /workspaces:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Creates a new workspace
       operationId: CreateWorkspace
       parameters:
-      - description: add workspace
-        in: body
-        name: workspace
-        required: true
-        schema:
-          $ref: '#/definitions/models.Workspace'
+        - description: add workspace
+          in: body
+          name: workspace
+          required: true
+          schema:
+            $ref: '#/definitions/models.Workspace'
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ok
@@ -2221,26 +2235,26 @@ paths:
         "400":
           description: Can not create workspace
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Creates a new workspace
       tags:
-      - Workspaces
+        - Workspaces
   /workspaces/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a workspace
       operationId: DeleteWorkspace
       parameters:
-      - description: workspace id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: workspace id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: connection id
@@ -2249,25 +2263,25 @@ paths:
         "400":
           description: Can not create workspace
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Delete a workspace
       tags:
-      - Workspaces
+        - Workspaces
     get:
       consumes:
-      - application/json
+        - application/json
       description: Describe Workspace
       operationId: DescribeWorkspace
       parameters:
-      - description: workspace id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: workspace id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -2276,114 +2290,121 @@ paths:
         "400":
           description: failed to set user role
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Describe Workspace
       tags:
-      - Workspaces
+        - Workspaces
   /workspaces/{id}/user/{user_id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Remove user from workspace
       operationId: WorkspaceRemoveUser
       parameters:
-      - description: workspace id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: user id
-        in: path
-        name: user_id
-        required: true
-        type: string
+        - description: workspace id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: user id
+          in: path
+          name: user_id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ""
         "400":
           description: failed to remove user from workspace
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Remove user from workspace
       tags:
-      - Workspaces
+        - Workspaces
   /workspaces/{id}/user/{user_id}/role/{role}:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Set user role in workspace
       operationId: WorkspaceSetUserRole
       parameters:
-      - description: workspace id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: user id
-        in: path
-        name: user_id
-        required: true
-        type: string
-      - description: role
-        in: path
-        name: role
-        required: true
-        type: string
+        - description: workspace id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: user id
+          in: path
+          name: user_id
+          required: true
+          type: string
+        - description: role
+          in: path
+          name: role
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ""
         "400":
           description: failed to set user role
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Set user role in workspace
       tags:
-      - Workspaces
+        - Workspaces
   /workspaces/{id}/users:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Add users to workspace
       operationId: WorkspaceAddUsers
       parameters:
-      - description: workspace id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: user ids list
-        in: body
-        name: users
-        required: true
-        schema:
-          $ref: '#/definitions/v1.UserList'
+        - description: workspace id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: user ids list
+          in: body
+          name: users
+          required: true
+          schema:
+            $ref: '#/definitions/v1.UserList'
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: ""
         "400":
           description: Can not add user
           schema:
-            $ref: '#/definitions/context_wrapper.ErrorWrapper'
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: []
       summary: Add users to workspace
       tags:
-      - Workspaces
+        - Workspaces
 securityDefinitions:
   ApiKeyAuth:
     in: header
     name: BLINK-API-KEY
     type: apiKey
 swagger: "2.0"
+tags:
+  - description: Connections are cool
+    name: Connections
+x-cobra-command:
+  example: ""
+  short: connections are cool baby
+  use: connections

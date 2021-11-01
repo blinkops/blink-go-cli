@@ -20,12 +20,26 @@ type CobraAnnotation struct {
 var cobraAnnotationError = fmt.Errorf("x-cobra-command: invalid structure")
 
 var cobraCommands = make(map[string]map[string]CobraAnnotation)
+var cobraOperations = make(map[string]CobraAnnotation)
 
 // Format formats the cobra command according to the
 // annotations specified in the openapi specification
 func Format(root *cobra.Command, spec *loads.Document) {
 
-	// build up the map
+	for k, v := range spec.Spec().Extensions {
+		if k != "x-cobra-command-operations" {
+			continue
+		}
+		ops, ok := v.(map[string]interface{})
+		if !ok {
+			panic(cobraAnnotationError)
+		}
+		for opName, opValue := range ops {
+			cobraOperations[opName] = marshalAnnotation(opValue)
+		}
+	}
+
+	// build up the commands map
 	for _, v := range spec.Spec().Paths.Paths {
 		if v.Get != nil {
 			addOperationToMap(v.Get)
@@ -49,16 +63,20 @@ func Format(root *cobra.Command, spec *loads.Document) {
 	for o := range operations {
 
 		operation := operations[o]
-
 		tag := getOriginalTagName(operation.Use)
 
+		if shouldHideOperation(tag) {
+			operation.Hidden = true
+			continue
+		}
+
 		// set the cobra tag name
-		cobraTag := GetCobraTag(tag, spec)
+		cobraTag := GetCobraTag(tag)
 		if cobraTag.Use == "" {
 			cobraTag.Use = operation.Use
 		}
 
-		// set the parent
+		// set the parent, the operation
 		operation.Use = cobraTag.Use
 		operation.Example = cobraTag.Example
 		operation.Short = cobraTag.Short
@@ -112,59 +130,74 @@ func unmarshalCobraAnnotation(extensions spec.Extensions) CobraAnnotation {
 	var cobra CobraAnnotation
 
 	for name, ext := range extensions {
-
 		if name != "x-cobra-command" {
 			continue
 		}
-
-		cobraParam, ok := ext.(map[string]interface{})
-		if !ok {
-			// we have problems
-			panic("x-cobra-command: invalid structure for operation")
-		}
-
-		// populate the extensions
-		for k, v := range cobraParam {
-			switch k {
-			case "use":
-				cobra.Use, ok = v.(string)
-				if !ok {
-					panic(cobraAnnotationError)
-				}
-			case "aliases":
-				aliases, ok := v.([]interface{})
-				if !ok {
-					panic(cobraAnnotationError)
-				}
-				for i := range aliases {
-					alias, ok := aliases[i].(string)
-					if !ok {
-						panic(cobraAnnotationError)
-					}
-					cobra.Aliases = append(cobra.Aliases, alias)
-				}
-			case "short":
-				cobra.Short, ok = v.(string)
-				if !ok {
-					panic(cobraAnnotationError)
-				}
-			case "example":
-				cobra.Example, ok = v.(string)
-				if !ok {
-					panic(cobraAnnotationError)
-				}
-			}
-		}
+		return marshalAnnotation(ext)
 	}
 
 	return cobra
 }
 
-func GetCobraTag(name string, spec *loads.Document) CobraAnnotation {
-	for _, val := range spec.Spec().Tags {
-		if name == val.Name {
-			return unmarshalCobraAnnotation(val.Extensions)
+func marshalAnnotation(ext interface{}) (cobra CobraAnnotation) {
+	cobraParam, ok := ext.(map[string]interface{})
+	if !ok {
+		// we have problems
+		panic("x-cobra-command: invalid structure for operation")
+	}
+
+	// populate the extensions
+	for k, v := range cobraParam {
+		switch k {
+		case "use":
+			cobra.Use, ok = v.(string)
+			if !ok {
+				panic(cobraAnnotationError)
+			}
+		case "aliases":
+			aliases, ok := v.([]interface{})
+			if !ok {
+				panic(cobraAnnotationError)
+			}
+			for i := range aliases {
+				alias, ok := aliases[i].(string)
+				if !ok {
+					panic(cobraAnnotationError)
+				}
+				cobra.Aliases = append(cobra.Aliases, alias)
+			}
+		case "short":
+			cobra.Short, ok = v.(string)
+			if !ok {
+				panic(cobraAnnotationError)
+			}
+		case "example":
+			cobra.Example, ok = v.(string)
+			if !ok {
+				panic(cobraAnnotationError)
+			}
 		}
 	}
-	return CobraAnnotation{}
+	return cobra
+}
+
+func GetCobraTag(name string) CobraAnnotation {
+	op, found := cobraOperations[name]
+	if !found {
+		return CobraAnnotation{}
+	}
+	return op
+}
+
+func shouldHideOperation(name string) bool {
+
+	// first check that its not one of the following
+	switch name {
+	case "Completion [Bash|Zsh|Fish|Powershell]":
+		return false
+	case "help":
+		return false
+	}
+	_, found := cobraOperations[name]
+	return !found
 }

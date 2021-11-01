@@ -48,13 +48,16 @@ func performListPlaybooks(wsID string) (string, error) {
 		return "", err
 	}
 
-	responseObject := &models.ContextWrapperPagingInfo{}
+	var responseObject = struct {
+		models.APIResponsesPagingInfo
+		Results []interface{} `json:"results"`
+	}{}
 
 	if err := json.Unmarshal(responseBody, &responseObject); err != nil {
 		return "", err
 	}
 
-	if responseObject == nil || responseObject.Results == nil {
+	if responseObject.Results == nil {
 		return "No playbooks are available", nil
 	}
 
