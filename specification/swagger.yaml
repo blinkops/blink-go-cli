@@ -1342,6 +1342,7 @@ paths:
       - Integrations
   /workspace/{ws_id}/integrations/{id}:
     delete:
+      x-cobra-command: { "use": "ws-elie-p-integration", "aliases": ["integ", "integ2"], "short": "", "example": "" }
       consumes:
       - application/json
       description: Delete an integration pack with all its actions, params etc.
@@ -1383,6 +1384,7 @@ paths:
       - application/json
       description: Delete an integration pack with all its actions, params etc.
       operationId: IntegrationDeleteByName
+      x-cobra-command: {"use": "ws-elie-p-del", "aliases": ["da","dab"], "short":"", "example": ""}
       parameters:
       - description: name
         in: path

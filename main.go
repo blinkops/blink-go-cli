@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"os"
 	"regexp"
-	"strings"
 
+	"github.com/blinkops/blink-go-cli/gen/spec"
 	"github.com/blinkops/blink-go-cli/pkg/commands/playbooks"
+	"github.com/blinkops/blink-go-cli/pkg/formatter"
 
 	"github.com/blinkops/blink-go-cli/gen/cli"
 	"github.com/spf13/cobra"
@@ -40,7 +41,13 @@ func main() {
 	}
 
 	rootCmd.Long = ICON
-	SetupOperations(rootCmd.Commands())
+
+	spec, err := spec.GetSwaggerSpec()
+	if err != nil {
+		panic(err)
+	}
+
+	formatter.Format(rootCmd, spec)
 
 	cmds := rootCmd.Commands()
 	for i := range cmds {
@@ -49,71 +56,8 @@ func main() {
 		}
 	}
 
-	// maybe just check the config file?
-	if true {
-		//setGlobalWorkspace()
-	}
-
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
 
-}
-
-func setGlobalWorkspace() {
-	for _, val := range rootCmd.Commands() {
-		for _, subCmds := range val.Commands() {
-			ws := subCmds.PersistentFlags().Lookup("ws_id")
-			if ws != nil {
-				ws.Changed = true
-				ws.Value.Set("global_ws_id_elie")
-				ws.Hidden = true
-			}
-		}
-	}
-}
-
-func unsetGlobalWorkspace() {
-	for _, val := range rootCmd.Commands() {
-		for _, subCmds := range val.Commands() {
-			ws := subCmds.PersistentFlags().Lookup("ws_id")
-			if ws != nil {
-				ws.Changed = false
-				ws.Value.Set("")
-				ws.Hidden = false
-			}
-		}
-	}
-}
-
-func SetupOperations(operations []*cobra.Command) {
-	for o := range operations {
-		operation := operations[o]
-		// always keep this
-		if operation.Use == "completion [bash|zsh|fish|powershell]" {
-			continue
-		}
-		//operation.Hidden = true
-		//continue
-		commands := operation.Commands()
-		for c := range commands {
-			command := commands[c]
-			// hide the command
-			// command.Hidden = true
-			// continue
-			stripped := removeGroupNameFromOperation(operation.Use, command.Use)
-			command.Use = toSnakeCase(stripped)
-		}
-	}
-}
-
-func removeGroupNameFromOperation(groupName, operation string) string {
-	// operations are in lowercase, to match we need to convert
-	return strings.TrimPrefix(operation, strings.ToUpper(operation))
-}
-
-func toSnakeCase(str string) string {
-	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
-	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
-	return strings.ToLower(snake)
 }
