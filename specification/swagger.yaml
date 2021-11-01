@@ -570,6 +570,8 @@ paths:
       summary: Show controller readiness status
       tags:
         - Controller
+      x-cobra-command:
+        use: health
   /api/stats:
     get:
       consumes:
@@ -586,6 +588,8 @@ paths:
       summary: Show controller status
       tags:
         - Controller
+      x-cobra-command:
+        use: stats
   /api/version:
     get:
       consumes:
@@ -602,6 +606,8 @@ paths:
       summary: Display blink controller version
       tags:
         - Controller
+      x-cobra-command:
+        use: version
   /apikey:
     get:
       description: Generate api key for user
@@ -658,6 +664,8 @@ paths:
       summary: Returns connection types by a filter
       tags:
         - Connections
+      x-cobra-command:
+        hidden: true
     post:
       consumes:
         - application/json
@@ -686,6 +694,8 @@ paths:
       summary: Creates a new Connection type
       tags:
         - Connections
+      x-cobra-command:
+        hidden: true
   /connection_types/{id}:
     delete:
       consumes:
@@ -714,6 +724,8 @@ paths:
       summary: Deletes a Connection type
       tags:
         - Connections
+      x-cobra-command:
+        hidden: true
     get:
       consumes:
         - application/json
@@ -741,6 +753,8 @@ paths:
       summary: Gets a Connection type by id
       tags:
         - Connections
+      x-cobra-command:
+        hidden: true
   /integrations/check_for_new:
     get:
       consumes:
@@ -761,6 +775,8 @@ paths:
       summary: Should be called by a runner to sync the newly added plugins
       tags:
         - Runners
+      x-cobra-command:
+        hidden: true
   /invite:
     get:
       description: Returns all the invitations for the current tenant
@@ -779,6 +795,8 @@ paths:
       summary: Returns all the invitations for the current tenant
       tags:
         - Invites
+      x-cobra-command:
+        use: list
     post:
       description: Inviting a user
       operationId: Invite
@@ -796,6 +814,8 @@ paths:
       summary: Inviting a user
       tags:
         - Invites
+      x-cobra-command:
+        use: invite
   /invite/:invitation:
     post:
       description: Accepting invitation by code
@@ -814,6 +834,8 @@ paths:
       summary: Accepting invitation by code
       tags:
         - Invites
+      x-cobra-command:
+        use: accept
   /uninvite/:email:
     post:
       description: Uninviting a user
@@ -832,6 +854,8 @@ paths:
       summary: Uninviting a user
       tags:
         - Invites
+      x-cobra-command:
+        use: uninvite
   /user_settings:
     post:
       consumes:
@@ -889,6 +913,8 @@ paths:
       summary: Executes a webhook
       tags:
         - Webhook
+      x-cobra-command:
+        use: execute
   /workspace/{ws_id}/connections:
     get:
       consumes:
@@ -930,6 +956,8 @@ paths:
       summary: Returns connections by a filter
       tags:
         - Connections
+      x-cobra-command:
+        use: search
     post:
       consumes:
         - application/json
@@ -963,6 +991,8 @@ paths:
       summary: Creates a new Connection
       tags:
         - Connections
+      x-cobra-command:
+        use: create
   /workspace/{ws_id}/connections/{id}:
     delete:
       consumes:
@@ -996,6 +1026,8 @@ paths:
       summary: Deletes a Connection
       tags:
         - Connections
+      x-cobra-command:
+        use: delete
     get:
       consumes:
         - application/json
@@ -1028,6 +1060,8 @@ paths:
       summary: Gets a Connection by id
       tags:
         - Connections
+      x-cobra-command:
+        use: get
   /workspace/{ws_id}/connections/test:
     post:
       consumes:
@@ -1062,6 +1096,8 @@ paths:
       summary: Tests a new Connection
       tags:
         - Connections
+      x-cobra-command:
+        use: test
   /workspace/{ws_id}/executions:
     get:
       consumes:
@@ -1102,7 +1138,9 @@ paths:
         - ApiKeyAuth: []
       summary: Returns playbooks execution by a filter
       tags:
-        - Playbooks
+        - Executions
+      x-cobra-command:
+        use: search
   /workspace/{ws_id}/executions/{id}:
     get:
       consumes:
@@ -1135,7 +1173,9 @@ paths:
         - ApiKeyAuth: []
       summary: Gets a playbook execution session by id
       tags:
-        - Playbooks
+        - Executions
+      x-cobra-command:
+        use: get
   /workspace/{ws_id}/executions/{id}/action_history:
     get:
       consumes:
@@ -1180,6 +1220,8 @@ paths:
       summary: Returns the list of audit commands per an execution
       tags:
         - Playbooks
+      x-cobra-command:
+        use: history
   /workspace/{ws_id}/executions/{id}/cancel:
     post:
       consumes:
@@ -1216,7 +1258,9 @@ paths:
         - ApiKeyAuth: []
       summary: Cancels/Aborts an execution
       tags:
-        - Playbooks
+        - Executions
+      x-cobra-command:
+        use: cancel
   /workspace/{ws_id}/executions/{id}/complete:
     post:
       consumes:
@@ -1254,6 +1298,8 @@ paths:
       summary: Completes/Finished an execution
       tags:
         - Playbooks
+      x-cobra-command:
+        hidden: true
   /workspace/{ws_id}/executions/{id}/outputs:
     get:
       consumes:
@@ -1286,7 +1332,9 @@ paths:
         - ApiKeyAuth: []
       summary: Gets playbook outputs by id
       tags:
-        - Playbooks
+        - Executions
+      x-cobra-command:
+        hidden: true
   /workspace/{ws_id}/executions/{id}/steps:
     get:
       consumes:
@@ -1326,7 +1374,9 @@ paths:
         - ApiKeyAuth: []
       summary: Returns a playbook execution steps details (inputs/outputs)
       tags:
-        - Playbooks
+        - Executions
+      x-cobra-command:
+        use: details
   /workspace/{ws_id}/integrations:
     post:
       consumes:
@@ -1351,6 +1401,8 @@ paths:
       summary: Register new integration
       tags:
         - Integrations
+      x-cobra-command:
+        use: register
   /workspace/{ws_id}/integrations/{id}:
     delete:
       consumes:
@@ -1388,6 +1440,8 @@ paths:
       summary: Delete an integration pack
       tags:
         - Integrations
+      x-cobra-command:
+        use: delete
   /workspace/{ws_id}/integrations/name/{name}:
     delete:
       consumes:
@@ -1425,9 +1479,12 @@ paths:
       summary: Delete an integration pack
       tags:
         - Integrations
+      x-cobra-command:
+        use: delete-by-name
   /workspace/{ws_id}/integrations/sync_to_runner/{id}/{name}:
     post:
       description: Sync an integration to a given runner
+      operationId: SyncIntegrationToRunner
       parameters:
         - description: Runner Id to push to
           in: path
@@ -1463,6 +1520,8 @@ paths:
       tags:
         - Integrations
         - Runners
+      x-cobra-command:
+        hidden: true
   /workspace/{ws_id}/playbooks:
     get:
       consumes:
@@ -1504,6 +1563,8 @@ paths:
       summary: Returns playbooks by a filter
       tags:
         - Playbooks
+      x-cobra-command:
+        use: search
     post:
       consumes:
         - application/json
@@ -1542,6 +1603,8 @@ paths:
       summary: Creates a new Playbook
       tags:
         - Playbooks
+      x-cobra-command:
+        hidden: true
   /workspace/{ws_id}/playbooks/{id}:
     delete:
       consumes:
@@ -1579,6 +1642,8 @@ paths:
       summary: Deletes a Playbook
       tags:
         - Playbooks
+      x-cobra-command:
+        use: delete
     get:
       consumes:
         - application/json
@@ -1611,6 +1676,8 @@ paths:
       summary: Gets a playbook by id
       tags:
         - Playbooks
+      x-cobra-command:
+        use: get
     put:
       consumes:
         - application/json
@@ -1653,6 +1720,8 @@ paths:
       summary: Updates a Playbook
       tags:
         - Playbooks
+      x-cobra-command:
+        use: update
   /workspace/{ws_id}/playbooks/{id}/execute:
     post:
       consumes:
@@ -1686,6 +1755,8 @@ paths:
       summary: Executes a complete playbook - in a sync or async mode
       tags:
         - Playbooks
+      x-cobra-command:
+        use: execute
   /workspace/{ws_id}/playbooks/{id}/start:
     post:
       consumes:
@@ -1729,6 +1800,8 @@ paths:
       summary: Starts a playbook execution
       tags:
         - Playbooks
+      x-cobra-command:
+        use: start
   /workspace/{ws_id}/playbooks/tags:
     get:
       consumes:
@@ -1764,6 +1837,8 @@ paths:
       summary: Returns a list of unique tags used by all playbooks
       tags:
         - Playbooks
+      x-cobra-command:
+        hidden: true
   /workspace/{ws_id}/runner/{id}:
     delete:
       consumes:
@@ -1797,6 +1872,8 @@ paths:
       summary: Deletes a Runner
       tags:
         - Runners
+      x-cobra-command:
+        hidden: true
   /workspace/{ws_id}/runner_groups:
     get:
       consumes:
@@ -1828,6 +1905,8 @@ paths:
       summary: Get all the runner groups
       tags:
         - Runners
+      x-cobra-command:
+        use: list
     post:
       consumes:
         - application/json
@@ -1861,6 +1940,8 @@ paths:
       summary: Creates a new runner group
       tags:
         - Runners
+      x-cobra-command:
+        use: create
   /workspace/{ws_id}/runner_groups/{id}:
     delete:
       consumes:
@@ -1894,6 +1975,8 @@ paths:
       summary: Deletes a runner group
       tags:
         - Runners
+      x-cobra-command:
+        use: delete
   /workspace/{ws_id}/runners:
     get:
       consumes:
@@ -1925,6 +2008,8 @@ paths:
       summary: get all Runners
       tags:
         - Runners
+      x-cobra-command:
+        hidden: true
     post:
       consumes:
         - application/json
@@ -1958,6 +2043,8 @@ paths:
       summary: Creates a new Runner
       tags:
         - Runners
+      x-cobra-command:
+        hidden: true
   /workspace/{ws_id}/runners/{id}:
     get:
       consumes:
@@ -1991,6 +2078,8 @@ paths:
       summary: Gets a Runner by id
       tags:
         - Runners
+      x-cobra-command:
+        use: get
   /workspace/{ws_id}/table/{table}:
     get:
       consumes:
@@ -2241,6 +2330,8 @@ paths:
       summary: Creates a new workspace
       tags:
         - Workspaces
+      x-cobra-command:
+        use: create
   /workspaces/{id}:
     delete:
       consumes:
@@ -2269,6 +2360,8 @@ paths:
       summary: Delete a workspace
       tags:
         - Workspaces
+      x-cobra-command:
+        use: delete
     get:
       consumes:
         - application/json
@@ -2296,6 +2389,8 @@ paths:
       summary: Describe Workspace
       tags:
         - Workspaces
+      x-cobra-command:
+        use: describe
   /workspaces/{id}/user/{user_id}:
     delete:
       consumes:
@@ -2327,6 +2422,8 @@ paths:
       summary: Remove user from workspace
       tags:
         - Workspaces
+      x-cobra-command:
+        use: remove-user
   /workspaces/{id}/user/{user_id}/role/{role}:
     post:
       consumes:
@@ -2363,6 +2460,8 @@ paths:
       summary: Set user role in workspace
       tags:
         - Workspaces
+      x-cobra-command:
+        use: set-role
   /workspaces/{id}/users:
     post:
       consumes:
@@ -2395,6 +2494,8 @@ paths:
       summary: Add users to workspace
       tags:
         - Workspaces
+      x-cobra-command:
+        use: add-user
 securityDefinitions:
   ApiKeyAuth:
     in: header
@@ -2404,7 +2505,65 @@ swagger: "2.0"
 tags:
   - description: Connections are cool
     name: Connections
-x-cobra-command:
-  example: ""
-  short: connections are cool baby
-  use: connections
+  - description: Controller are super cool
+    name: Controller
+  - description: integrations are super cool
+    name: Integrations
+  - description: invites are super cool
+    name: Invites
+  - description: playbooks are super cool
+    name: Playbooks
+  - description: runner-groups are super cool
+    name: Runners
+  - description: table are super cool
+    name: Table
+  - description: user settings are super cool
+    name: User Settings
+  - description: webhook are super cool
+    name: Webhook
+  - description: workspaces are super cool
+    name: workspaces
+x-cobra-command-operations:
+  Connections:
+    example: ""
+    short: connections are cool
+    use: connections
+  Controller:
+    example: ""
+    short: controllers are cool
+    use: controller
+  Executions:
+    use: executions
+  Integrations:
+    example: ""
+    short: integrations are uber cool
+    use: integrations
+  Invites:
+    example: ""
+    short: invites are uber cool
+    use: invites
+  Playbooks:
+    example: ""
+    short: playbooks are uber cool
+    use: playbooks
+  Runners:
+    example: ""
+    short: runner-groups are uber cool
+    use: runner-groups
+  Settings:
+    example: ""
+    short: user-settings are uber cool
+    use: user-settings
+  Table:
+    example: ""
+    hidden: true
+    short: table are uber cool
+    use: table
+  Webhook:
+    example: ""
+    short: webhook are uber cool
+    use: webhook
+  Workspaces:
+    example: ""
+    short: workspaces are uber cool
+    use: workspaces

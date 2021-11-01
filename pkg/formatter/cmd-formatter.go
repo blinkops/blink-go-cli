@@ -15,6 +15,7 @@ type CobraAnnotation struct {
 	Aliases []string
 	Short   string
 	Example string
+	Hidden bool
 }
 
 var cobraAnnotationError = fmt.Errorf("x-cobra-command: invalid structure")
@@ -81,6 +82,7 @@ func Format(root *cobra.Command, spec *loads.Document) {
 		operation.Example = cobraTag.Example
 		operation.Short = cobraTag.Short
 		operation.Aliases = cobraTag.Aliases
+		operation.Hidden = cobraTag.Hidden
 
 		commands := operation.Commands()
 		for c := range commands {
@@ -93,6 +95,7 @@ func Format(root *cobra.Command, spec *loads.Document) {
 			command.Aliases = cobraCommand.Aliases
 			command.Short = cobraCommand.Short
 			command.Example = cobraCommand.Example
+			command.Hidden = cobraCommand.Hidden
 		}
 	}
 
@@ -176,6 +179,8 @@ func marshalAnnotation(ext interface{}) (cobra CobraAnnotation) {
 			if !ok {
 				panic(cobraAnnotationError)
 			}
+		case "hidden":
+			cobra.Hidden = v.(bool)
 		}
 	}
 	return cobra
