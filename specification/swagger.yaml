@@ -177,13 +177,6 @@ definitions:
       name:
         type: string
     type: object
-  models.CreateRunnerRequest:
-    properties:
-      group:
-        type: string
-      name:
-        type: string
-    type: object
   models.FormAttribute:
     properties:
       default_value:
@@ -2027,41 +2020,6 @@ paths:
       security:
         - ApiKeyAuth: []
       summary: get all Runners
-      tags:
-        - Runners
-      x-cobra-command:
-        hidden: true
-    post:
-      consumes:
-        - application/json
-      description: Creates a new Runner
-      operationId: RunnerCreate
-      parameters:
-        - description: Create runner request
-          in: body
-          name: data
-          required: true
-          schema:
-            $ref: '#/definitions/models.CreateRunnerRequest'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.Runner'
-        "400":
-          description: Cannot create Runner
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Creates a new Runner
       tags:
         - Runners
       x-cobra-command:
