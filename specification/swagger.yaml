@@ -96,7 +96,9 @@ definitions:
           YAML
         type: string
       tags:
-        type: string
+        items:
+          type: string
+        type: array
       tenant_id:
         type: string
       updated_at:
@@ -156,7 +158,9 @@ definitions:
           YAML
         type: string
       tags:
-        type: string
+        items:
+          type: string
+        type: array
       tenant_id:
         type: string
       type_name:
@@ -281,8 +285,6 @@ definitions:
         type: string
       name:
         type: string
-      parent_execution_id:
-        type: string
       playbook:
         type: string
       playbook_id:
@@ -294,8 +296,6 @@ definitions:
       step_results:
         $ref: '#/definitions/models.StepResults'
       tenant_id:
-        type: string
-      top_execution_id:
         type: string
       trigger_type:
         type: string
@@ -542,6 +542,17 @@ definitions:
         items:
           $ref: '#/definitions/models.UserInfo'
         type: array
+    type: object
+  v1.integration:
+    properties:
+      image:
+        type: string
+      kubernetes_image_pull_secrets:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
     type: object
 host: app.blinkops.com:80
 info:
@@ -1050,7 +1061,9 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/models.Connection'
+            items:
+              $ref: '#/definitions/models.Connection'
+            type: array
         "404":
           description: Cannot find Connection
           schema:
@@ -1245,7 +1258,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.PlaybookExecution'
+            type: string
         "400":
           description: Cannot cancel execution, it is not in a running state
           schema:
@@ -1389,6 +1402,12 @@ paths:
           name: ws_id
           required: true
           type: string
+        - description: test connection
+          in: body
+          name: integration
+          required: true
+          schema:
+            $ref: '#/definitions/v1.integration'
       produces:
         - application/json
       responses:
@@ -1745,7 +1764,9 @@ paths:
         "200":
           description: execution id
           schema:
-            type: string
+            additionalProperties:
+              type: string
+            type: object
         "404":
           description: Can not find Playbook
           schema:
@@ -2079,7 +2100,7 @@ paths:
       tags:
         - Runners
       x-cobra-command:
-        use: get
+        hidden: true
   /workspace/{ws_id}/table/{table}:
     get:
       consumes:
@@ -2526,44 +2547,43 @@ tags:
 x-cobra-command-operations:
   Connections:
     example: ""
-    short: connections are cool
+    short: Manage your connections
     use: connections
   Controller:
     example: ""
-    short: controllers are cool
+    hidden: true
     use: controller
   Executions:
+    short: Manage and track your playbook executions
     use: executions
   Integrations:
     example: ""
-    short: integrations are uber cool
+    short: Manage your integrations
     use: integrations
   Invites:
     example: ""
-    short: invites are uber cool
+    short: Manage your invites
     use: invites
   Playbooks:
     example: ""
-    short: playbooks are uber cool
+    short: Create and execute your playbooks
     use: playbooks
   Runners:
     example: ""
-    short: runner-groups are uber cool
+    short: Configure your runners
     use: runner-groups
   Settings:
     example: ""
-    short: user-settings are uber cool
     use: user-settings
   Table:
     example: ""
     hidden: true
-    short: table are uber cool
     use: table
   Webhook:
     example: ""
-    short: webhook are uber cool
+    hidden: true
     use: webhook
   Workspaces:
     example: ""
-    short: workspaces are uber cool
+    short: Manage your workspaces
     use: workspaces
