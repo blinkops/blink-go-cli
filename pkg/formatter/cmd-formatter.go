@@ -23,9 +23,9 @@ var cobraAnnotationError = fmt.Errorf("x-cobra-command: invalid structure")
 var cobraCommands = make(map[string]map[string]CobraAnnotation)
 var cobraOperations = make(map[string]CobraAnnotation)
 
-// Format formats the cobra command according to the
+// CMDFormat formats the cobra command according to the
 // annotations specified in the openapi specification
-func Format(root *cobra.Command, spec *loads.Document) {
+func CMDFormat(root *cobra.Command, spec *loads.Document) {
 
 	for k, v := range spec.Spec().Extensions {
 		if k != "x-cobra-command-operations" {

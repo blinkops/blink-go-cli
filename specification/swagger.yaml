@@ -547,7 +547,10 @@ definitions:
       name:
         type: string
     type: object
-host: app.blinkops.com:80
+host: app.dev.blinkops.com
+schemes:
+  - https
+  - http
 info:
   contact:
     email: support@blinkops.com

@@ -4,13 +4,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-openapi/loads"
 	"os"
 	"path/filepath"
 	"text/template"
+
+	"github.com/go-openapi/loads"
 )
 
-func main(){
+func main() {
 
 	var d struct {
 		Spec string
@@ -45,10 +46,20 @@ func main(){
 
 	t := template.Must(template.New("spec").Parse(specTemplate))
 	err = t.Execute(f, d)
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
+	cobraGenDir := filepath.Join(currenDir, "gen", "cli")
+	err = os.MkdirAll(cobraGenDir, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+
+	err = os.WriteFile(filepath.Join(cobraGenDir, "cobra_init_config.go"), []byte(cobraInitConfig), 0644)
+	if err != nil {
+		panic(err)
+	}
 }
 
 var specTemplate = `
@@ -60,4 +71,12 @@ func GetSwaggerSpec()(*loads.Document, error){
 	return loads.Analyzed([]byte(SwaggerSpec), "")
 }
 
+`
+
+// add package accessible  function, so we can call the exact cobra config
+var cobraInitConfig = `
+package cli
+func InitViperConfigs(){
+	initViperConfigs()
+}
 `

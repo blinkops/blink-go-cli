@@ -7,6 +7,8 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/blinkops/blink-go-cli/pkg/commands/initialize"
+
 	"github.com/blinkops/blink-go-cli/gen/spec"
 	"github.com/blinkops/blink-go-cli/pkg/commands/playbooks"
 	"github.com/blinkops/blink-go-cli/pkg/formatter"
@@ -47,7 +49,8 @@ func main() {
 		panic(err)
 	}
 
-	formatter.Format(rootCmd, spec)
+	formatter.CMDFormat(rootCmd, spec)
+	formatter.FlagFormat(rootCmd)
 
 	cmds := rootCmd.Commands()
 	for i := range cmds {
@@ -55,6 +58,8 @@ func main() {
 			playbooks.RegisterCommands(cmds[i])
 		}
 	}
+
+	rootCmd.AddCommand(initialize.CMD())
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
