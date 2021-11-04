@@ -10,7 +10,7 @@ func CMD() *cobra.Command {
 		Aliases: []string{"i"},
 		Short:   "Initialize a blink config file",
 		Long:    `This utility will walk you through setting up the blink configuration`,
-		RunE:    SetupMenuOptions,
+		RunE:    setupMenuOptions,
 	}
 	return command
 }

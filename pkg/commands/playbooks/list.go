@@ -61,12 +61,13 @@ func performListPlaybooks(wsID string) (string, error) {
 		return "No playbooks are available", nil
 	}
 
-	indentedOutput, err := json.MarshalIndent(responseObject.Results, "", consts.MarshalIndentation)
+	marshaled, err := json.Marshal(responseObject.Results)
 	if err != nil {
 		return "", err
 	}
 
-	return string(indentedOutput), nil
+	return string(marshaled), nil
+
 }
 
 func ListPlaybooks(command *cobra.Command, _ []string) error {

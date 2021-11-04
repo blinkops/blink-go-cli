@@ -7,11 +7,12 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/blinkops/blink-go-cli/pkg/normalizer"
+
 	"github.com/blinkops/blink-go-cli/pkg/commands/initialize"
 
 	"github.com/blinkops/blink-go-cli/gen/spec"
 	"github.com/blinkops/blink-go-cli/pkg/commands/playbooks"
-	"github.com/blinkops/blink-go-cli/pkg/formatter"
 
 	"github.com/blinkops/blink-go-cli/gen/cli"
 	"github.com/spf13/cobra"
@@ -49,8 +50,8 @@ func main() {
 		panic(err)
 	}
 
-	formatter.CMDFormat(rootCmd, spec)
-	formatter.FlagFormat(rootCmd)
+	normalizer.CMDFormat(rootCmd, spec)
+	normalizer.FlagFormat(rootCmd)
 
 	cmds := rootCmd.Commands()
 	for i := range cmds {

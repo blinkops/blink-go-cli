@@ -14,10 +14,16 @@ import (
 
 var exeName string = filepath.Base(os.Args[0])
 
-func SetupMenuOptions(command *cobra.Command, _ []string) error {
+func setupMenuOptions(command *cobra.Command, _ []string) error {
 
 	var results []string
 	var prompts = []promptui.Prompt{
+		{
+			Label: "Hostname (Example: app.dev.blinkops.com)",
+		},
+		{
+			Label: "Scheme (http or https)",
+		},
 		{
 			Label: "Blink API Key",
 		},
@@ -35,11 +41,15 @@ func SetupMenuOptions(command *cobra.Command, _ []string) error {
 	}
 
 	createConfigFile()
-	viper.Set("blink-api-key", results[0])
-	viper.Set("workspace-id", results[1])
+	viper.Set("hostname", results[0])
+	viper.Set("scheme", results[1])
+	viper.Set("blink-api-key", results[2])
+	viper.Set("workspace-id", results[3])
 	viper.WriteConfig()
 
-	fmt.Printf("Wrote conflig file to %s\n", viper.ConfigFileUsed())
+	fmt.Printf("\nWrote conflig file to %s\n\n", viper.ConfigFileUsed())
+	fmt.Println("Try it out - list your playbooks by running the following:")
+	fmt.Println("\tblink-cli playbooks list")
 
 	return nil
 }

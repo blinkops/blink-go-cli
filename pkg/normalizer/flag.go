@@ -1,4 +1,4 @@
-package formatter
+package normalizer
 
 import (
 	"github.com/spf13/cobra"
