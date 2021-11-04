@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
@@ -14,37 +15,48 @@ import (
 
 var exeName string = filepath.Base(os.Args[0])
 
-func setupMenuOptions(command *cobra.Command, _ []string) error {
+func setupMenuOptions(command *cobra.Command, _ []string) (err error) {
 
-	var results []string
-	var prompts = []promptui.Prompt{
-		{
-			Label: "Hostname (Example: app.dev.blinkops.com)",
-		},
-		{
-			Label: "Scheme (http or https)",
-		},
-		{
-			Label: "Blink API Key",
-		},
-		{
-			Label: "Workspace ID",
-		},
+	var prompt promptui.Prompt
+
+	prompt = promptui.Prompt{
+		Label:   "Hostname",
+		Default: "https://app.blinkops.com",
 	}
 
-	for _, prompt := range prompts {
-		result, err := prompt.Run()
-		if err != nil {
-			return err
-		}
-		results = append(results, result)
+	fullHostname, err := prompt.Run()
+	if err != nil {
+		return err
+	}
+
+	u, err := url.Parse(fullHostname)
+	if err != nil {
+		return err
+	}
+
+	prompt = promptui.Prompt{
+		Label: "Blink API Key",
+	}
+
+	apiKey, err := prompt.Run()
+	if err != nil {
+		return err
+	}
+
+	prompt = promptui.Prompt{
+		Label: "Workspace ID",
+	}
+
+	workspaceID, err := prompt.Run()
+	if err != nil {
+		return err
 	}
 
 	createConfigFile()
-	viper.Set("hostname", results[0])
-	viper.Set("scheme", results[1])
-	viper.Set("blink-api-key", results[2])
-	viper.Set("workspace-id", results[3])
+	viper.Set("hostname", u.Host)
+	viper.Set("scheme", u.Scheme)
+	viper.Set("blink-api-key", apiKey)
+	viper.Set("workspace-id", workspaceID)
 	viper.WriteConfig()
 
 	fmt.Printf("\nWrote conflig file to %s\n\n", viper.ConfigFileUsed())
