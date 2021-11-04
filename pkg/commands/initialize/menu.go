@@ -35,7 +35,9 @@ func setupMenuOptions(command *cobra.Command, _ []string) (err error) {
 	}
 
 	prompt = promptui.Prompt{
-		Label: "Blink API Key",
+		Label: fmt.Sprintf(
+			"Blink API Key (Obtain key by accessing %s/api/v1/apikey in your webbrowser)", fullHostname,
+		),
 	}
 
 	apiKey, err := prompt.Run()
