@@ -490,6 +490,48 @@ definitions:
       updated_by:
         type: string
     type: object
+  models.WorkspaceInfo:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+      user_count:
+        type: integer
+    type: object
+  user_details.Details:
+    properties:
+      auth_id:
+        type: string
+      default_workspace:
+        type: string
+      email:
+        type: string
+      inner_id:
+        type: string
+      name:
+        type: string
+      permissions:
+        items:
+          type: string
+        type: array
+      selected_workspace:
+        type: string
+      tenant_id:
+        type: string
+      tenant_role:
+        type: string
+      user_role:
+        type: string
+      workspaces:
+        additionalProperties:
+          $ref: '#/definitions/models.WorkspaceInfo'
+        type: object
+    type: object
   v1.RunnerGroupResponse:
     properties:
       available_runners:
@@ -547,7 +589,7 @@ definitions:
       name:
         type: string
     type: object
-host: app.dev.blinkops.com
+host: app.blinkops.com:80
 info:
   contact:
     email: support@blinkops.com
@@ -860,6 +902,24 @@ paths:
         - Invites
       x-cobra-command:
         use: uninvite
+  /user:
+    get:
+      description: Returns my user info
+      operationId: GetUserDetails
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_details.Details'
+      security:
+        - ApiKeyAuth: []
+      summary: Get my user info
+      tags:
+        - User Info
+      x-cobra-command:
+        use: user-details
   /user_settings:
     post:
       consumes:
@@ -2482,25 +2542,25 @@ securityDefinitions:
     type: apiKey
 swagger: "2.0"
 tags:
-  - description: Connections are cool
+  - description: Manage your connections
     name: Connections
-  - description: Controller are super cool
+  - description: Controller health and stats
     name: Controller
-  - description: integrations are super cool
+  - description: Manage your integrations
     name: Integrations
-  - description: invites are super cool
+  - description: Manage your invites
     name: Invites
-  - description: playbooks are super cool
+  - description: Create and execute your playbooks
     name: Playbooks
-  - description: runner-groups are super cool
+  - description: Configure your runners
     name: Runners
-  - description: table are super cool
+  - description: Manage your tables
     name: Table
-  - description: user settings are super cool
+  - description: Manage user settings
     name: User Settings
-  - description: webhook are super cool
+  - description: Send to webhook
     name: Webhook
-  - description: workspaces are super cool
+  - description: Manage your workspaces
     name: workspaces
 x-cobra-command-operations:
   Connections:
@@ -2537,6 +2597,9 @@ x-cobra-command-operations:
     example: ""
     hidden: true
     use: table
+  User Info:
+    short: Obtain user information
+    use: user-info
   Webhook:
     example: ""
     hidden: true
