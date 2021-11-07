@@ -8,24 +8,24 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/blinkops/blink-go-cli/pkg/utils"
+
 	"github.com/blinkops/blink-go-cli/gen/models"
-	"github.com/blinkops/blink-go-cli/pkg/commands/requests"
-	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
 
-func getCreatePlaybookCommand() *cobra.Command {
+func CreatePlaybookCommand() *cobra.Command {
 	command := &cobra.Command{
 		Use:     "create",
 		Aliases: []string{"c", "cr"},
 		Short:   "Create playbook by file",
 		Long:    `The following command will request Blink's system to create a playbook by a given YAML file`,
 		Example: "create -f /path/to/playbook.yaml",
-		RunE:    CreatePlaybook,
+		RunE:    createPlaybook,
 	}
 
-	command.Flags().StringP(consts.FileFlag, "f", "", "The path to the playbook file")
+	command.Flags().StringP("file", "f", "", "The path to the playbook file")
 
 	return command
 }
@@ -63,7 +63,7 @@ func performCreatePlaybook(filePath, wsID string) error {
 		return fmt.Errorf("Failed to create playbook data: %s ", err)
 	}
 
-	request, err := requests.NewRequest(http.MethodPost, GetPlaybookURL(wsID),
+	request, err := utils.NewRequest(http.MethodPost, GetPlaybookURL(wsID),
 		bytes.NewBuffer(playbookData), map[string]string{
 			"Content-Type": "application/json",
 		})
@@ -92,10 +92,10 @@ func performCreatePlaybook(filePath, wsID string) error {
 
 }
 
-func CreatePlaybook(command *cobra.Command, _ []string) error {
+func createPlaybook(command *cobra.Command, _ []string) error {
 
 	wsID := getWorkspaceParamFlags(command)
-	filePath, err := command.Flags().GetString(consts.FileFlag)
+	filePath, err := command.Flags().GetString("file")
 	if err != nil || filePath == "" {
 		return fmt.Errorf("no file input is supplied for the playbook creation")
 	}

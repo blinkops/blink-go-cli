@@ -15,7 +15,7 @@ type CobraAnnotation struct {
 	Aliases []string
 	Short   string
 	Example string
-	Hidden bool
+	Hidden  bool
 }
 
 var cobraAnnotationError = fmt.Errorf("x-cobra-command: invalid structure")
@@ -23,40 +23,49 @@ var cobraAnnotationError = fmt.Errorf("x-cobra-command: invalid structure")
 var cobraCommands = make(map[string]map[string]CobraAnnotation)
 var cobraOperations = make(map[string]CobraAnnotation)
 
-// CMDFormat formats the cobra command according to the
+// NormalizeCommands formats the cobra command according to the
 // annotations specified in the openapi specification
-func CMDFormat(root *cobra.Command, spec *loads.Document) {
+func NormalizeCommands(root *cobra.Command, doc *loads.Document) error {
 
-	for k, v := range spec.Spec().Extensions {
+	for k, v := range doc.Spec().Extensions {
 		if k != "x-cobra-command-operations" {
 			continue
 		}
 		ops, ok := v.(map[string]interface{})
 		if !ok {
-			panic(cobraAnnotationError)
+			return cobraAnnotationError
 		}
 		for opName, opValue := range ops {
-			cobraOperations[opName] = marshalAnnotation(opValue)
+			cobraObj, err := toCobraAnnotation(opValue)
+			cobra.CheckErr(err)
+			cobraOperations[opName] = cobraObj
 		}
 	}
 
+	var operationsToAdd []*spec.Operation
+
 	// build up the commands map
-	for _, v := range spec.Spec().Paths.Paths {
+	for _, v := range doc.Spec().Paths.Paths {
 		if v.Get != nil {
-			addOperationToMap(v.Get)
+			operationsToAdd = append(operationsToAdd, v.Get)
 		}
 		if v.Put != nil {
-			addOperationToMap(v.Put)
+			operationsToAdd = append(operationsToAdd, v.Put)
 		}
 		if v.Post != nil {
-			addOperationToMap(v.Post)
+			operationsToAdd = append(operationsToAdd, v.Post)
 		}
 		if v.Delete != nil {
-			addOperationToMap(v.Delete)
+			operationsToAdd = append(operationsToAdd, v.Delete)
 		}
 		if v.Patch != nil {
-			addOperationToMap(v.Patch)
+			operationsToAdd = append(operationsToAdd, v.Patch)
 		}
+	}
+
+	for _, op := range operationsToAdd {
+		err := addOperationToMap(op)
+		cobra.CheckErr(err)
 	}
 
 	operations := root.Commands()
@@ -98,7 +107,7 @@ func CMDFormat(root *cobra.Command, spec *loads.Document) {
 			command.Hidden = cobraCommand.Hidden
 		}
 	}
-
+	return nil
 }
 
 func getOriginalTagName(op string) string {
@@ -106,84 +115,90 @@ func getOriginalTagName(op string) string {
 	return strings.Title(spaced)
 }
 
-func addOperationToMap(operation *spec.Operation) {
+func addOperationToMap(operation *spec.Operation) error {
 
 	// like always take the first tag
 	if len(operation.Tags) == 0 {
-		return
+		return nil
 	}
 
 	tag := operation.Tags[0]
+
 	if _, found := cobraCommands[tag]; !found {
 		cobraCommands[tag] = make(map[string]CobraAnnotation)
 	}
 
-	cobra := unmarshalCobraAnnotation(operation.Extensions)
-	// if there is no annotation provided use the operation id as the use.
-	if cobra.Use == "" {
-		cobra.Use = operation.ID
+	cobraObj, err := unmarshalCobraAnnotation(operation.Extensions)
+	if err != nil {
+		return err
 	}
 
-	cobraCommands[tag][operation.ID] = cobra
+	// if there is no annotation provided use the operation id as the use.
+	if cobraObj.Use == "" {
+		cobraObj.Use = operation.ID
+	}
+
+	cobraCommands[tag][operation.ID] = cobraObj
+	return nil
 
 }
 
-func unmarshalCobraAnnotation(extensions spec.Extensions) CobraAnnotation {
+func unmarshalCobraAnnotation(extensions spec.Extensions) (CobraAnnotation, error) {
 
-	var cobra CobraAnnotation
+	var cobraObj CobraAnnotation
 
 	for name, ext := range extensions {
 		if name != "x-cobra-command" {
 			continue
 		}
-		return marshalAnnotation(ext)
+		return toCobraAnnotation(ext)
 	}
 
-	return cobra
+	return cobraObj, nil
 }
 
-func marshalAnnotation(ext interface{}) (cobra CobraAnnotation) {
+func toCobraAnnotation(ext interface{}) (cobraObj CobraAnnotation, err error) {
 	cobraParam, ok := ext.(map[string]interface{})
 	if !ok {
 		// we have problems
-		panic("x-cobra-command: invalid structure for operation")
+		return cobraObj, cobraAnnotationError
 	}
 
 	// populate the extensions
 	for k, v := range cobraParam {
 		switch k {
 		case "use":
-			cobra.Use, ok = v.(string)
+			cobraObj.Use, ok = v.(string)
 			if !ok {
-				panic(cobraAnnotationError)
+				return cobraObj, cobraAnnotationError
 			}
 		case "aliases":
 			aliases, ok := v.([]interface{})
 			if !ok {
-				panic(cobraAnnotationError)
+				return cobraObj, cobraAnnotationError
 			}
 			for i := range aliases {
 				alias, ok := aliases[i].(string)
 				if !ok {
-					panic(cobraAnnotationError)
+					return cobraObj, cobraAnnotationError
 				}
-				cobra.Aliases = append(cobra.Aliases, alias)
+				cobraObj.Aliases = append(cobraObj.Aliases, alias)
 			}
 		case "short":
-			cobra.Short, ok = v.(string)
+			cobraObj.Short, ok = v.(string)
 			if !ok {
-				panic(cobraAnnotationError)
+				return cobraObj, cobraAnnotationError
 			}
 		case "example":
-			cobra.Example, ok = v.(string)
+			cobraObj.Example, ok = v.(string)
 			if !ok {
-				panic(cobraAnnotationError)
+				return cobraObj, cobraAnnotationError
 			}
 		case "hidden":
-			cobra.Hidden = v.(bool)
+			cobraObj.Hidden = v.(bool)
 		}
 	}
-	return cobra
+	return cobraObj, nil
 }
 
 func GetCobraTag(name string) CobraAnnotation {

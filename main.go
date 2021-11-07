@@ -3,18 +3,12 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"regexp"
-
+	"github.com/blinkops/blink-go-cli/pkg/commands"
 	"github.com/blinkops/blink-go-cli/pkg/normalizer"
-
-	"github.com/blinkops/blink-go-cli/pkg/commands/initialize"
-
-	"github.com/blinkops/blink-go-cli/gen/spec"
-	"github.com/blinkops/blink-go-cli/pkg/commands/playbooks"
+	"os"
 
 	"github.com/blinkops/blink-go-cli/gen/cli"
+	"github.com/blinkops/blink-go-cli/gen/spec"
 	"github.com/spf13/cobra"
 )
 
@@ -28,9 +22,6 @@ const (
 ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝     ╚═════╝╚══════╝╚═╝`
 )
 
-var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
-var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
-
 var rootCmd *cobra.Command
 
 func main() {
@@ -38,29 +29,31 @@ func main() {
 	var err error
 
 	rootCmd, err = cli.MakeRootCmd()
-	if err != nil {
-		fmt.Println("Cmd construction error: ", err)
-		os.Exit(1)
-	}
+	cobra.CheckErr(err)
 
 	rootCmd.Long = ICON
 
 	spec, err := spec.GetSwaggerSpec()
-	if err != nil {
-		panic(err)
-	}
+	cobra.CheckErr(err)
 
-	normalizer.CMDFormat(rootCmd, spec)
-	normalizer.FlagFormat(rootCmd)
+	normalizer.NormalizeCommands(rootCmd, spec)
+	normalizer.NormalizeFlags(rootCmd)
 
-	cmds := rootCmd.Commands()
-	for i := range cmds {
-		if cmds[i].Use == "playbooks" {
-			playbooks.RegisterCommands(cmds[i])
+	// Add the children commands
+	parentCommands := rootCmd.Commands()
+	childCommands := commands.GetRegisteredChildCommands()
+
+	for i := range parentCommands {
+		parent := parentCommands[i]
+		if children, found := childCommands[parent.Use]; found {
+			parent.AddCommand(children...)
 		}
 	}
 
-	rootCmd.AddCommand(initialize.CMD())
+	// Add the standalone commands
+	rootCmd.AddCommand(
+		commands.GetRegisteredStandaloneCommands()...,
+	)
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)

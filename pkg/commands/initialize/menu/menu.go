@@ -1,4 +1,4 @@
-package initialize
+package menu
 
 import (
 	"fmt"
@@ -19,7 +19,7 @@ import (
 
 var exeName string = filepath.Base(os.Args[0])
 
-func setupMenuOptions(command *cobra.Command, _ []string) (err error) {
+func Setup(command *cobra.Command, _ []string) (err error) {
 
 	var prompt promptui.Prompt
 

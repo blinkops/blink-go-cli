@@ -1,11 +1,11 @@
-package requests
+package utils
 
 import (
 	"fmt"
-	"github.com/blinkops/blink-go-cli/pkg/consts"
-	"github.com/spf13/viper"
 	"io"
 	"net/http"
+
+	"github.com/spf13/viper"
 )
 
 func NewRequest(method string, endpoint string, body io.Reader, headers map[string]string) (*http.Request, error) {
@@ -24,11 +24,11 @@ func NewRequest(method string, endpoint string, body io.Reader, headers map[stri
 		authKey = viper.GetString("BLINK-API-KEY")
 	}
 
-	request.Header.Set(consts.ApiKeyHeader, authKey)
+	request.Header.Set("BLINK-API-KEY", authKey)
 	return request, nil
 }
 
-func GetBaseURL() string{
+func GetBaseURL() string {
 	hostname := viper.GetString("hostname")
 	scheme := viper.GetString("scheme")
 	return fmt.Sprintf("%s://%s", scheme, hostname)

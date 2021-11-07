@@ -7,8 +7,8 @@ import (
 
 // better name normalizer
 
-// FlagFormat formats the cobra flags according to the
-func FlagFormat(root *cobra.Command) {
+// NormalizeFlags formats the cobra flags according to the
+func NormalizeFlags(root *cobra.Command) {
 
 	// disable this stuff
 	for _, flag := range []string{"BLINK-API-KEY", "hostname", "scheme"} {

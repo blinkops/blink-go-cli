@@ -6,13 +6,13 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/blinkops/blink-go-cli/pkg/utils"
+
 	"github.com/blinkops/blink-go-cli/gen/models"
-	"github.com/blinkops/blink-go-cli/pkg/commands/requests"
-	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"github.com/spf13/cobra"
 )
 
-func getListPlaybooksCommand() *cobra.Command {
+func ListPlaybooksCommand() *cobra.Command {
 
 	command := &cobra.Command{
 		Use:     "list",
@@ -20,17 +20,17 @@ func getListPlaybooksCommand() *cobra.Command {
 		Short:   "Get all the available playbooks",
 		Long:    `The following command will request Blink's system to list all available playbooks`,
 		Example: "list",
-		RunE:    ListPlaybooks,
+		RunE:    listPlaybooks,
 	}
 
-	command.Flags().StringP(consts.FileFlag, "f", "", "The path to the playbook file")
+	command.Flags().StringP("file", "f", "", "The path to the playbook file")
 
 	return command
 }
 
 func performListPlaybooks(wsID string) (string, error) {
 
-	request, err := requests.NewRequest(http.MethodGet, GetPlaybookURL(wsID), nil, nil)
+	request, err := utils.NewRequest(http.MethodGet, GetPlaybookURL(wsID), nil, nil)
 	if err != nil {
 		return "", err
 	}
@@ -70,7 +70,7 @@ func performListPlaybooks(wsID string) (string, error) {
 
 }
 
-func ListPlaybooks(command *cobra.Command, _ []string) error {
+func listPlaybooks(command *cobra.Command, _ []string) error {
 
 	wsID := getWorkspaceParamFlags(command)
 	pagingInfo, err := performListPlaybooks(wsID)
