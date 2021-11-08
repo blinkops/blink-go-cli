@@ -17,9 +17,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-var exeName string = filepath.Base(os.Args[0])
+var exeName = filepath.Base(os.Args[0])
 
-func Setup(command *cobra.Command, _ []string) (err error) {
+func Setup(_ *cobra.Command, _ []string) (err error) {
 
 	var prompt promptui.Prompt
 
