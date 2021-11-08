@@ -3,9 +3,10 @@
 package main
 
 import (
+	"os"
+
 	"github.com/blinkops/blink-go-cli/pkg/commands"
 	"github.com/blinkops/blink-go-cli/pkg/normalizer"
-	"os"
 
 	"github.com/blinkops/blink-go-cli/gen/cli"
 	"github.com/blinkops/blink-go-cli/gen/spec"
@@ -36,9 +37,6 @@ func main() {
 	spec, err := spec.GetSwaggerSpec()
 	cobra.CheckErr(err)
 
-	normalizer.NormalizeCommands(rootCmd, spec)
-	normalizer.NormalizeFlags(rootCmd)
-
 	// Add the children commands
 	parentCommands := rootCmd.Commands()
 	childCommands := commands.GetRegisteredChildCommands()
@@ -54,6 +52,9 @@ func main() {
 	rootCmd.AddCommand(
 		commands.GetRegisteredStandaloneCommands()...,
 	)
+
+	normalizer.NormalizeCommands(rootCmd, spec)
+	normalizer.NormalizeFlags(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)

@@ -2562,6 +2562,8 @@ tags:
     name: Webhook
   - description: Manage your workspaces
     name: workspaces
+  - description: Get Information on current user
+    name: User Info
 x-cobra-command-operations:
   Connections:
     example: ""

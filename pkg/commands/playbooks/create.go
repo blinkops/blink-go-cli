@@ -6,13 +6,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 
 	"github.com/blinkops/blink-go-cli/pkg/utils"
 
-	"github.com/blinkops/blink-go-cli/gen/models"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 func CreatePlaybookCommand() *cobra.Command {
@@ -20,43 +17,23 @@ func CreatePlaybookCommand() *cobra.Command {
 		Use:     "create",
 		Aliases: []string{"c", "cr"},
 		Short:   "Create playbook by file",
-		Long:    `The following command will request Blink's system to create a playbook by a given YAML file`,
+		Long:    `The following command will create a playbook from a given YAML file`,
 		Example: "create -f /path/to/playbook.yaml",
 		RunE:    createPlaybook,
 	}
 
+	command.PersistentFlags().String("ws_id", "", "Required. workspace ID")
 	command.Flags().StringP("file", "f", "", "The path to the playbook file")
 
 	return command
 }
 
 func performCreatePlaybook(filePath, wsID string) error {
-	if _, err := os.Stat(filePath); err != nil {
-		return fmt.Errorf("%s does not exist", filePath)
-	}
 
-	data, err := ioutil.ReadFile(filePath)
+	playbook, err := readPlaybookFile(filePath)
 	if err != nil {
 		return err
 	}
-
-	playbookObject := &models.ModelsPlaybook{}
-	if err := yaml.NewDecoder(bytes.NewBuffer(data)).Decode(playbookObject); err != nil {
-		return fmt.Errorf("invalid playbook file: %s", err)
-	}
-
-	playbookAsYaml, err := yaml.Marshal(playbookObject)
-	if err != nil {
-		return fmt.Errorf("failed to create playbook object data: %s", err)
-	}
-
-	playbook := &models.ModelsPlaybook{
-		Version:         playbookObject.Version,
-		Playbook:        string(playbookAsYaml),
-		NumOfExecutions: 0,
-		Tags:            playbookObject.Tags,
-	}
-	playbook.Name = playbookObject.Name
 
 	playbookData, err := json.Marshal(playbook)
 	if err != nil {
@@ -94,7 +71,7 @@ func performCreatePlaybook(filePath, wsID string) error {
 
 func createPlaybook(command *cobra.Command, _ []string) error {
 
-	wsID := getWorkspaceParamFlags(command)
+	wsID, err := command.Flags().GetString("ws_id")
 	filePath, err := command.Flags().GetString("file")
 	if err != nil || filePath == "" {
 		return fmt.Errorf("no file input is supplied for the playbook creation")

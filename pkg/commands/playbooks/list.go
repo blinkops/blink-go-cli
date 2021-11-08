@@ -23,7 +23,7 @@ func ListPlaybooksCommand() *cobra.Command {
 		RunE:    listPlaybooks,
 	}
 
-	command.Flags().StringP("file", "f", "", "The path to the playbook file")
+	command.PersistentFlags().String("ws_id", "", "Required. workspace ID")
 
 	return command
 }
@@ -72,7 +72,7 @@ func performListPlaybooks(wsID string) (string, error) {
 
 func listPlaybooks(command *cobra.Command, _ []string) error {
 
-	wsID := getWorkspaceParamFlags(command)
+	wsID, err := command.Flags().GetString("ws_id")
 	pagingInfo, err := performListPlaybooks(wsID)
 	if err != nil {
 		return err
