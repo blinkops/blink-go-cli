@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"io/ioutil"
 	"net/http"
 
@@ -22,8 +23,8 @@ func CreatePlaybookCommand() *cobra.Command {
 		RunE:    createPlaybook,
 	}
 
-	command.PersistentFlags().String("ws_id", "", "Required. workspace ID")
-	command.Flags().StringP("file", "f", "", "The path to the playbook file")
+	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
+	command.Flags().StringP(consts.FileFlagName, "f", "", "The path to the playbook file")
 
 	return command
 }
@@ -71,8 +72,8 @@ func performCreatePlaybook(filePath, wsID string) error {
 
 func createPlaybook(command *cobra.Command, _ []string) error {
 
-	wsID, err := command.Flags().GetString("ws_id")
-	filePath, err := command.Flags().GetString("file")
+	wsID, err := command.Flags().GetString(consts.WorkspaceIDAutoGenFlagName)
+	filePath, err := command.Flags().GetString(consts.FileFlagName)
 	if err != nil || filePath == "" {
 		return fmt.Errorf("no file input is supplied for the playbook creation")
 	}

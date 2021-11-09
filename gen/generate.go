@@ -11,12 +11,11 @@ import (
 	"github.com/go-openapi/loads"
 )
 
+type Specification struct {
+	Spec string
+}
+
 func main() {
-
-	var d struct {
-		Spec string
-	}
-
 	fmt.Println("Running generate spec")
 
 	currenDir, err := os.Getwd()
@@ -31,7 +30,9 @@ func main() {
 		panic(err)
 	}
 
-	d.Spec = string(doc.Raw())
+	d := Specification{
+		Spec: string(doc.Raw()),
+	}
 
 	specGenDirPath := filepath.Join(currenDir, "gen", "spec")
 	err = os.MkdirAll(specGenDirPath, os.ModePerm)

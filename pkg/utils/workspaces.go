@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 
 	"github.com/blinkops/blink-go-cli/gen/client"
 	httptransport "github.com/go-openapi/runtime/client"
@@ -11,8 +12,8 @@ import (
 
 func GetWorkspaceID(workspaceName, apiKey string) (string, error) {
 
-	hostname := viper.GetString("hostname")
-	scheme := viper.GetString("scheme")
+	hostname := viper.GetString(consts.HostnameEntry)
+	scheme := viper.GetString(consts.SchemeEntry)
 
 	if scheme == "" {
 		scheme = "https"
@@ -20,7 +21,7 @@ func GetWorkspaceID(workspaceName, apiKey string) (string, error) {
 
 	r := httptransport.New(hostname, client.DefaultBasePath, []string{scheme})
 	r.DefaultAuthentication = httptransport.Compose(
-		httptransport.APIKeyAuth("BLINK-API-KEY", "header", apiKey),
+		httptransport.APIKeyAuth(consts.ApiKeyHeader, "header", apiKey),
 	)
 
 	userDetails, err := client.New(r, strfmt.Default).UserInfo.GetUserDetails(nil, nil)

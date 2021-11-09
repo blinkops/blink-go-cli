@@ -3,6 +3,7 @@ package playbooks
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"io/ioutil"
 	"net/http"
 
@@ -23,7 +24,7 @@ func ListPlaybooksCommand() *cobra.Command {
 		RunE:    listPlaybooks,
 	}
 
-	command.PersistentFlags().String("ws_id", "", "Required. workspace ID")
+	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
 
 	return command
 }

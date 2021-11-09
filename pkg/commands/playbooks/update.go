@@ -2,6 +2,7 @@ package playbooks
 
 import (
 	"fmt"
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +15,7 @@ func UpdatePlaybooksCommand() *cobra.Command {
 		Example: "update -f /path/to/playbook.yaml",
 		RunE:    updatePlaybooks,
 	}
-	command.PersistentFlags().String("ws_id", "", "Required. workspace ID")
+	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
 
 	return command
 }
