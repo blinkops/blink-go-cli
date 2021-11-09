@@ -15,6 +15,7 @@ func GetRegisteredChildCommands() map[string][]*cobra.Command {
 		"playbooks": {
 			playbooks.ListPlaybooksCommand(),
 			playbooks.CreatePlaybookCommand(),
+			playbooks.UpdatePlaybooksCommand(),
 		},
 	}
 }

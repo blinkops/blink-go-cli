@@ -3,9 +3,11 @@ package playbooks
 import (
 	"bytes"
 	"fmt"
-	"github.com/blinkops/blink-go-cli/pkg/consts"
+
 	"io/ioutil"
 	"os"
+
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 
 	"github.com/blinkops/blink-go-cli/gen/models"
 	"github.com/blinkops/blink-go-cli/pkg/utils"

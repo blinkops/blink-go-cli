@@ -1793,7 +1793,7 @@ paths:
       tags:
         - Playbooks
       x-cobra-command:
-        use: update
+        hidden: true
   /workspace/{ws_id}/playbooks/{id}/execute:
     post:
       consumes:
