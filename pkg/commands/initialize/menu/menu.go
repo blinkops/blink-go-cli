@@ -2,6 +2,7 @@ package menu
 
 import (
 	"fmt"
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"net/url"
 	"os"
 	"path"
@@ -25,7 +26,7 @@ func Setup(_ *cobra.Command, _ []string) (err error) {
 
 	prompt = promptui.Prompt{
 		Label:   "Hostname",
-		Default: "https://app.blinkops.com",
+		Default: consts.DefaultBlinkHostname,
 	}
 	fullHostname, err := prompt.Run()
 	if err != nil {
@@ -49,7 +50,7 @@ func Setup(_ *cobra.Command, _ []string) (err error) {
 
 	r := httptransport.New(u.Host, client.DefaultBasePath, []string{u.Scheme})
 	r.DefaultAuthentication = httptransport.Compose(
-		httptransport.APIKeyAuth("BLINK-API-KEY", "header", apiKey),
+		httptransport.APIKeyAuth(consts.ApiKeyHeader, "header", apiKey),
 	)
 
 	userDetails, err := client.New(r, strfmt.Default).UserInfo.GetUserDetails(nil, nil)
@@ -83,10 +84,10 @@ func Setup(_ *cobra.Command, _ []string) (err error) {
 	}
 
 	createConfigFile()
-	viper.Set("hostname", u.Host)
-	viper.Set("scheme", u.Scheme)
-	viper.Set("blink-api-key", apiKey)
-	viper.Set("workspace-id", workspaceID)
+	viper.Set(consts.HostnameEntry, u.Host)
+	viper.Set(consts.SchemeEntry, u.Scheme)
+	viper.Set(consts.ApiKeyEntry, apiKey)
+	viper.Set(consts.WorkspaceIdEntry, workspaceID)
 	viper.WriteConfig()
 
 	fmt.Printf("\nWrote conflig file to %s\n\n", viper.ConfigFileUsed())

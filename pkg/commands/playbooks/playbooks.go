@@ -3,6 +3,7 @@ package playbooks
 import (
 	"bytes"
 	"fmt"
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"io/ioutil"
 	"os"
 
@@ -19,7 +20,7 @@ func GetPlaybookURL(workspaceID string) string {
 }
 
 func getWorkspaceParamFlags(cmd *cobra.Command) string {
-	return viper.GetString("workspace-id")
+	return viper.GetString(consts.WorkspaceIDCobraKey)
 }
 
 func readPlaybookFile(filePath string) (playbook models.ModelsPlaybook, err error) {

@@ -34,7 +34,7 @@ func main() {
 
 	rootCmd.Long = ICON
 
-	spec, err := spec.GetSwaggerSpec()
+	swaggerSpec, err := spec.GetSwaggerSpec()
 	cobra.CheckErr(err)
 
 	// Add the children commands
@@ -53,7 +53,7 @@ func main() {
 		commands.GetRegisteredStandaloneCommands()...,
 	)
 
-	normalizer.NormalizeCommands(rootCmd, spec)
+	normalizer.NormalizeCommands(rootCmd, swaggerSpec)
 	normalizer.NormalizeFlags(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {

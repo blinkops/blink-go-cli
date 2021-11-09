@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"io"
 	"net/http"
 
@@ -20,11 +21,11 @@ func NewRequest(method string, endpoint string, body io.Reader, headers map[stri
 	}
 
 	var authKey string
-	if viper.IsSet("BLINK-API-KEY") {
-		authKey = viper.GetString("BLINK-API-KEY")
+	if viper.IsSet(consts.ApiKeyHeader) {
+		authKey = viper.GetString(consts.ApiKeyHeader)
 	}
 
-	request.Header.Set("BLINK-API-KEY", authKey)
+	request.Header.Set(consts.ApiKeyHeader, authKey)
 	return request, nil
 }
 
