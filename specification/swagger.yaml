@@ -22,6 +22,7 @@ definitions:
     type: object
   api_responses.ErrorWrapper:
     properties:
+      data: {}
       details:
         type: string
       message:
@@ -231,6 +232,29 @@ definitions:
       role:
         type: string
     type: object
+  models.Invite:
+    properties:
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      email_address:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+      tenant_id:
+        type: string
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+      user_id:
+        type: string
+    type: object
   models.Playbook:
     properties:
       created_at:
@@ -281,6 +305,8 @@ definitions:
       playbook:
         type: string
       playbook_id:
+        type: string
+      runner_id:
         type: string
       started_at:
         type: integer
@@ -374,6 +400,8 @@ definitions:
       updated_by:
         type: string
       user_name:
+        type: string
+      version:
         type: string
       workspace_id:
         type: string
@@ -588,6 +616,15 @@ definitions:
         type: array
       name:
         type: string
+    type: object
+  v1.invitation:
+    properties:
+      email:
+        type: string
+      roles:
+        items:
+          type: string
+        type: array
     type: object
 host: app.blinkops.com:80
 info:
@@ -831,7 +868,16 @@ paths:
         - application/json
       responses:
         "200":
-          description: ""
+          description: ok
+          schema:
+            allOf:
+              - $ref: '#/definitions/api_responses.PagingInfo'
+              - properties:
+                  results:
+                    items:
+                      $ref: '#/definitions/models.Invite'
+                    type: array
+                type: object
         "400":
           description: Failed to get invitations
           schema:
@@ -844,8 +890,19 @@ paths:
       x-cobra-command:
         use: list
     post:
+      consumes:
+        - application/json
       description: Inviting a user
       operationId: Invite
+      parameters:
+        - description: invitation
+          in: body
+          name: invitation
+          required: true
+          schema:
+            items:
+              $ref: '#/definitions/v1.invitation'
+            type: array
       produces:
         - application/json
       responses:
@@ -861,7 +918,7 @@ paths:
       tags:
         - Invites
       x-cobra-command:
-        use: invite
+        hidden: true
   /invite/:invitation:
     post:
       description: Accepting invitation by code
@@ -881,7 +938,7 @@ paths:
       tags:
         - Invites
       x-cobra-command:
-        use: accept
+        hidden: true
   /uninvite/:email:
     post:
       description: Uninviting a user

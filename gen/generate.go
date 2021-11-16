@@ -57,7 +57,7 @@ func main() {
 		panic(err)
 	}
 
-	err = os.WriteFile(filepath.Join(cobraGenDir, "cobra_init_config.go"), []byte(cobraInitConfig), 0644)
+	err = os.WriteFile(filepath.Join(cobraGenDir, "public_accessors.go"), []byte(publicAccessors), 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -75,9 +75,16 @@ func GetSwaggerSpec()(*loads.Document, error){
 `
 
 // add package accessible  function, so we can call the exact cobra config
-var cobraInitConfig = `
+var publicAccessors = `
 package cli
+import(
+	"github.com/blinkops/blink-go-cli/gen/client"
+	"github.com/spf13/cobra"
+)
 func InitViperConfigs(){
 	initViperConfigs()
+}
+func MakeClient(cmd *cobra.Command) (*client.BlinkApis, error){
+	return makeClient(cmd, nil)
 }
 `

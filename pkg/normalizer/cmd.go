@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/blinkops/blink-go-cli/pkg/consts"
+
 	"github.com/go-openapi/spec"
 
 	"github.com/go-openapi/loads"
@@ -80,6 +82,10 @@ func NormalizeCommands(root *cobra.Command, doc *loads.Document) error {
 			continue
 		}
 
+		if isAllowedOperations(tag) {
+			continue
+		}
+
 		// set the cobra tag name
 		cobraTag := GetCobraTag(tag)
 		if cobraTag.Use == "" {
@@ -133,9 +139,15 @@ func addOperationToMap(operation *spec.Operation) error {
 		return err
 	}
 
-	// if there is no annotation provided use the operation id as the use.
+	// if there is no annotation provided
+	// use the corresponding swagger annotation
+
 	if cobraObj.Use == "" {
 		cobraObj.Use = operation.ID
+	}
+
+	if cobraObj.Short == "" {
+		cobraObj.Short = operation.Description
 	}
 
 	cobraCommands[tag][operation.ID] = cobraObj
@@ -210,14 +222,23 @@ func GetCobraTag(name string) CobraAnnotation {
 }
 
 func shouldHideOperation(name string) bool {
+	// we want to hide  only the operations that are allowed as specified
+	// or that
 
-	// first check that its not one of the following
-	switch name {
-	case "Completion [Bash|Zsh|Fish|Powershell]":
-		return false
-	case "help":
+	if isAllowedOperations(name) {
 		return false
 	}
 	_, found := cobraOperations[name]
 	return !found
+}
+
+func isAllowedOperations(name string) bool {
+
+	for _, v := range consts.AllowedOperations() {
+		if strings.Title(v) == name {
+			return true
+		}
+	}
+
+	return false
 }
