@@ -5,11 +5,12 @@ package main
 import (
 	"os"
 
+	"github.com/blinkops/blink-go-cli/gen/spec"
+
 	"github.com/blinkops/blink-go-cli/pkg/commands"
 	"github.com/blinkops/blink-go-cli/pkg/normalizer"
 
 	"github.com/blinkops/blink-go-cli/gen/cli"
-	"github.com/blinkops/blink-go-cli/gen/spec"
 	"github.com/spf13/cobra"
 )
 
