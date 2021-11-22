@@ -2,6 +2,7 @@ package normalizer
 
 import (
 	"fmt"
+
 	"github.com/blinkops/blink-go-cli/pkg/consts"
 
 	"github.com/blinkops/blink-go-cli/pkg/utils"
@@ -30,7 +31,7 @@ func NormalizeFlags(root *cobra.Command) {
 		for _, subCommands := range val.Commands() {
 			ws := subCommands.PersistentFlags().Lookup(consts.WorkspaceIDAutoGenFlagName)
 			if ws != nil {
-				subCommands.PersistentFlags().String(consts.WorkspaceNameFlagName, "", "")
+				subCommands.PersistentFlags().String(consts.WorkspaceNameFlagName, "", "workspace name")
 				// bindWorkspace needs to run after the global flags are parsed
 				// but before the command is run
 				//subCommands.PersistentPreRunE = bindWorkspace
