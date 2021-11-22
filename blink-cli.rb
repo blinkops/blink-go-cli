@@ -5,21 +5,21 @@
 class BlinkCli < Formula
   desc "Awesome CLI for the blink ops platform"
   homepage "https://www.blinkops.com/"
-  version "0.3.1"
+  version "0.3.2"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.1/blink-cli_0.3.1_darwin_amd64.tar.gz"
-      sha256 "2d358975882a91a9bb0d293b29eb7552eea34183799847009da61e3d4bca83ea"
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.2/blink-cli_0.3.2_darwin_amd64.tar.gz"
+      sha256 "19e98e9883a97cb64e9b0035df0ba4ad49f6bd9903aa2d2e6ddac9a97ea69e9b"
 
       def install
         bin.install "blink-cli"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.1/blink-cli_0.3.1_darwin_arm64.tar.gz"
-      sha256 "14ef44b2ad97a0b74c1e4ca325554913d79f56b540340e5282ddedd711e36aab"
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.2/blink-cli_0.3.2_darwin_arm64.tar.gz"
+      sha256 "120be0875b67b721db27cf025c9605615e9fb7126f13f6f3fa24d0b4a7508453"
 
       def install
         bin.install "blink-cli"
@@ -29,16 +29,16 @@ class BlinkCli < Formula
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.1/blink-cli_0.3.1_linux_amd64.tar.gz"
-      sha256 "b5fc1591bffb9fd43641f8d500bd41a889c5f00d49448a11e786d511e31474a4"
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.2/blink-cli_0.3.2_linux_amd64.tar.gz"
+      sha256 "78254b38dba96c83443e234b0180e38081929072a42eaf7c28c8a35abd09c31b"
 
       def install
         bin.install "blink-cli"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.1/blink-cli_0.3.1_linux_arm64.tar.gz"
-      sha256 "95ed4bf4a45e6da180a7de3f4b80fee8c9cd7d8304225fbafc006462c8237b67"
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.2/blink-cli_0.3.2_linux_arm64.tar.gz"
+      sha256 "bf94a04d53cd0b85e7cd53ad12db5d2f393bbd7f1affee51f8334c27c8f0de13"
 
       def install
         bin.install "blink-cli"
