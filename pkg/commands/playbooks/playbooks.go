@@ -56,11 +56,10 @@ func readPlaybookFile(filePath string) (playbook models.ModelsPlaybook, err erro
 	}
 
 	playbook = models.ModelsPlaybook{
-		Version:         version,
-		Playbook:        string(data),
-		NumOfExecutions: 0,
-		Tags:            tags,
-		Name:            name,
+		Version:  version,
+		Playbook: string(data),
+		Tags:     tags,
+		Name:     name,
 	}
 
 	return playbook, nil
