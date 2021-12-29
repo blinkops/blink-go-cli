@@ -235,7 +235,7 @@ func shouldHideOperation(name string) bool {
 func isAllowedOperations(name string) bool {
 
 	for _, v := range consts.AllowedOperations() {
-		if strings.Title(v) == name {
+		if getOriginalTagName(v) == name {
 			return true
 		}
 	}

@@ -1,4 +1,4 @@
-//go:generate go run gen/generate.go
+//go:generate go run cmd/gen/generate.go
 
 package main
 

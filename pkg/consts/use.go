@@ -3,9 +3,14 @@ package consts
 const (
 	CompletionAutoGen = "completion [Bash|Zsh|Fish|Powershell]"
 	HelpAutoGen       = "help"
-	InitExtra         = "init"
 )
 
 func AllowedOperations() []string {
-	return []string{CompletionAutoGen, HelpAutoGen, InitExtra}
+	return allowedList
 }
+
+func AddAllowedOperation(name string) {
+	allowedList = append(allowedList, name)
+}
+
+var allowedList = []string{CompletionAutoGen, HelpAutoGen}
