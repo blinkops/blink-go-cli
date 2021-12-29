@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+
 	"github.com/blinkops/blink-go-cli/pkg/consts"
 
 	"github.com/blinkops/blink-go-cli/gen/client"
@@ -30,7 +31,7 @@ func GetWorkspaceID(workspaceName, apiKey string) (string, error) {
 	}
 
 	for _, val := range userDetails.Payload.Workspaces {
-		if val.Name == workspaceName {
+		if val.DisplayName == workspaceName {
 			return val.ID, nil
 		}
 	}
