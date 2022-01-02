@@ -20,16 +20,31 @@ type CobraAnnotation struct {
 	Hidden  bool
 }
 
+type CommandContext struct {
+	Cobra CobraAnnotation
+	Op    *spec.Operation
+}
+
 var cobraAnnotationError = fmt.Errorf("x-cobra-command: invalid structure")
 
-var cobraCommands = make(map[string]map[string]CobraAnnotation)
+var cobraCommands = make(map[string]map[string]CommandContext)
 var cobraOperations = make(map[string]CobraAnnotation)
 
-// NormalizeCommands formats the cobra command according to the
-// annotations specified in the openapi specification
-func NormalizeCommands(root *cobra.Command, doc *loads.Document) error {
+type CommandNormalizer struct {
+	doc *loads.Document
+}
 
-	for k, v := range doc.Spec().Extensions {
+func NewCommandNormalizer(doc *loads.Document) *CommandNormalizer {
+	return &CommandNormalizer{
+		doc: doc,
+	}
+}
+
+// Normalize Normalizes and formats the cobra command according to the
+// annotations specified in the openapi specification
+func (normalizer *CommandNormalizer) Normalize(root *cobra.Command) error {
+
+	for k, v := range normalizer.doc.Spec().Extensions {
 		if k != "x-cobra-command-operations" {
 			continue
 		}
@@ -47,7 +62,7 @@ func NormalizeCommands(root *cobra.Command, doc *loads.Document) error {
 	var operationsToAdd []*spec.Operation
 
 	// build up the commands map
-	for _, v := range doc.Spec().Paths.Paths {
+	for _, v := range normalizer.doc.Spec().Paths.Paths {
 		if v.Get != nil {
 			operationsToAdd = append(operationsToAdd, v.Get)
 		}
@@ -106,11 +121,11 @@ func NormalizeCommands(root *cobra.Command, doc *loads.Document) error {
 			if !ok {
 				continue
 			}
-			command.Use = cobraCommand.Use
-			command.Aliases = cobraCommand.Aliases
-			command.Short = cobraCommand.Short
-			command.Example = cobraCommand.Example
-			command.Hidden = cobraCommand.Hidden
+			command.Use = cobraCommand.Cobra.Use
+			command.Aliases = cobraCommand.Cobra.Aliases
+			command.Short = cobraCommand.Cobra.Short
+			command.Example = cobraCommand.Cobra.Example
+			command.Hidden = cobraCommand.Cobra.Hidden
 		}
 	}
 	return nil
@@ -123,15 +138,15 @@ func getOriginalTagName(op string) string {
 
 func addOperationToMap(operation *spec.Operation) error {
 
-	// like always take the first tag
 	if len(operation.Tags) == 0 {
 		return nil
 	}
 
+	// like always take the first tag
 	tag := operation.Tags[0]
 
 	if _, found := cobraCommands[tag]; !found {
-		cobraCommands[tag] = make(map[string]CobraAnnotation)
+		cobraCommands[tag] = make(map[string]CommandContext)
 	}
 
 	cobraObj, err := unmarshalCobraAnnotation(operation.Extensions)
@@ -150,7 +165,9 @@ func addOperationToMap(operation *spec.Operation) error {
 		cobraObj.Short = operation.Description
 	}
 
-	cobraCommands[tag][operation.ID] = cobraObj
+	cobraCommands[tag][operation.ID] = CommandContext{
+		Cobra: cobraObj, Op: operation,
+	}
 	return nil
 
 }

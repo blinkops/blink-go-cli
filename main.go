@@ -54,8 +54,8 @@ func main() {
 		commands.GetRegisteredStandaloneCommands()...,
 	)
 
-	normalizer.NormalizeCommands(rootCmd, swaggerSpec)
-	normalizer.NormalizeFlags(rootCmd)
+	normalizer.NewFlagNormalizer(swaggerSpec).Normalize(rootCmd)
+	normalizer.NewCommandNormalizer(swaggerSpec).Normalize(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
