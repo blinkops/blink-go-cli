@@ -5,6 +5,7 @@ const (
 	WorkspaceNameFlagName      = "workspace"
 	WorkspaceIDAutoGenFlagName = "ws_id"
 	IDFlagName                 = "id"
+	QueryFlagName              = "q"
 	RecordFlag                 = "record"
 	WorkspaceIDCobraKey        = "workspace-id"
 	APIKeyCobraKey             = "blink-api-key"

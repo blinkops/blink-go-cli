@@ -116,8 +116,8 @@ func MakeFind(tableName string) *cobra.Command {
 func makeFindExec(tableName string) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		tableService := newTableService(cmd)
-		wsID, _ := cmd.Flags().GetString("ws_id")
-		qFlag, _ := cmd.Flags().GetString("q")
+		wsID, _ := cmd.Flags().GetString(consts.WorkspaceIDAutoGenFlagName)
+		qFlag, _ := cmd.Flags().GetString(consts.QueryFlagName)
 
 		params := table.NewTableFindRecordParams()
 		params.Table = tableName
@@ -148,8 +148,8 @@ func MakeGet(tableName string) *cobra.Command {
 func makeGetExec(tableName string) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		tableService := newTableService(cmd)
-		wsID, _ := cmd.Flags().GetString("ws_id")
-		id, _ := cmd.Flags().GetString("id")
+		wsID, _ := cmd.Flags().GetString(consts.WorkspaceIDAutoGenFlagName)
+		id, _ := cmd.Flags().GetString(consts.IDFlagName)
 
 		params := table.NewTableGetRecordParams()
 		params.Table = tableName
@@ -221,8 +221,8 @@ func registerIDParamFlag(cmd *cobra.Command) *string {
 }
 
 func registerQParamFlags(cmd *cobra.Command) error {
-	qDescription := `query json, example: { "limit": 25, "offset": 0, "filter": { "name": { "$gt": "k8s" } } }`
+	qDescription := `query json, for example: { "limit": 25, "offset": 0, "filter": { "name": { "$gt": "k8s" } } }`
 	var qFlagDefault string
-	_ = cmd.PersistentFlags().String("q", qFlagDefault, qDescription)
+	_ = cmd.PersistentFlags().String(consts.QueryFlagName, qFlagDefault, qDescription)
 	return nil
 }
