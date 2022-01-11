@@ -54,7 +54,8 @@ definitions:
     type: object
   api_responses.ErrorWrapper:
     properties:
-      data: {}
+      data:
+        type: object
       details:
         type: string
       message:
@@ -83,7 +84,8 @@ definitions:
         type: integer
       offset:
         type: integer
-      results: {}
+      results:
+        type: object
       total:
         type: integer
     type: object
@@ -147,7 +149,8 @@ definitions:
     type: object
   models.ConnectionAttribute:
     properties:
-      value: {}
+      value:
+        type: object
     type: object
   models.ConnectionAttributes:
     additionalProperties:
@@ -242,6 +245,7 @@ definitions:
     properties:
       default_value:
         description: 'optional: the default value'
+        type: object
       description:
         description: 'optional: "description text"'
         type: string
@@ -568,21 +572,6 @@ definitions:
   models.StepResults:
     additionalProperties:
       type: integer
-    type: object
-  models.TenantBase:
-    properties:
-      created_at:
-        type: integer
-      created_by:
-        type: string
-      id:
-        type: string
-      tenant_id:
-        type: string
-      updated_at:
-        type: integer
-      updated_by:
-        type: string
     type: object
   models.UserSettings:
     properties:
@@ -2976,16 +2965,7 @@ paths:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/api_responses.PagingInfo'
-            - properties:
-                results:
-                  additionalProperties:
-                    items:
-                      type: string
-                    type: array
-                  type: object
-              type: object
+            $ref: '#/definitions/api_responses.ResponseWrapper'
         "404":
           description: Can not find record
           schema:
@@ -2993,6 +2973,46 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Returns table records by a filter
+      tags:
+      - Table
+    post:
+      consumes:
+      - application/json
+      description: Creates a new record
+      operationId: TableCreateRecord
+      parameters:
+      - description: table name
+        in: path
+        name: table
+        required: true
+        type: string
+      - description: record json
+        in: body
+        name: record
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Can not create Record
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new record
       tags:
       - Table
   /workspace/{ws_id}/table/{table}/{id}:
@@ -3064,7 +3084,8 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.TenantBase'
+            additionalProperties: true
+            type: object
         "400":
           description: Id is mandatory
           schema:
@@ -3078,61 +3099,12 @@ paths:
       summary: Returns a record by id
       tags:
       - Table
-    post:
-      consumes:
-      - application/json
-      description: Creates a new record
-      operationId: TableCreateRecord
-      parameters:
-      - description: record
-        in: body
-        name: playbook
-        required: true
-        schema:
-          $ref: '#/definitions/models.TenantBase'
-      - description: record id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: table name
-        in: path
-        name: table
-        required: true
-        type: string
-      - description: workspace ID
-        in: path
-        name: ws_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Playbook'
-        "400":
-          description: Can not create Record
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-      - ApiKeyAuth: []
-      summary: Creates a new record
-      tags:
-      - Table
     put:
       consumes:
       - application/json
       description: Updates a record
       operationId: TableUpdateRecord
       parameters:
-      - description: Updates a record
-        in: body
-        name: record
-        required: true
-        schema:
-          $ref: '#/definitions/models.TenantBase'
       - description: table name
         in: path
         name: table
@@ -3143,6 +3115,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: record json
+        in: body
+        name: record
+        required: true
+        schema:
+          type: string
       - description: workspace ID
         in: path
         name: ws_id
@@ -3154,7 +3132,7 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/models.Playbook'
+            type: string
         "400":
           description: Can not update record
           schema:
