@@ -1,4 +1,4 @@
-//go:generate swagger generate cli -f ../specification/swagger.yaml
+//go:generate swagger generate cli -t ../../gen -f ../../specification/swagger.yaml
 
 package main
 
@@ -81,10 +81,17 @@ import(
 	"github.com/blinkops/blink-go-cli/gen/client"
 	"github.com/spf13/cobra"
 )
+
 func InitViperConfigs(){
 	initViperConfigs()
 }
+
 func MakeClient(cmd *cobra.Command) (*client.BlinkApis, error){
 	return makeClient(cmd, nil)
 }
+
+func Debug() bool {
+	return debug
+}
+
 `

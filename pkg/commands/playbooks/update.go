@@ -2,14 +2,12 @@ package playbooks
 
 import (
 	"fmt"
-
-	"github.com/blinkops/blink-go-cli/gen/client/playbooks"
-	httptransport "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/strfmt"
-	"github.com/spf13/viper"
+	"github.com/blinkops/blink-go-cli/pkg/utils"
 
 	"github.com/blinkops/blink-go-cli/gen/client"
+	"github.com/blinkops/blink-go-cli/gen/client/playbooks"
 	"github.com/blinkops/blink-go-cli/pkg/consts"
+	"github.com/go-openapi/strfmt"
 	"github.com/spf13/cobra"
 )
 
@@ -41,18 +39,7 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 		return err
 	}
 
-	hostname := viper.GetString(consts.HostnameEntry)
-	scheme := viper.GetString(consts.SchemeEntry)
-	apiKey := viper.GetString(consts.ApiKeyEntry)
-
-	if scheme == "" {
-		scheme = "https"
-	}
-
-	r := httptransport.New(hostname, client.DefaultBasePath, []string{scheme})
-	r.DefaultAuthentication = httptransport.Compose(
-		httptransport.APIKeyAuth(consts.ApiKeyHeader, "header", apiKey),
-	)
+	r := utils.NewTransport()
 
 	searchParam := playbooks.NewPlaybookFindByFilterParams()
 	searchParam.Q = fmt.Sprintf(`{"search":{"text":"%s"}}`, playbookObj.Name)
