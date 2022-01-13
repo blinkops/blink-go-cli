@@ -47,6 +47,7 @@ func readPlaybookFile(filePath string) (playbook models.ModelsPlaybook, err erro
 	version, _ := playbookPayload["version"].(string)
 	tagsI, _ := playbookPayload["tags"].([]interface{})
 	name, _ := playbookPayload["name"].(string)
+	playbookType, _ := playbookPayload["type"].(string)
 
 	var tags []string
 	for _, tagI := range tagsI {
@@ -56,6 +57,7 @@ func readPlaybookFile(filePath string) (playbook models.ModelsPlaybook, err erro
 	}
 
 	playbook = models.ModelsPlaybook{
+		Type:     playbookType,
 		Version:  version,
 		Playbook: string(data),
 		Tags:     tags,

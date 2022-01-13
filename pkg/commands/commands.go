@@ -28,7 +28,7 @@ func GetRegisteredChildCommands() map[string][]*cobra.Command {
 func GetRegisteredStandaloneCommands() []*cobra.Command {
 	commands := []*cobra.Command{
 		initialize.Command(),
-		table.CRUD("connection_types", "Manage your connection types"),
+		table.CRUD("connection_types", "connection-types", "Manage your connection types"),
 	}
 
 	for _, command := range commands {
