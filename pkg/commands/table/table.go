@@ -4,19 +4,20 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/blinkops/blink-go-cli/gen/cli"
 	"github.com/blinkops/blink-go-cli/gen/client/table"
 	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"github.com/spf13/cobra"
 )
 
-func CRUD(table string, desc string) *cobra.Command {
-	return makeOperationGroupTableCmd(table, desc)
+func CRUD(table string, usage, desc string) *cobra.Command {
+	return makeOperationGroupTableCmd(table, usage, desc)
 }
 
-func makeOperationGroupTableCmd(tableName string, desc string) *cobra.Command {
+func makeOperationGroupTableCmd(tableName string, usage, desc string) *cobra.Command {
 	operationGroupTableCmd := &cobra.Command{
-		Use:   tableName,
+		Use:   usage,
 		Long:  desc,
 		Short: desc,
 	}

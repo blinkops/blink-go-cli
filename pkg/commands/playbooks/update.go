@@ -2,6 +2,7 @@ package playbooks
 
 import (
 	"fmt"
+
 	"github.com/blinkops/blink-go-cli/pkg/utils"
 
 	"github.com/blinkops/blink-go-cli/gen/client"
@@ -42,7 +43,7 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 	r := utils.NewTransport()
 
 	searchParam := playbooks.NewPlaybookFindByFilterParams()
-	searchParam.Q = fmt.Sprintf(`{"search":{"text":"%s"}}`, playbookObj.Name)
+	searchParam.Q = fmt.Sprintf(`{"search":{"text":"%s","fields":["name"]}}`, playbookObj.Name)
 	searchParam.WsID = wsID
 
 	playbookResponse, err := client.New(r, strfmt.Default).
