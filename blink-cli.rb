@@ -5,21 +5,21 @@
 class BlinkCli < Formula
   desc "Awesome CLI for the blink ops platform"
   homepage "https://www.blinkops.com/"
-  version "0.3.4"
+  version "0.3.5"
   license "MIT"
 
   on_macos do
-    if Hardware::CPU.intel?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.4/blink-cli_0.3.4_darwin_amd64.tar.gz"
-      sha256 "f39e58ce263817bb80d01179d073c100ba77b218cbbfc3c4f24b24fd74c5a34c"
+    if Hardware::CPU.arm?
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.5/blink-cli_0.3.5_darwin_arm64.tar.gz"
+      sha256 "f3ad5311dcb8c5b46173c37324ef3fc1679c9ecf3d7f251826a1ceda3b2d3033"
 
       def install
         bin.install "blink-cli"
       end
     end
-    if Hardware::CPU.arm?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.4/blink-cli_0.3.4_darwin_arm64.tar.gz"
-      sha256 "5348e82727de2934ec805726b993069bf6fe1196b143273222d54870f2447e6f"
+    if Hardware::CPU.intel?
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.5/blink-cli_0.3.5_darwin_amd64.tar.gz"
+      sha256 "e321fa5692d1c2d4b0c0044bd422b12ebe4c4c0c04a4091135f2be679a798170"
 
       def install
         bin.install "blink-cli"
@@ -28,17 +28,17 @@ class BlinkCli < Formula
   end
 
   on_linux do
-    if Hardware::CPU.intel?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.4/blink-cli_0.3.4_linux_amd64.tar.gz"
-      sha256 "74795ab06e725e95787581d1c7f13ea977774cbad0bbc16528783641160ca64a"
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.5/blink-cli_0.3.5_linux_arm64.tar.gz"
+      sha256 "68ab404aa8c064cb558f5c08fe2446f825c620a21f6a184dbc56fcc9e99819e2"
 
       def install
         bin.install "blink-cli"
       end
     end
-    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.4/blink-cli_0.3.4_linux_arm64.tar.gz"
-      sha256 "90c9e28138cf0594e8daeba80cd3ce096972ef5fa363e928bd70c2289a87597a"
+    if Hardware::CPU.intel?
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.5/blink-cli_0.3.5_linux_amd64.tar.gz"
+      sha256 "37bc162cf879a4d0ced712cfd01c6b30c3fe705aa287fe500d788983e5e50b17"
 
       def install
         bin.install "blink-cli"
