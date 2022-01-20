@@ -1730,8 +1730,8 @@ paths:
       description: Returns connections by a filter
       operationId: ConnectionFindByFilter
       parameters:
-        - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
-          ''$gt'': ''k8s'', } } }'
+        - description: '''{ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'':
+          { ''$gt'': ''k8s''}}}'' filter is optional'
           in: query
           name: q
           required: true
