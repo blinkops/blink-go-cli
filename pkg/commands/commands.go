@@ -18,6 +18,8 @@ func GetRegisteredChildCommands() map[string][]*cobra.Command {
 			playbooks.ListPlaybooksCommand(),
 			playbooks.CreatePlaybookCommand(),
 			playbooks.UpdatePlaybooksCommand(),
+			playbooks.GetPlaybookCommand(),
+			playbooks.DeletePlaybookCommand(),
 		},
 		"invites": {
 			invites.InviteCommand(),

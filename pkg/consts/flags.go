@@ -10,4 +10,5 @@ const (
 	WorkspaceIDCobraKey        = "workspace-id"
 	APIKeyCobraKey             = "blink-api-key"
 	FileFlagName               = "file"
+	NameFlagName               = "name"
 )

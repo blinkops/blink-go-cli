@@ -1044,8 +1044,8 @@ paths:
       description: Returns connection types by a filter
       operationId: ConnectionTypeFindByFilter
       parameters:
-        - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
-          ''$gt'': ''k8s'', } } }'
+        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+          ''k8s''}}}'' filter is optional'
           in: query
           name: q
           required: true
@@ -1730,8 +1730,8 @@ paths:
       description: Returns connections by a filter
       operationId: ConnectionFindByFilter
       parameters:
-        - description: '''{ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'':
-          { ''$gt'': ''k8s''}}}'' filter is optional'
+        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+          ''k8s''}}}'' filter is optional'
           in: query
           name: q
           required: true
@@ -1955,8 +1955,8 @@ paths:
       description: Returns playbooks execution by a filter
       operationId: PlaybookExecutionFindByFilter
       parameters:
-        - description: '{ ֿֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'':
-          { ''$gt'': ''k8s'', } } }'
+        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+          ''k8s''}}}'' filter is optional'
           in: query
           name: q
           required: true
@@ -2429,8 +2429,8 @@ paths:
       description: Returns playbooks by a filter
       operationId: PlaybookFindByFilter
       parameters:
-        - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
-          ''$gt'': ''k8s'', } } }'
+        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+          ''k8s''}}}'' filter is optional'
           in: query
           name: q
           required: true
@@ -2543,7 +2543,7 @@ paths:
       tags:
         - Playbooks
       x-cobra-command:
-        use: delete
+        hidden: true
     get:
       consumes:
         - application/json
@@ -2577,7 +2577,7 @@ paths:
       tags:
         - Playbooks
       x-cobra-command:
-        use: get
+        hidden: true
     put:
       consumes:
         - application/json
@@ -3076,8 +3076,8 @@ paths:
       description: Returns table records by a filter
       operationId: TableFindRecord
       parameters:
-        - description: '{ ֿֿֿ''limit'': 25, ''offset'': 0, ''filter'': { ''name'': {
-          ''$gt'': ''k8s'', } } }'
+        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+          ''k8s''}}}'' filter is optional'
           in: query
           name: q
           required: true
