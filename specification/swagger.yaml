@@ -2815,7 +2815,7 @@ paths:
       tags:
         - Runners
       x-cobra-command:
-        use: create
+        hidden: true
   /workspace/{ws_id}/runner_groups/{id}:
     delete:
       consumes:
