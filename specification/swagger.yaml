@@ -2844,6 +2844,10 @@ paths:
           description: Cannot delete runner group
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
+        "403":
+          description: You are not allowed to manage this resource
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
       summary: Deletes a runner group
