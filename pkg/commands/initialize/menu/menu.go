@@ -124,8 +124,7 @@ func Setup(_ *cobra.Command, _ []string) (err error) {
 	viper.Set(consts.SchemeEntry, u.Scheme)
 	viper.Set(consts.ApiKeyEntry, apiKey)
 	viper.Set(consts.WorkspaceIdEntry, workspaceID)
-	err = viper.WriteConfig()
-	if err != nil {
+	if err = viper.WriteConfig(); err != nil {
 		return err
 	}
 

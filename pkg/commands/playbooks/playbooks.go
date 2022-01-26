@@ -3,7 +3,9 @@ package playbooks
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/blinkops/blink-go-cli/pkg/api_responses"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -71,15 +73,8 @@ func readPlaybookFile(filePath string) (playbook models.ModelsPlaybook, err erro
 }
 
 func extractPlaybookIdFromResponse(responseBody []byte, playbookName string) (string, error) {
-	type Result struct {
-		Results []struct {
-			Id              string        `json:"id"`
-		} `json:"results"`
-	}
-
-	var result Result
-	err := json.Unmarshal(responseBody, &result)
-	if err != nil {
+	var result api_responses.GetPlaybookIdByNameResponse
+	if err := json.Unmarshal(responseBody, &result); err != nil {
 		return "", err
 	}
 
@@ -90,8 +85,8 @@ func extractPlaybookIdFromResponse(responseBody []byte, playbookName string) (st
 	return "", fmt.Errorf("cannot find playbook id for playbook [%s]", playbookName)
 }
 
-func getPlaybookId(playbookName string, workspaceID string) (string, error) {
-	filter := fmt.Sprintf(`{"limit": 1, "offset": 0, "filter": {"name": {"$eq": "%s"}}}`, playbookName)
+func getPlaybookIdByName(playbookName string, workspaceID string) (string, error) {
+	filter := fmt.Sprintf(`{"limit": 1, "offset": 0, "filter": {"name": {"$eq": "%s"}}, "select": ["id"]}`, playbookName)
 	url := utils.GetBaseURL() + fmt.Sprintf("/api/v1/workspace/%s/playbooks?q=%s", workspaceID, url.QueryEscape(filter))
 	request, err := utils.NewRequest(http.MethodGet, url, nil, nil)
 	if err != nil {
@@ -102,6 +97,10 @@ func getPlaybookId(playbookName string, workspaceID string) (string, error) {
 	response, err := client.Do(request)
 	if err != nil {
 		return "", err
+	}
+
+	if response.Body == nil {
+		return "", errors.New("invalid response body")
 	}
 
 	defer func() { _ = response.Body.Close() }()

@@ -43,6 +43,10 @@ func performGetPlaybookById(playbookID, wsID string) error {
 		return err
 	}
 
+	if response.Body == nil {
+		return errors.New("invalid response body")
+	}
+
 	defer func() { _ = response.Body.Close() }()
 
 	responseBody, err := ioutil.ReadAll(response.Body)
@@ -70,7 +74,7 @@ func getPlaybook(command *cobra.Command, _ []string) error {
 
 	// if both name and id are supplied, name takes priority
 	if name != "" {
-		if id, err = getPlaybookId(name, wsID); err != nil {
+		if id, err = getPlaybookIdByName(name, wsID); err != nil {
 			return err
 		}
 	}

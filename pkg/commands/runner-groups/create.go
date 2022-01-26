@@ -61,6 +61,10 @@ func performCreateRunnerGroup(runnerGroupData models.APIRequestsCreateRunnerGrou
 		return err
 	}
 
+	if response.Body == nil {
+		return errors.New("invalid response body")
+	}
+
 	defer func() { _ = response.Body.Close() }()
 
 	responseBody, err := ioutil.ReadAll(response.Body)
@@ -93,7 +97,7 @@ func createRunnerGroup(command *cobra.Command, _ []string) error {
 
 	// handle tags if passed
 	if tags != "" {
-		runnerGroupData.Tags = strings.Split(tags, ",")
+		runnerGroupData.Tags = strings.Split(tags, ", ")
 	}
 
 	if err := performCreateRunnerGroup(runnerGroupData, wsID); err != nil {
