@@ -9,7 +9,7 @@ The Blink CLI helps you build and manage your Blink operations right from the te
 **With the CLI, you can:**
 
 - Create, retrieve, update, or delete API objects.
-- Run playbooks
+- Run playbooks.
 
 ## Installation
 
@@ -32,7 +32,7 @@ WIP
 Blink CLI is available on Windows via the [Scoop](https://scoop.sh/) package manager:
 WIP 
 
-### Docker(Under Development)
+### Docker (Under Development)
 
 The CLI is also available as a Docker image: [`blinkops/blink-cli`](https://hub.docker.com/r/blinkops/blink-cli).
 
@@ -57,7 +57,7 @@ blink-cli [command] --help
 ### Configuration
 
 By default, blink-cli looks for a file named ``config.json`` in the ``$HOME/.config/blink-cli/config.json`` directory.
-You can specify a different file path by setting the ``--config`` flag
+You can specify a different file path by setting the ``--config`` flag.
 
 ```sh-session
 blink-cli [command] --config ./config.json
@@ -73,11 +73,23 @@ At a minimum you should set the following values in your config file.
 }
 ```
 
+### Workspaces
+
+By default, blink-cli uses the workspace specified in your config file.
+If a workspace is not set in your config file, or you would like to use a different workspace
+than the one set, use the ``--workspace`` flag.
+
+```sh-session
+blink-cli [command] --workspace my_workspace
+```
+
+
 ## Commands
 
 The Blink CLI supports a broad range of commands. Below is some of the most used ones:
 - `playbooks`
-- `runners`
+- `runner-groups`
+- `connections`
 
 ## Feedback
 
