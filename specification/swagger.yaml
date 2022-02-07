@@ -434,6 +434,8 @@ definitions:
         type: string
       full_name:
         type: string
+      icon_uri:
+        type: string
       id:
         type: string
       image:
@@ -2639,7 +2641,7 @@ paths:
           name: ws_id
           required: true
           type: string
-        - description: input values
+        - description: 'For example: ''{''''input_values'''': {''''key'''':''''value''''}}'''
           in: body
           name: inputs
           schema:
