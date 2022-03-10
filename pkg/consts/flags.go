@@ -11,6 +11,7 @@ const (
 	APIKeyCobraKey             = "blink-api-key"
 	FileFlagName               = "file"
 	NameFlagName               = "name"
+	DescriptionFlagName        = "description"
 	IsDefaultFlagName          = "is-default"
 	TagsFlagName               = "tags"
 )

@@ -6,6 +6,7 @@ import (
 	"github.com/blinkops/blink-go-cli/pkg/commands/playbooks"
 	"github.com/blinkops/blink-go-cli/pkg/commands/runner-groups"
 	"github.com/blinkops/blink-go-cli/pkg/commands/table"
+	"github.com/blinkops/blink-go-cli/pkg/commands/workspaces"
 	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"github.com/spf13/cobra"
 )
@@ -27,6 +28,9 @@ func GetRegisteredChildCommands() map[string][]*cobra.Command {
 		},
 		"runners": {
 			runner_groups.CreateRunnerGroupCommand(),
+		},
+		"workspaces": {
+			workspaces.CreateWorkspaceCommand(),
 		},
 	}
 }
