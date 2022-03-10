@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/blinkops/blink-go-cli/pkg/api_responses"
 	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"io/ioutil"
 	"net/http"
@@ -63,6 +64,16 @@ func performCreatePlaybook(filePath, wsID string) error {
 	}
 
 	if response.StatusCode >= http.StatusOK && response.StatusCode < http.StatusBadRequest {
+		if err != nil {
+			return err
+		}
+		var playbookResponse api_responses.CreatePlaybookResponse
+		if err := json.Unmarshal(responseBody, &playbookResponse); err != nil {
+			return err
+		}
+		if playbookResponse.Id != "" {
+			fmt.Printf(playbookResponse.Id)
+		}
 		return nil
 	}
 
