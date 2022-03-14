@@ -9,3 +9,7 @@ type GetPlaybookIdByNameResponse struct {
 type CreateWorkspaceResponse struct {
 	Id string `json:"id"`
 }
+
+type CreatePlaybookResponse struct {
+	Id string `json:"id"`
+}
