@@ -66,6 +66,7 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 
 	updateParam := playbooks.NewUpdatePlaybookParams()
 	updateParam.ID = playbookObj.ID
+	updateParam.WsID = wsID
 	updateParam.Playbook = &playbookObj
 
 	_, err = client.New(r, strfmt.Default).
