@@ -76,5 +76,8 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 		return err
 	}
 
+	// print the playbook id for automation purposes
+	fmt.Println(updateParam.ID)
+
 	return nil
 }
