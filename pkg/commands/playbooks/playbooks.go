@@ -22,7 +22,7 @@ import (
 
 func GetPlaybookURL(workspaceID string) string {
 	return utils.GetBaseURL() +
-		fmt.Sprintf("/api/v1/workspace/%s/table/playbooks", workspaceID)
+		fmt.Sprintf("/api/v1/workspace/%s/playbooks", workspaceID)
 }
 
 func getWorkspaceParamFlags(cmd *cobra.Command) string {
