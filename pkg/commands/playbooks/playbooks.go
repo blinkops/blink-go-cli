@@ -5,19 +5,17 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/blinkops/blink-go-cli/pkg/api_responses"
-	"io/ioutil"
-	"net/http"
-	"net/url"
-	"os"
-
-	"github.com/blinkops/blink-go-cli/pkg/consts"
-
 	"github.com/blinkops/blink-go-cli/gen/models"
+	"github.com/blinkops/blink-go-cli/pkg/api_responses"
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"github.com/blinkops/blink-go-cli/pkg/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"os"
 )
 
 func GetPlaybookURL(workspaceID string) string {
