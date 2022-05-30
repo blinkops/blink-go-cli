@@ -10,6 +10,8 @@ const (
 	WorkspaceIDCobraKey        = "workspace-id"
 	APIKeyCobraKey             = "blink-api-key"
 	FileFlagName               = "file"
+	AutomationPackFlag         = "pack-name"
+	AutomationPackShortFlag    = "p"
 	NameFlagName               = "name"
 	DescriptionFlagName        = "description"
 	IsDefaultFlagName          = "is-default"

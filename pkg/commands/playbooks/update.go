@@ -13,7 +13,6 @@ import (
 )
 
 func UpdatePlaybooksCommand() *cobra.Command {
-
 	command := &cobra.Command{
 		Use:     "update",
 		Short:   "Update playbook from file",
@@ -23,16 +22,26 @@ func UpdatePlaybooksCommand() *cobra.Command {
 	}
 	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
 	command.Flags().StringP(consts.FileFlagName, "f", "", "The path to the playbook file")
+	command.Flags().StringP(consts.AutomationPackFlag, consts.AutomationPackShortFlag, "", "Name of an automation pack to put the updated playbook in")
 
 	return command
 }
 
 func updatePlaybooks(command *cobra.Command, _ []string) error {
-
-	wsID, err := command.Flags().GetString("ws_id")
-	filePath, err := command.Flags().GetString("file")
-	if err != nil || filePath == "" {
-		return fmt.Errorf("no file input is supplied for the playbook creation")
+	wsID, err := command.Flags().GetString(consts.WorkspaceIDAutoGenFlagName)
+	if err != nil {
+		return err
+	}
+	filePath, err := command.Flags().GetString(consts.FileFlagName)
+	if err != nil {
+		return err
+	}
+	if filePath == "" {
+		return fmt.Errorf("no file input is supplied for the playbook update")
+	}
+	packName, err := command.Flags().GetString(consts.AutomationPackFlag)
+	if err != nil {
+		return err
 	}
 
 	playbookObj, err := readPlaybookFile(filePath)
@@ -48,7 +57,6 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 
 	playbookResponse, err := client.New(r, strfmt.Default).
 		Playbooks.PlaybookFindByFilter(searchParam, nil)
-
 	if err != nil {
 		return err
 	}
@@ -63,6 +71,12 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 	if playbookObj.ID == "" {
 		return fmt.Errorf("could not find playbook [%s]", playbookObj.Name)
 	}
+
+	packId, err := resolveAutomationPackId(packName, wsID)
+	if err != nil {
+		return err
+	}
+	playbookObj.PackID = packId
 
 	updateParam := playbooks.NewUpdatePlaybookParams()
 	updateParam.ID = playbookObj.ID

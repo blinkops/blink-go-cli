@@ -28,6 +28,17 @@ definitions:
       workspace_id:
         type: string
     type: object
+  api_requests.AutomationPackPayload:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
   api_requests.CreateIntegrationRequest:
     properties:
       image:
@@ -360,6 +371,8 @@ definitions:
       version:
         type: string
       workspace_id:
+        type: string
+      pack_id:
         type: string
     type: object
   models.PlaybookExecution:
