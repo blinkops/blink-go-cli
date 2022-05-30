@@ -1,15 +1,11 @@
 package api_responses
 
-type GetPlaybookIdByNameResponse struct {
+type GetIdByNameResponse struct {
 	Results []struct {
 		Id string `json:"id"`
 	} `json:"results"`
 }
 
-type CreateWorkspaceResponse struct {
-	Id string `json:"id"`
-}
-
-type CreatePlaybookResponse struct {
+type CreateResponseWithId struct {
 	Id string `json:"id"`
 }

@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/blinkops/blink-go-cli/pkg/api_responses"
-	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"io/ioutil"
 	"net/http"
 
+	"github.com/blinkops/blink-go-cli/pkg/api_responses"
+	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"github.com/blinkops/blink-go-cli/pkg/utils"
 
 	"github.com/spf13/cobra"
@@ -26,16 +26,22 @@ func CreatePlaybookCommand() *cobra.Command {
 
 	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
 	command.Flags().StringP(consts.FileFlagName, "f", "", "The path to the playbook file")
+	command.Flags().StringP(consts.AutomationPackFlag, consts.AutomationPackShortFlag, "", "Name of an automation pack to create the playbook in")
 
 	return command
 }
 
-func performCreatePlaybook(filePath, wsID string) error {
-
+func performCreatePlaybook(filePath, wsID, packName string) error {
 	playbook, err := readPlaybookFile(filePath)
 	if err != nil {
 		return err
 	}
+
+	packId, err := resolveAutomationPackId(packName, wsID)
+	if err != nil {
+		return err
+	}
+	playbook.PackID = packId
 
 	playbookData, err := json.Marshal(playbook)
 	if err != nil {
@@ -67,7 +73,7 @@ func performCreatePlaybook(filePath, wsID string) error {
 		if err != nil {
 			return err
 		}
-		var playbookResponse api_responses.CreatePlaybookResponse
+		var playbookResponse api_responses.CreateResponseWithId
 		if err := json.Unmarshal(responseBody, &playbookResponse); err != nil {
 			return err
 		}
@@ -78,18 +84,26 @@ func performCreatePlaybook(filePath, wsID string) error {
 	}
 
 	return fmt.Errorf(string(responseBody))
-
 }
 
 func createPlaybook(command *cobra.Command, _ []string) error {
-
 	wsID, err := command.Flags().GetString(consts.WorkspaceIDAutoGenFlagName)
+	if err != nil {
+		return err
+	}
 	filePath, err := command.Flags().GetString(consts.FileFlagName)
-	if err != nil || filePath == "" {
+	if err != nil {
+		return err
+	}
+	if filePath == "" {
 		return fmt.Errorf("no file input is supplied for the playbook creation")
 	}
+	packName, err := command.Flags().GetString(consts.AutomationPackFlag)
+	if err != nil {
+		return err
+	}
 
-	if err := performCreatePlaybook(filePath, wsID); err != nil {
+	if err := performCreatePlaybook(filePath, wsID, packName); err != nil {
 		return err
 	}
 

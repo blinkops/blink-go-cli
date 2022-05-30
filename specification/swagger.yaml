@@ -15,6 +15,8 @@ definitions:
       name:
         description: Name should be unique per tenant
         type: string
+      secret_manager:
+        type: string
       tags:
         items:
           type: string
@@ -27,6 +29,116 @@ definitions:
         type: string
       workspace_id:
         type: string
+    type: object
+  action_explorer.ActionExplorerAction:
+    properties:
+      display_name:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  action_explorer.ActionExplorerCollection:
+    properties:
+      actions:
+        items:
+          $ref: '#/definitions/action_explorer.ActionExplorerAction'
+        type: array
+      collection_id:
+        type: string
+      collection_name:
+        type: string
+      num_of_actions:
+        type: integer
+    type: object
+  action_explorer.ActionExplorerResponse:
+    properties:
+      collections:
+        items:
+          $ref: '#/definitions/action_explorer.ActionExplorerCollection'
+        type: array
+      search_value:
+        type: string
+    type: object
+  action_inputs.InputParams:
+    additionalProperties: true
+    type: object
+  api.RunnerGroupResponse:
+    properties:
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      display_name:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: string
+      is_default:
+        type: boolean
+      is_shared:
+        type: boolean
+      name:
+        description: Name should be unique per tenant
+        type: string
+      number_of_instances:
+        type: integer
+      secret_manager:
+        type: string
+      secret_manager_name:
+        type: string
+      shared_with:
+        items:
+          type: string
+        type: array
+      slug_name:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      tenant_id:
+        type: string
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+      used_by:
+        $ref: '#/definitions/models.RunnerGroupUsedBy'
+      workspace_id:
+        type: string
+      workspace_name:
+        type: string
+    type: object
+  api.WorkspaceDescription:
+    properties:
+      description:
+        type: string
+      entities:
+        items:
+          $ref: '#/definitions/models.EntityInfo'
+        type: array
+      name:
+        type: string
+    type: object
+  api.WorkspaceInfoMap:
+    additionalProperties:
+      $ref: '#/definitions/models.WorkspaceInfo'
+    type: object
+  api_requests.AutomationPackPayload:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
     type: object
   api_requests.CreateIntegrationRequest:
     properties:
@@ -47,6 +159,22 @@ definitions:
     properties:
       is_default:
         type: boolean
+      name:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  api_requests.DuplicatePlaybookInput:
+    properties:
+      name:
+        type: string
+    type: object
+  api_requests.EditPlaybookInput:
+    properties:
+      desc:
+        type: string
       name:
         type: string
       tags:
@@ -89,6 +217,51 @@ definitions:
       total:
         type: integer
     type: object
+  api_responses.RunnerGroupInformationResponse:
+    properties:
+      latest_runner_version:
+        type: string
+      runner_group_api_key:
+        type: string
+    type: object
+  invite.Invitation:
+    properties:
+      email:
+        type: string
+      role:
+        type: string
+    type: object
+  models.ActionCollection:
+    properties:
+      active:
+        type: boolean
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      display_name:
+        type: string
+      full_name:
+        type: string
+      icon_uri:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      tenant_id:
+        type: string
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+      workspace_id:
+        type: string
+    type: object
   models.ActionHistory:
     properties:
       cmd:
@@ -108,6 +281,43 @@ definitions:
       updated_at:
         type: integer
       updated_by:
+        type: string
+    type: object
+  models.AuthenticationSettings:
+    properties:
+      authorized_domains:
+        items: {}
+        type: array
+      identity_provider:
+        $ref: '#/definitions/models.TenantIdentityProvider'
+    type: object
+  models.AutomationPack:
+    properties:
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      description:
+        type: string
+      display_name:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      tenant_id:
+        type: string
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+      workspace_id:
         type: string
     type: object
   models.Connection:
@@ -133,6 +343,8 @@ definitions:
       name:
         description: Connection names are unique per tenant as they are used in playbook
           YAML
+        type: string
+      secret_manager:
         type: string
       tags:
         items:
@@ -181,8 +393,14 @@ definitions:
         description: Connection names are unique per tenant as they are used in playbook
           YAML
         type: string
+      secret_manager:
+        type: string
+      secret_manager_name:
+        type: string
       shared_with:
-        type: integer
+        items:
+          type: string
+        type: array
       slug_name:
         type: string
       tags:
@@ -198,7 +416,7 @@ definitions:
       updated_by:
         type: string
       used_by:
-        type: integer
+        $ref: '#/definitions/models.ConnectionUsedBy'
       workspace_id:
         type: string
       workspace_name:
@@ -226,6 +444,20 @@ definitions:
         type: integer
       updated_by:
         type: string
+    type: object
+  models.ConnectionUsedBy:
+    properties:
+      subflows:
+        $ref: '#/definitions/models.ConnectionUsedBySubflows'
+    type: object
+  models.ConnectionUsedBySubflows:
+    properties:
+      count:
+        type: integer
+      names:
+        items:
+          type: string
+        type: array
     type: object
   models.EntityInfo:
     properties:
@@ -266,6 +498,10 @@ definitions:
         description: 'optional: "text"|"password"|email"|"number"|"url" in case of
           input component - default "text"'
         type: string
+      input_type_source:
+        description: 'optional: link the input type to a dropdown input by specifying
+          its index'
+        type: string
       is_multi:
         description: 'optional: is this a multi-select field'
         type: boolean
@@ -291,6 +527,13 @@ definitions:
     additionalProperties:
       $ref: '#/definitions/models.FormAttribute'
     type: object
+  models.GeneralSettings:
+    properties:
+      disable_cloud_runner:
+        type: boolean
+      retention_period:
+        type: integer
+    type: object
   models.Group:
     properties:
       created_at:
@@ -301,6 +544,8 @@ definitions:
         type: string
       id:
         type: string
+      managed:
+        type: boolean
       name:
         type: string
       tenant_id:
@@ -333,15 +578,27 @@ definitions:
     type: object
   models.Playbook:
     properties:
+      actions:
+        items:
+          $ref: '#/definitions/models.PlaybookAction'
+        type: array
+      automation_type:
+        type: string
       created_at:
         type: integer
       created_by:
         type: string
+      executionNumber:
+        type: integer
       id:
         type: string
       is_request:
         type: boolean
       name:
+        type: string
+      notification_emails:
+        type: string
+      pack_id:
         type: string
       playbook:
         type: string
@@ -357,6 +614,82 @@ definitions:
         type: integer
       updated_by:
         type: string
+      used_connections:
+        items:
+          type: string
+        type: array
+      used_subflows:
+        items:
+          type: string
+        type: array
+      version:
+        type: string
+      workspace_id:
+        type: string
+    type: object
+  models.PlaybookAction:
+    properties:
+      full_name:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  models.PlaybookEnhanced:
+    properties:
+      actions:
+        items:
+          $ref: '#/definitions/models.PlaybookAction'
+        type: array
+      automation_type:
+        type: string
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      executionNumber:
+        type: integer
+      executions_count:
+        type: integer
+      id:
+        type: string
+      is_request:
+        type: boolean
+      last_run:
+        type: integer
+      name:
+        type: string
+      notification_emails:
+        type: string
+      pack_id:
+        type: string
+      playbook:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      tenant_id:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+      updated_by_name:
+        type: string
+      used_by:
+        $ref: '#/definitions/models.PlaybookUsedBy'
+      used_connections:
+        items:
+          type: string
+        type: array
+      used_subflows:
+        items:
+          type: string
+        type: array
       version:
         type: string
       workspace_id:
@@ -372,6 +705,9 @@ definitions:
         type: string
       execution_depth:
         type: integer
+      execution_number:
+        description: UNIQUE INDEX idx_playbook_executions_pbid_en
+        type: integer
       finished_at:
         type: integer
       id:
@@ -385,6 +721,7 @@ definitions:
       playbook:
         type: string
       playbook_id:
+        description: UNIQUE INDEX idx_playbook_executions_pbid_en
         type: string
       runner_id:
         type: string
@@ -409,8 +746,109 @@ definitions:
       workspace_id:
         type: string
     type: object
-  models.PlaybookInputParams:
-    additionalProperties: true
+  models.PlaybookExecutionEnhanced:
+    properties:
+      cancel_reason:
+        type: string
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      display_name:
+        type: string
+      duration:
+        type: integer
+      execution_depth:
+        type: integer
+      execution_number:
+        description: UNIQUE INDEX idx_playbook_executions_pbid_en
+        type: integer
+      finished_at:
+        type: integer
+      id:
+        type: string
+      last_playbook_name:
+        description: LastPlaybookName Holds last playbook name after playbook deletion
+          to be used in display names for past executions
+        type: string
+      name:
+        type: string
+      pack_id:
+        type: string
+      pack_name:
+        type: string
+      playbook:
+        type: string
+      playbook_id:
+        description: UNIQUE INDEX idx_playbook_executions_pbid_en
+        type: string
+      playbook_name:
+        type: string
+      runner_id:
+        type: string
+      started_at:
+        type: integer
+      state:
+        type: string
+      step_results:
+        $ref: '#/definitions/models.StepResults'
+      tenant_id:
+        type: string
+      trigger_type:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+      version:
+        type: string
+      workspace_id:
+        type: string
+    type: object
+  models.PlaybookExecutionMetrics:
+    properties:
+      cancelled:
+        type: integer
+      completed:
+        type: integer
+      failed:
+        type: integer
+      pending:
+        type: integer
+      timeout:
+        type: integer
+      total_executions:
+        type: integer
+      total_time_saved:
+        type: integer
+    type: object
+  models.PlaybookExecutionWithMetrics:
+    properties:
+      limit:
+        type: integer
+      metrics:
+        $ref: '#/definitions/models.PlaybookExecutionMetrics'
+      offset:
+        type: integer
+      results: {}
+      total:
+        type: integer
+    type: object
+  models.PlaybookUsedBy:
+    properties:
+      subflows:
+        $ref: '#/definitions/models.PlaybookUsedBySubflows'
+    type: object
+  models.PlaybookUsedBySubflows:
+    properties:
+      count:
+        type: integer
+      names:
+        items:
+          type: string
+        type: array
     type: object
   models.Plugin:
     properties:
@@ -484,6 +922,8 @@ definitions:
       name:
         description: Runner names should be unique
         type: string
+      secret_manager:
+        type: string
       started_at:
         type: integer
       status:
@@ -503,6 +943,20 @@ definitions:
       workspace_id:
         type: string
     type: object
+  models.RunnerGroupUsedBy:
+    properties:
+      subflows:
+        $ref: '#/definitions/models.RunnerGroupUsedBySubflows'
+    type: object
+  models.RunnerGroupUsedBySubflows:
+    properties:
+      count:
+        type: integer
+      names:
+        items:
+          type: string
+        type: array
+    type: object
   models.Schedule:
     properties:
       active:
@@ -516,19 +970,25 @@ definitions:
       id:
         type: string
       inputs:
-        $ref: '#/definitions/models.PlaybookInputParams'
+        $ref: '#/definitions/action_inputs.InputParams'
       name:
         type: string
       playbook_id:
         type: string
+      sample:
+        type: string
       tenant_id:
+        type: string
+      trigger_type:
+        type: string
+      trigger_type_id:
         type: string
       updated_at:
         type: integer
       updated_by:
         type: string
       when:
-        type: string
+        $ref: '#/definitions/action_inputs.InputParams'
       workspace_id:
         type: string
     type: object
@@ -542,6 +1002,8 @@ definitions:
         type: string
       error_data:
         type: string
+      execution_count:
+        type: integer
       execution_id:
         type: string
       finished_at:
@@ -552,6 +1014,8 @@ definitions:
         type: string
       output_data:
         type: string
+      response_type:
+        type: integer
       runner:
         type: string
       started_at:
@@ -572,6 +1036,44 @@ definitions:
   models.StepResults:
     additionalProperties:
       type: integer
+    type: object
+  models.Tenant:
+    properties:
+      active:
+        type: boolean
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      settings:
+        $ref: '#/definitions/models.TenantSettings'
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+    type: object
+  models.TenantIdentityProvider:
+    properties:
+      attributes:
+        additionalProperties: true
+        type: object
+      name:
+        type: string
+      provider_name:
+        type: string
+      strategy:
+        type: string
+    type: object
+  models.TenantSettings:
+    properties:
+      authentication:
+        $ref: '#/definitions/models.AuthenticationSettings'
+      general:
+        $ref: '#/definitions/models.GeneralSettings'
     type: object
   models.UserSettings:
     properties:
@@ -604,16 +1106,26 @@ definitions:
       id:
         type: string
       inputs:
-        $ref: '#/definitions/models.PlaybookInputParams'
+        $ref: '#/definitions/action_inputs.InputParams'
       last_event:
         type: integer
+      listen_for_temp_sample:
+        type: boolean
       name:
         type: string
       playbook_id:
         type: string
+      sample:
+        type: string
+      temp_sample:
+        type: string
       tenant_id:
         type: string
       token:
+        type: string
+      trigger_type:
+        type: string
+      trigger_type_id:
         type: string
       updated_at:
         type: integer
@@ -622,7 +1134,7 @@ definitions:
       user_id:
         type: string
       when:
-        type: string
+        $ref: '#/definitions/action_inputs.InputParams'
       workspace_id:
         type: string
     type: object
@@ -662,26 +1174,32 @@ definitions:
       user_count:
         type: integer
     type: object
-  playbook_inputs.PlaybookInputParamValues:
+  playbook.StartExecutionRequest:
     properties:
-      input_values:
-        additionalProperties: true
-        type: object
-    type: object
-  types.StartExecutionRequest:
-    properties:
+      actions:
+        items:
+          $ref: '#/definitions/models.PlaybookAction'
+        type: array
+      automation_type:
+        type: string
       created_at:
         type: integer
       created_by:
         type: string
+      executionNumber:
+        type: integer
       id:
         type: string
       input_values:
-        $ref: '#/definitions/models.PlaybookInputParams'
+        $ref: '#/definitions/action_inputs.InputParams'
         description: playbook input values that's passed as user input
       is_request:
         type: boolean
       name:
+        type: string
+      notification_emails:
+        type: string
+      pack_id:
         type: string
       playbook:
         type: string
@@ -697,12 +1215,20 @@ definitions:
         type: integer
       updated_by:
         type: string
+      used_connections:
+        items:
+          type: string
+        type: array
+      used_subflows:
+        items:
+          type: string
+        type: array
       version:
         type: string
       workspace_id:
         type: string
     type: object
-  types.UpdateExecutionRequest:
+  playbook.UpdateExecutionRequest:
     properties:
       cancel_reason:
         type: string
@@ -712,12 +1238,15 @@ definitions:
         type: string
       execution_depth:
         type: integer
+      execution_number:
+        description: UNIQUE INDEX idx_playbook_executions_pbid_en
+        type: integer
       finished_at:
         type: integer
       id:
         type: string
       input_values:
-        $ref: '#/definitions/models.PlaybookInputParams'
+        $ref: '#/definitions/action_inputs.InputParams'
         description: playbook input values that's passed as user input
       last_playbook_name:
         description: LastPlaybookName Holds last playbook name after playbook deletion
@@ -728,6 +1257,7 @@ definitions:
       playbook:
         type: string
       playbook_id:
+        description: UNIQUE INDEX idx_playbook_executions_pbid_en
         type: string
       runner_id:
         type: string
@@ -752,7 +1282,178 @@ definitions:
       workspace_id:
         type: string
     type: object
-  user_details.Details:
+  playbook_inputs.PlaybookInputParamValues:
+    properties:
+      input_values:
+        additionalProperties: true
+        type: object
+    type: object
+  playbook_versions.PlaybookForCommit:
+    properties:
+      actions:
+        items:
+          $ref: '#/definitions/models.PlaybookAction'
+        type: array
+      automation_type:
+        type: string
+      branched_from:
+        type: integer
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      executionNumber:
+        type: integer
+      id:
+        type: string
+      is_request:
+        type: boolean
+      name:
+        type: string
+      notification_emails:
+        type: string
+      pack_id:
+        type: string
+      playbook:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      tenant_id:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+      used_connections:
+        items:
+          type: string
+        type: array
+      used_subflows:
+        items:
+          type: string
+        type: array
+      version:
+        type: string
+      workspace_id:
+        type: string
+    type: object
+  playbook_versions.PlaybookWithVersion:
+    properties:
+      actions:
+        items:
+          $ref: '#/definitions/models.PlaybookAction'
+        type: array
+      automation_type:
+        type: string
+      branch:
+        type: string
+      branched_from:
+        type: integer
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      executionNumber:
+        type: integer
+      id:
+        type: string
+      is_request:
+        type: boolean
+      name:
+        type: string
+      notification_emails:
+        type: string
+      pack_id:
+        type: string
+      playbook:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      tenant_id:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: integer
+      updated_by:
+        type: string
+      used_connections:
+        items:
+          type: string
+        type: array
+      used_subflows:
+        items:
+          type: string
+        type: array
+      version:
+        type: string
+      version_id:
+        type: integer
+      workspace_id:
+        type: string
+    type: object
+  structures.SharedPlaybook:
+    properties:
+      playbook_id:
+        type: string
+      playbook_name:
+        type: string
+      workspace_name:
+        type: string
+    type: object
+  structures.SharedResourcesInformation:
+    properties:
+      shared_with:
+        items:
+          $ref: '#/definitions/structures.SharedTarget'
+        type: array
+      used_by:
+        items:
+          $ref: '#/definitions/structures.SharedPlaybook'
+        type: array
+    type: object
+  structures.SharedTarget:
+    properties:
+      created_by:
+        type: string
+      display_name:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      target_id:
+        type: string
+      target_type:
+        type: string
+    type: object
+  types.ConnectionEditRequest:
+    properties:
+      active:
+        type: boolean
+      attributes:
+        $ref: '#/definitions/models.ConnectionAttributes'
+      id:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  types.TestConnectionRequest:
+    properties:
+      connection:
+        $ref: '#/definitions/models.Connection'
+      runner_group:
+        type: string
+    type: object
+  user.Details:
     properties:
       auth_id:
         type: string
@@ -783,137 +1484,20 @@ definitions:
           $ref: '#/definitions/models.WorkspaceInfo'
         type: object
     type: object
-  v1.ConnectionEditRequest:
-    properties:
-      active:
-        type: boolean
-      attributes:
-        $ref: '#/definitions/models.ConnectionAttributes'
-      tags:
-        items:
-          type: string
-        type: array
-    type: object
-  v1.EntityList:
+  workspace_entity.EntityList:
     properties:
       entities:
         items:
-          $ref: '#/definitions/v1.WorkspaceEntity'
+          $ref: '#/definitions/workspace_entity.WorkspaceEntity'
         type: array
     type: object
-  v1.RunnerGroupResponse:
-    properties:
-      available_runners:
-        type: integer
-      created_at:
-        type: integer
-      created_by:
-        type: string
-      display_name:
-        type: string
-      full_name:
-        type: string
-      id:
-        type: string
-      is_default:
-        type: boolean
-      is_shared:
-        type: boolean
-      name:
-        description: Name should be unique per tenant
-        type: string
-      number_of_instances:
-        type: integer
-      shared_with:
-        type: integer
-      slug_name:
-        type: string
-      tags:
-        items:
-          type: string
-        type: array
-      tenant_id:
-        type: string
-      updated_at:
-        type: integer
-      updated_by:
-        type: string
-      used_by:
-        type: integer
-      workspace_id:
-        type: string
-      workspace_name:
-        type: string
-    type: object
-  v1.SharedPlaybook:
-    properties:
-      playbook_id:
-        type: string
-      playbook_name:
-        type: string
-      workspace_name:
-        type: string
-    type: object
-  v1.SharedResourcesInformation:
-    properties:
-      shared_with:
-        items:
-          $ref: '#/definitions/v1.SharedTarget'
-        type: array
-      used_by:
-        items:
-          $ref: '#/definitions/v1.SharedPlaybook'
-        type: array
-    type: object
-  v1.SharedTarget:
-    properties:
-      created_by:
-        type: string
-      display_name:
-        type: string
-      email:
-        type: string
-      name:
-        type: string
-      target_id:
-        type: string
-      target_type:
-        type: string
-    type: object
-  v1.TestConnectionRequest:
-    properties:
-      connection:
-        $ref: '#/definitions/models.Connection'
-      runner_group:
-        type: string
-    type: object
-  v1.WorkspaceDescription:
-    properties:
-      description:
-        type: string
-      entities:
-        items:
-          $ref: '#/definitions/models.EntityInfo'
-        type: array
-      name:
-        type: string
-    type: object
-  v1.WorkspaceEntity:
+  workspace_entity.WorkspaceEntity:
     properties:
       entity_id:
         type: string
       entity_type:
         type: string
-    type: object
-  v1.WorkspaceInfoMap:
-    additionalProperties:
-      $ref: '#/definitions/models.WorkspaceInfo'
-    type: object
-  v1.invitation:
-    properties:
-      email:
-        type: string
-      role:
+      name:
         type: string
     type: object
 host: app.blinkops.com:80
@@ -930,11 +1514,11 @@ paths:
   /api/readiness:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Show controller GetReadiness status
       operationId: GetReadiness
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -942,17 +1526,17 @@ paths:
             type: string
       summary: Show controller readiness status
       tags:
-        - Controller
+      - Controller
       x-cobra-command:
         use: health
   /api/stats:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Show controller status
       operationId: GetStats
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -960,17 +1544,17 @@ paths:
             type: string
       summary: Show controller status
       tags:
-        - Controller
+      - Controller
       x-cobra-command:
         use: stats
   /api/version:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Display blink controller version
       operationId: GetVersion
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -978,7 +1562,7 @@ paths:
             type: string
       summary: Display blink controller version
       tags:
-        - Controller
+      - Controller
       x-cobra-command:
         use: version
   /apikey:
@@ -986,7 +1570,7 @@ paths:
       description: Delete user's api key
       operationId: RemoveAPIKey
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -997,15 +1581,15 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Delete user's api key
       tags:
-        - APIKey
+      - APIKey
     get:
       description: List all user available api keys
       operationId: ListAPIKeys
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -1016,15 +1600,15 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List all user available api keys
       tags:
-        - APIKey
+      - APIKey
     post:
       description: Generate api key for user
       operationId: GenerateAPIKey
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -1035,62 +1619,62 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Generate api key for user
       tags:
-        - APIKey
+      - APIKey
   /connection_types:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns connection types by a filter
       operationId: ConnectionTypeFindByFilter
       parameters:
-        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+      - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
-          in: query
-          name: q
-          required: true
-          type: string
+        in: query
+        name: q
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.PagingInfo'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.ConnectionType'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.PagingInfo'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.ConnectionType'
+                  type: array
+              type: object
         "404":
           description: Can not find Connection Types
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns connection types by a filter
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         hidden: true
     post:
       consumes:
-        - application/json
+      - application/json
       description: Creates a new Connection type
       operationId: ConnectionTypeCreate
       parameters:
-        - description: add connection type
-          in: body
-          name: connection_type
-          required: true
-          schema:
-            $ref: '#/definitions/models.ConnectionType'
+      - description: add connection type
+        in: body
+        name: connection_type
+        required: true
+        schema:
+          $ref: '#/definitions/models.ConnectionType'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1101,26 +1685,26 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Creates a new Connection type
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         hidden: true
   /connection_types/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Deletes a Connection type
       operationId: ConnectionTypeDelete
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: connection type id
@@ -1131,25 +1715,25 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Deletes a Connection type
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         hidden: true
     get:
       consumes:
-        - application/json
+      - application/json
       description: Gets a Connection type by id
       operationId: ConnectionTypeGetById
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1160,26 +1744,26 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Gets a Connection type by id
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         hidden: true
   /group/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Delete group by id
       operationId: DeleteGroup
       parameters:
-        - description: group id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: group id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1188,23 +1772,23 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Delete group by id
       tags:
-        - Groups
+      - Groups
     get:
       consumes:
-        - application/json
+      - application/json
       description: List group users
       operationId: ListGroupUsers
       parameters:
-        - description: group id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: group id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1213,32 +1797,32 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List group users
       tags:
-        - Groups
+      - Groups
   /groups/{id}/add_users:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Add users to group
       operationId: AddUsersToGroup
       parameters:
-        - description: set value
-          in: body
-          name: userSetting
-          required: true
-          schema:
-            items:
-              type: string
-            type: array
-        - description: group id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: set value
+        in: body
+        name: userSetting
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      - description: group id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1247,32 +1831,32 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Add users to group
       tags:
-        - UserManagement
+      - UserManagement
   /groups/{id}/remove_users:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Remove users from group
       operationId: RemoveUsersFromGroup
       parameters:
-        - description: set value
-          in: body
-          name: userSetting
-          required: true
-          schema:
-            items:
-              type: string
-            type: array
-        - description: user id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: set value
+        in: body
+        name: userSetting
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1281,18 +1865,18 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Remove users from group
       tags:
-        - UserManagement
+      - UserManagement
   /integrations/check_for_new:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Checks which new plugins needs to be pushed and synced to the runner
       operationId: CheckForNewlyAddedPlugins
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1304,7 +1888,7 @@ paths:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       summary: Should be called by a runner to sync the newly added plugins
       tags:
-        - Runners
+      - Runners
       x-cobra-command:
         hidden: true
   /invite:
@@ -1312,46 +1896,46 @@ paths:
       description: Returns all the invitations for the current tenant
       operationId: GetInvitations
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.PagingInfo'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.Invite'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.PagingInfo'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.Invite'
+                  type: array
+              type: object
         "400":
           description: Failed to get invitations
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns all the invitations for the current tenant
       tags:
-        - Invites
+      - Invites
       x-cobra-command:
         use: list
     post:
       consumes:
-        - application/json
+      - application/json
       description: Inviting a user
       operationId: Invite
       parameters:
-        - description: invitation
-          in: body
-          name: invitation
-          required: true
-          schema:
-            items:
-              $ref: '#/definitions/v1.invitation'
-            type: array
+      - description: invitation
+        in: body
+        name: invitation
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/invite.Invitation'
+          type: array
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ""
@@ -1360,10 +1944,10 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Inviting a user
       tags:
-        - Invites
+      - Invites
       x-cobra-command:
         hidden: true
   /invite/:invitation:
@@ -1371,7 +1955,7 @@ paths:
       description: Accepting invitation by code
       operationId: InvitationAccept
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ""
@@ -1380,31 +1964,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Accepting invitation by code
       tags:
-        - Invites
+      - Invites
       x-cobra-command:
         hidden: true
   /invite/{id}/role/{role}:
     put:
       consumes:
-        - application/json
+      - application/json
       description: Set invitation role on company (member / admin)
       operationId: SetInvitationRole
       parameters:
-        - description: invitation id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: role
-          in: path
-          name: role
-          required: true
-          type: string
+      - description: invitation id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: role
+        in: path
+        name: role
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1415,16 +1999,110 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Set invitation role on company
       tags:
-        - Invitation
+      - Invitation
+  /marketplace:
+    get:
+      description: Get Marketplace playbooks
+      operationId: GetPlaybooks
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/api_responses.ResponseWrapper'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.PlaybookEnhanced'
+                  type: array
+              type: object
+        "400":
+          description: Failed to list playbooks
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      summary: Get Marketplace playbooks
+      tags:
+      - Marketplace
+      x-cobra-command:
+        use: list
+  /marketplace/download/:id/workspace/:ws_id:
+    get:
+      description: Download playbook from the marketplace to your own workspace
+      operationId: Download
+      responses:
+        "200":
+          description: 'Playbook named \"\" has been downloaded to workspace with
+            name: \"\'
+          schema:
+            type: string
+        "400":
+          description: Failed to download playbook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Download playbook from marketplace
+      tags:
+      - Marketplace
+      x-cobra-command:
+        use: download
+  /tenant:
+    get:
+      consumes:
+      - application/json
+      description: Fetch the tenant information
+      operationId: FetchTenant
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.Tenant'
+        "404":
+          description: Cannot update tenant settings
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Fetch the Tenant information
+      tags:
+      - Tenant
+      x-cobra-command:
+        use: get
+  /tenant/settings:
+    post:
+      consumes:
+      - application/json
+      description: Update the tenant settings by provided values
+      operationId: UpdateSettings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.TenantSettings'
+        "404":
+          description: Cannot update tenant settings
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Update the Tenant Settings
+      tags:
+      - Tenant Settings
+      x-cobra-command:
+        use: update
   /uninvite/:email:
     post:
       description: Uninviting a user
       operationId: UnInvite
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ""
@@ -1433,10 +2111,10 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Uninviting a user
       tags:
-        - Invites
+      - Invites
       x-cobra-command:
         use: uninvite
   /user:
@@ -1444,17 +2122,17 @@ paths:
       description: Returns my user info
       operationId: GetUserDetails
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user_details.Details'
+            $ref: '#/definitions/user.Details'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Get my user info
       tags:
-        - User Info
+      - User Info
       x-cobra-command:
         use: user-details
   /user-workspaces:
@@ -1462,33 +2140,33 @@ paths:
       description: Returns my user workspaces
       operationId: GetWorkspaces
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/v1.WorkspaceInfoMap'
+            $ref: '#/definitions/api.WorkspaceInfoMap'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Get my user workspaces
       tags:
-        - User Info
+      - User Info
       x-cobra-command:
         use: user-workspaces
   /user/{id}:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Delete user and all of his data
       operationId: DeleteUser
       parameters:
-        - description: user id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1499,60 +2177,60 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Delete User from the System
       tags:
-        - UserManagement
+      - UserManagement
       x-cobra-command:
         hidden: false
   /user/{id}/groups:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get groups of user
       operationId: GetUserGroups
       parameters:
-        - description: user id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.ResponseWrapper'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.Group'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.ResponseWrapper'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.Group'
+                  type: array
+              type: object
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Get groups of user
       tags:
-        - UserManagement
+      - UserManagement
     post:
       consumes:
-        - application/json
+      - application/json
       description: Add user to groups
       operationId: AddUserToGroups
       parameters:
-        - description: user id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1561,29 +2239,29 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Add user to groups
       tags:
-        - UserManagement
+      - UserManagement
   /user/{id}/role/{role}:
     put:
       consumes:
-        - application/json
+      - application/json
       description: Set user role on company (member / admin)
       operationId: SetUserRole
       parameters:
-        - description: user id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: user role
-          in: path
-          name: role
-          required: true
-          type: string
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: user role
+        in: path
+        name: role
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1594,29 +2272,29 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Set user role on company
       tags:
-        - UserManagement
+      - UserManagement
   /user/{id}/status/{status}:
     put:
       consumes:
-        - application/json
+      - application/json
       description: Set user status on company (active / inactive)
       operationId: SetUserStatus
       parameters:
-        - description: user id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: status
-          in: path
-          name: status
-          required: true
-          type: string
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: status
+        in: path
+        name: status
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1627,29 +2305,29 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Set user status on company
       tags:
-        - UserManagement
+      - UserManagement
   /user/{id}/tenant/{tenant_id}:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Move user from his tenant to the target tenant
       operationId: MoveUserTenant
       parameters:
-        - description: user id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: tenant id
-          in: path
-          name: tenant_id
-          required: true
-          type: string
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: tenant id
+        in: path
+        name: tenant_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1660,27 +2338,27 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Move user tenant
       tags:
-        - UserManagement
+      - UserManagement
       x-cobra-command:
         hidden: true
   /user_settings:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Set user settings key/value. Creates a new one or updates an existing
       operationId: UserSettingsSetValue
       parameters:
-        - description: set value
-          in: body
-          name: userSetting
-          required: true
-          schema:
-            $ref: '#/definitions/models.UserSettings'
+      - description: set value
+        in: body
+        name: userSetting
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSettings'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1691,24 +2369,24 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Set user settings key/value
       tags:
-        - UserManagement
+      - UserManagement
   /webhooks/{id}:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Executes a webhook
       operationId: ExecuteWebhook
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: execution id
@@ -1719,74 +2397,256 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Executes a webhook
       tags:
-        - Webhook
+      - Webhook
       x-cobra-command:
         use: execute
+  /workspace/{ws_id}/actions:
+    get:
+      consumes:
+      - application/json
+      description: Gets collections with actions inside
+      operationId: ExploreActions
+      parameters:
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/action_explorer.ActionExplorerResponse'
+        "404":
+          description: Can not find Actions
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Gets collections with actions inside
+      tags:
+      - Actions
+      x-cobra-command:
+        use: search
+  /workspace/{ws_id}/automation_packs:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new Automation Pack
+      operationId: CreateAutomationPack
+      parameters:
+      - description: add automation pack
+        in: body
+        name: creation_payload
+        required: true
+        schema:
+          $ref: '#/definitions/api_requests.AutomationPackPayload'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.AutomationPack'
+        "400":
+          description: Can not create Automation Pack
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new Automation Pack
+      tags:
+      - AutomationPacks
+      x-cobra-command:
+        hidden: true
+  /workspace/{ws_id}/automation_packs/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an Automation Pack
+      operationId: DeleteAutomationPack
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: automation pack id
+          schema:
+            type: string
+        "400":
+          description: Can not delete Automation Pack
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+        "404":
+          description: Can not find Automation Pack
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes an Automation Pack
+      tags:
+      - AutomationPacks
+      x-cobra-command:
+        hidden: true
+    put:
+      consumes:
+      - application/json
+      description: Updates an Automation Pack
+      operationId: UpdateAutomationPack
+      parameters:
+      - description: update automation pack
+        in: body
+        name: update_payload
+        required: true
+        schema:
+          $ref: '#/definitions/api_requests.AutomationPackPayload'
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.AutomationPack'
+        "400":
+          description: Can not update Automation Pack
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+        "404":
+          description: Can not find Automation Pack
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Updates an Automation Pack
+      tags:
+      - AutomationPacks
+      x-cobra-command:
+        hidden: true
+  /workspace/{ws_id}/collections/triggers:
+    get:
+      description: List collections with trigger types
+      operationId: GetTriggerCollections
+      parameters:
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/api_responses.ResponseWrapper'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.ActionCollection'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: List collections with trigger types
+      x-cobra-command:
+        use: trigger-sources
   /workspace/{ws_id}/connections:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns connections by a filter
       operationId: ConnectionFindByFilter
       parameters:
-        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+      - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
-          in: query
-          name: q
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+        in: query
+        name: q
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.ResponseWrapper'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.ConnectionEnhanced'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.ResponseWrapper'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.ConnectionEnhanced'
+                  type: array
+              type: object
         "404":
           description: Can not find Connections
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns connections by a filter
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         use: search
     post:
       consumes:
-        - application/json
+      - application/json
       description: Creates a new Connection
       operationId: ConnectionCreate
       parameters:
-        - description: add connection
-          in: body
-          name: connection
-          required: true
-          schema:
-            $ref: '#/definitions/models.Connection'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: add connection
+        in: body
+        name: connection
+        required: true
+        schema:
+          $ref: '#/definitions/models.Connection'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1797,31 +2657,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Creates a new Connection
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         use: create
   /workspace/{ws_id}/connections/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Deletes a Connection
       operationId: ConnectionDelete
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: connection id
@@ -1832,30 +2692,30 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Deletes a Connection
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         use: delete
     get:
       consumes:
-        - application/json
+      - application/json
       description: Gets a Connection by id
       operationId: ConnectionGetById
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1868,36 +2728,36 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Gets a Connection by id
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         use: get
     post:
       consumes:
-        - application/json
+      - application/json
       description: Edit an existing Connection
       operationId: ConnectionEdit
       parameters:
-        - description: connection edit request
-          in: body
-          name: connection
-          required: true
-          schema:
-            $ref: '#/definitions/v1.ConnectionEditRequest'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: connection ID
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: connection edit request
+        in: body
+        name: connection
+        required: true
+        schema:
+          $ref: '#/definitions/types.ConnectionEditRequest'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: connection ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1908,32 +2768,32 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Edit an existing Connection
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         use: edit
   /workspace/{ws_id}/connections/test:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Tests a new Connection
       operationId: TestConnection
       parameters:
-        - description: test connection
-          in: body
-          name: connection
-          required: true
-          schema:
-            $ref: '#/definitions/v1.TestConnectionRequest'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: test connection
+        in: body
+        name: connection
+        required: true
+        schema:
+          $ref: '#/definitions/types.TestConnectionRequest'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -1944,74 +2804,74 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Tests a new Connection
       tags:
-        - Connections
+      - Connections
       x-cobra-command:
         use: test
   /workspace/{ws_id}/executions:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns playbooks execution by a filter
       operationId: PlaybookExecutionFindByFilter
       parameters:
-        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+      - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
-          in: query
-          name: q
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+        in: query
+        name: q
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.PagingInfo'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.PlaybookExecution'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.PagingInfo'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.PlaybookExecution'
+                  type: array
+              type: object
         "404":
           description: Can not find Executions
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns playbooks execution by a filter
       tags:
-        - Executions
+      - Executions
       x-cobra-command:
         use: search
   /workspace/{ws_id}/executions/{id}:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Gets a playbook execution session by id
       operationId: PlaybookExecutionGetById
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -2022,36 +2882,36 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Gets a playbook execution session by id
       tags:
-        - Executions
+      - Executions
       x-cobra-command:
         use: get
     put:
       consumes:
-        - application/json
+      - application/json
       description: Updates an execution and its input params
       operationId: PlaybookExecutionUpdate
       parameters:
-        - description: execution id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: execution and its input params
-          in: body
-          name: execution
-          required: true
-          schema:
-            $ref: '#/definitions/types.UpdateExecutionRequest'
+      - description: execution id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: execution and its input params
+        in: body
+        name: execution
+        required: true
+        schema:
+          $ref: '#/definitions/playbook.UpdateExecutionRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -2066,43 +2926,43 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Updates an execution
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/executions/{id}/action_history:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns the list of audit commands per an execution
       operationId: GetActionHistory
       parameters:
-        - description: execution id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: execution id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.ResponseWrapper'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.ActionHistory'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.ResponseWrapper'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.ActionHistory'
+                  type: array
+              type: object
         "400":
           description: Execution id is mandatory
           schema:
@@ -2112,31 +2972,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns the list of audit commands per an execution
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         use: history
   /workspace/{ws_id}/executions/{id}/cancel:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Cancels/Aborts an execution
       operationId: PlaybookExecutionCancel
       parameters:
-        - description: execution id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: execution id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -2151,31 +3011,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Cancels/Aborts an execution
       tags:
-        - Executions
+      - Executions
       x-cobra-command:
         use: cancel
   /workspace/{ws_id}/executions/{id}/complete:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Completes/Finished an execution
       operationId: PlaybookExecutionComplete
       parameters:
-        - description: execution id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: execution id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -2190,31 +3050,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Completes/Finished an execution
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/executions/{id}/outputs:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Gets playbook outputs by id
       operationId: PlaybookExecutionGetOutputs
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -2225,105 +3085,165 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Gets playbook outputs by id
       tags:
-        - Executions
+      - Executions
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/executions/{id}/steps:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns a playbook execution steps details (inputs/outputs)
       operationId: GetStepsExecutionDetails
       parameters:
-        - description: execution id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: execution id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.ResponseWrapper'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.StepExecution'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.ResponseWrapper'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.StepExecution'
+                  type: array
+              type: object
         "404":
           description: Can not find Executions
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns a playbook execution steps details (inputs/outputs)
       tags:
-        - Executions
+      - Executions
       x-cobra-command:
         use: details
+  /workspace/{ws_id}/executions/with_inputs:
+    get:
+      consumes:
+      - application/json
+      description: Return playbook executions with input params used
+      operationId: GetExecutionsWithInputs
+      parameters:
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/api_responses.ResponseWrapper'
+        "400":
+          description: Error fetching execution with inputs
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Return playbook executions with input params used
+      tags:
+      - Executions
+      x-cobra-command:
+        hidden: true
+  /workspace/{ws_id}/executions/with_metrics:
+    get:
+      consumes:
+      - application/json
+      description: Return playbook executions with general execution metrics
+      operationId: GetExecutionsWithMetrics
+      parameters:
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.PlaybookExecutionWithMetrics'
+        "400":
+          description: Error fetching execution stats
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Return playbook executions with general execution metrics
+      tags:
+      - Executions
+      x-cobra-command:
+        hidden: true
   /workspace/{ws_id}/integrations:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Register new integration
       operationId: IntegrationRegister
       parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: integration
-          in: body
-          name: integration
-          required: true
-          schema:
-            $ref: '#/definitions/api_requests.CreateIntegrationRequest'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: integration
+        in: body
+        name: integration
+        required: true
+        schema:
+          $ref: '#/definitions/api_requests.CreateIntegrationRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
           schema:
             $ref: '#/definitions/models.Plugin'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Register new integration
       tags:
-        - Integrations
+      - Integrations
       x-cobra-command:
         use: register
   /workspace/{ws_id}/integrations/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Delete an integration pack with all its actions, params etc.
       operationId: IntegrationDelete
       parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: integration pack id
@@ -2338,31 +3258,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Delete an integration pack
       tags:
-        - Integrations
+      - Integrations
       x-cobra-command:
         use: delete
   /workspace/{ws_id}/integrations/name/{name}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Delete an integration pack with all its actions, params etc.
       operationId: IntegrationDeleteByName
       parameters:
-        - description: name
-          in: path
-          name: name
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: integration pack id
@@ -2377,10 +3297,10 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Delete an integration pack
       tags:
-        - Integrations
+      - Integrations
       x-cobra-command:
         use: delete-by-name
   /workspace/{ws_id}/integrations/sync_to_runner/{id}/{name}:
@@ -2388,21 +3308,21 @@ paths:
       description: Sync an integration to a given runner
       operationId: SyncIntegrationToRunner
       parameters:
-        - description: Runner Id to push to
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: Integration name
-          in: path
-          name: name
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: Runner Id to push to
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Integration name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       responses:
         "200":
           description: integration pack id
@@ -2417,80 +3337,80 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Sync an integration to a given runner
       tags:
-        - Integrations
-        - Runners
+      - Integrations
+      - Runners
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/playbooks:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns playbooks by a filter
       operationId: PlaybookFindByFilter
       parameters:
-        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+      - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
-          in: query
-          name: q
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+        in: query
+        name: q
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.PagingInfo'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.Playbook'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.PagingInfo'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.Playbook'
+                  type: array
+              type: object
         "404":
           description: Can not find Playbooks
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns playbooks by a filter
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         use: search
     post:
       consumes:
-        - application/json
+      - application/json
       description: Creates a new Playbook
       operationId: CreatePlaybook
       parameters:
-        - description: add playbook
-          in: body
-          name: playbook
-          required: true
-          schema:
-            $ref: '#/definitions/models.Playbook'
-        - description: http://someurl/somefile.yaml
-          in: query
-          name: playbook_content_url
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: add playbook
+        in: body
+        name: playbook
+        required: true
+        schema:
+          $ref: '#/definitions/models.Playbook'
+      - description: http://someurl/somefile.yaml
+        in: query
+        name: playbook_content_url
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -2501,31 +3421,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Creates a new Playbook
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/playbooks/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Deletes a Playbook
       operationId: DeletePlaybook
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: playbook id
@@ -2540,30 +3460,30 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Deletes a Playbook
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         hidden: true
     get:
       consumes:
-        - application/json
+      - application/json
       description: Gets a playbook by id
       operationId: PlaybookGetById
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -2574,36 +3494,36 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Gets a playbook by id
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         hidden: true
     put:
       consumes:
-        - application/json
+      - application/json
       description: Updates a Playbook
       operationId: UpdatePlaybook
       parameters:
-        - description: add playbook
-          in: body
-          name: playbook
-          required: true
-          schema:
-            $ref: '#/definitions/models.Playbook'
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: add playbook
+        in: body
+        name: playbook
+        required: true
+        schema:
+          $ref: '#/definitions/models.Playbook'
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -2618,36 +3538,195 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Updates a Playbook
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         hidden: true
+  /workspace/{ws_id}/playbooks/{id}/dependants:
+    get:
+      consumes:
+      - application/json
+      description: Gets all the objects that depend on a playbook (by id)
+      operationId: GetDependants
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/playbook_versions.PlaybookWithVersion'
+        "404":
+          description: Cannot find Playbook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Gets all the objects that depend on a playbook
+      tags:
+      - Playbooks
+      x-cobra-command:
+        hidden: true
+  /workspace/{ws_id}/playbooks/{id}/draft:
+    get:
+      consumes:
+      - application/json
+      description: Gets the latest draft playbook version by id
+      operationId: GetLatestDraft
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/playbook_versions.PlaybookWithVersion'
+        "404":
+          description: Cannot find Playbook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Gets the latest draft playbook version by id
+      tags:
+      - Playbooks
+      x-cobra-command:
+        hidden: true
+    post:
+      consumes:
+      - application/json
+      description: Saves a playbook draft version
+      operationId: SaveDraft
+      parameters:
+      - description: add playbook
+        in: body
+        name: playbook
+        required: true
+        schema:
+          $ref: '#/definitions/playbook_versions.PlaybookForCommit'
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "500":
+          description: Cannot publish playbook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Saves a playbook draft version
+      tags:
+      - Playbooks
+      x-cobra-command:
+        hidden: true
+  /workspace/{ws_id}/playbooks/{id}/duplicate:
+    put:
+      consumes:
+      - application/json
+      description: Duplicates the playbook with the given ID. Name is set to the given
+        value. Triggers are not duplicated. Duplicated playbook is created with type
+        Flow (not exposed as action)
+      operationId: DuplicatePlaybook
+      parameters:
+      - description: '{''name'':''Blink''}'
+        in: body
+        name: playbook
+        required: true
+        schema:
+          $ref: '#/definitions/api_requests.DuplicatePlaybookInput'
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: playbook_id
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Can not duplicate Playbook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+        "404":
+          description: Can not find Playbook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Duplicates a playbook
+      tags:
+      - Playbooks
+      x-cobra-command:
+        use: duplicate
   /workspace/{ws_id}/playbooks/{id}/execute:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Executes a complete playbook - in a sync or async mode
       operationId: ExecutePlaybook
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: 'For example: ''{''''input_values'''': {''''key'''':''''value''''}}'''
-          in: body
-          name: inputs
-          schema:
-            $ref: '#/definitions/playbook_inputs.PlaybookInputParamValues'
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: 'For example: ''{''''input_values'''': {''''key'''':''''value''''}}'''
+        in: body
+        name: inputs
+        schema:
+          $ref: '#/definitions/playbook_inputs.PlaybookInputParamValues'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: execution id
@@ -2664,42 +3743,130 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Executes a complete playbook - in a sync or async mode
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         use: execute
-  /workspace/{ws_id}/playbooks/{id}/start:
+  /workspace/{ws_id}/playbooks/{id}/public:
     post:
       consumes:
-        - application/json
-      description: Starts a playbook execution
-      operationId: PlaybookStartExecution
+      - application/json
+      description: Publishes a new version of a playbook by saving a draft version,
+        public version and updating the prod-playbooks table
+      operationId: PublishPlaybook
       parameters:
-        - description: playbook id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: playbook and its input params
-          in: body
-          name: execution
-          required: true
-          schema:
-            $ref: '#/definitions/types.StartExecutionRequest'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: add playbook
+        in: body
+        name: playbook
+        required: true
+        schema:
+          $ref: '#/definitions/playbook_versions.PlaybookForCommit'
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/models.PlaybookExecution'
+            type: string
+        "500":
+          description: Cannot publish playbook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Publishes a playbook version
+      tags:
+      - Playbooks
+      x-cobra-command:
+        hidden: true
+  /workspace/{ws_id}/playbooks/{id}/rename:
+    put:
+      consumes:
+      - application/json
+      description: Sets the name, description and name of the playbook with the given
+        ID to the given name
+      operationId: EditPlaybook
+      parameters:
+      - description: '{''name'':''Blink'',''description'',''tags'':[''a'',''b'']}'
+        in: body
+        name: playbook
+        required: true
+        schema:
+          $ref: '#/definitions/api_requests.EditPlaybookInput'
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/api_requests.EditPlaybookInput'
+        "400":
+          description: Can not edit Playbook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+        "404":
+          description: Can not find Playbook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Edits the name, description and tags of a playbook
+      tags:
+      - Playbooks
+      x-cobra-command:
+        hidden: true
+  /workspace/{ws_id}/playbooks/{id}/start:
+    post:
+      consumes:
+      - application/json
+      description: Starts a playbook execution
+      operationId: PlaybookStartExecution
+      parameters:
+      - description: playbook id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: playbook and its input params
+        in: body
+        name: execution
+        required: true
+        schema:
+          $ref: '#/definitions/playbook.StartExecutionRequest'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.PlaybookExecutionEnhanced'
         "400":
           description: Execution creation failed
           schema:
@@ -2709,99 +3876,105 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Starts a playbook execution
       tags:
-        - Playbooks
+      - Playbooks
       x-cobra-command:
         use: start
-  /workspace/{ws_id}/runner/{id}:
-    delete:
+  /workspace/{ws_id}/runner/{id}/prepare_update:
+    put:
       consumes:
-        - application/json
-      description: Deletes a Runner
-      operationId: RunnerDelete
+      - application/json
+      description: Marks runner as update-candidate, so it won't take any new executions.
+        If runner is not performing an execution, it will be marked as update-ready.
+        If it is executing, it will finish the execution and then transition to update-ready.
+      operationId: PrepareForUpdate
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: runner ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
-          description: runner id
+          description: Runner Status
           schema:
             type: string
-        "400":
-          description: Cannot delete Runner
+        "404":
+          description: Cannot find Runner
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+        "500":
+          description: Cannot prepare Runner
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
-      summary: Deletes a Runner
+      - ApiKeyAuth: []
+      summary: Should be called by user to mark runner as update candidate
       tags:
-        - Runners
+      - Runners
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/runner_groups:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns a list of all runner groups
       operationId: RunnerGroupsFindAll
       parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.PagingInfo'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/v1.RunnerGroupResponse'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.PagingInfo'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/api.RunnerGroupResponse'
+                  type: array
+              type: object
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Get all the runner groups
       tags:
-        - Runners
+      - Runners
       x-cobra-command:
         use: list
     post:
       consumes:
-        - application/json
+      - application/json
       description: Creates a new runner group
       operationId: RunnerGroupCreate
       parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: Add runner group
-          in: body
-          name: name
-          required: true
-          schema:
-            $ref: '#/definitions/api_requests.CreateRunnerGroupRequest'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: Add runner group
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/api_requests.CreateRunnerGroupRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -2812,31 +3985,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Creates a new runner group
       tags:
-        - Runners
+      - Runners
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/runner_groups/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Deletes a runner group
       operationId: RunnerGroupDelete
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: runner group id
@@ -2851,36 +4024,66 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Deletes a runner group
       tags:
-        - Runners
+      - Runners
       x-cobra-command:
         use: delete
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of all runner groups
+      operationId: GetRunnerGroupById
+      parameters:
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: Runner group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api_responses.RunnerGroupInformationResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a runner group by id
+      tags:
+      - Runners
+      x-cobra-command:
+        hidden: true
     post:
       consumes:
-        - application/json
+      - application/json
       description: Update an existing runner group
       operationId: UpdateRunnerGroup
       parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: runner group ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: Update runner group
-          in: body
-          name: name
-          required: true
-          schema:
-            $ref: '#/definitions/api_requests.CreateRunnerGroupRequest'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: runner group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update runner group
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/api_requests.CreateRunnerGroupRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -2891,64 +4094,202 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Update an existing runner group
       tags:
-        - Runners
+      - Runners
       x-cobra-command:
         use: update
+  /workspace/{ws_id}/runner_groups/default:
+    post:
+      consumes:
+      - application/json
+      description: Sets a runner group as default per workspace
+      operationId: SetDefaultGroup
+      parameters:
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: Runner group name
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/RGroup'
+        "400":
+          description: Cannot create runner group
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Sets a runner group as default per workspace
+      tags:
+      - Runners
+      x-cobra-command:
+        hidden: true
+  /workspace/{ws_id}/runner_groups/name/{name}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a runner group by name
+      operationId: RunnerGroupDeleteByName
+      parameters:
+      - description: Name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: runner group id
+          schema:
+            type: string
+        "400":
+          description: Cannot delete runner group
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+        "403":
+          description: You are not allowed to manage this resource
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a runner group by name
+      tags:
+      - Runners
+      x-cobra-command:
+        hidden: true
+    get:
+      consumes:
+      - application/json
+      description: Get a runner group by name
+      operationId: GetRunnerGroupByName
+      parameters:
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: Runner group name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api_responses.RunnerGroupInformationResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a runner group by id
+      tags:
+      - Runners
+      x-cobra-command:
+        hidden: true
   /workspace/{ws_id}/runners:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns a list of all Runners
       operationId: RunnerFindAll
       parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-              - $ref: '#/definitions/api_responses.PagingInfo'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.Runner'
-                    type: array
-                type: object
+            - $ref: '#/definitions/api_responses.PagingInfo'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/models.Runner'
+                  type: array
+              type: object
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: get all Runners
       tags:
-        - Runners
+      - Runners
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/runners/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a Runner
+      operationId: RunnerDelete
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: runner id
+          schema:
+            type: string
+        "400":
+          description: Cannot delete Runner
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a Runner
+      tags:
+      - Runners
+      x-cobra-command:
+        hidden: true
     get:
       consumes:
-        - application/json
+      - application/json
       description: Gets a Runner by id
       operationId: RunnerGetById
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -2959,31 +4300,66 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Gets a Runner by id
       tags:
-        - Runners
+      - Runners
+      x-cobra-command:
+        hidden: true
+  /workspace/{ws_id}/runners/name/{name}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a Runner
+      operationId: RunnerDeleteByName
+      parameters:
+      - description: name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: runner id
+          schema:
+            type: string
+        "400":
+          description: Cannot delete Runner
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a Runner by name
+      tags:
+      - Runners
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/schedule/{id}:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Gets a schedule by id
       operationId: ScheduleGetById
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -2994,31 +4370,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Gets a schedule by id
       tags:
-        - Schedules
+      - Schedules
       x-cobra-command:
         use: get
   /workspace/{ws_id}/schedules/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Deletes a schedule
       operationId: ScheduleDelete
       parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: schedule id
@@ -3029,36 +4405,36 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Deletes a schedule
       tags:
-        - Schedules
+      - Schedules
       x-cobra-command:
         use: delete
     post:
       consumes:
-        - application/json
+      - application/json
       description: Creates a new Schedule
       operationId: ScheduleCreate
       parameters:
-        - description: add schedule
-          in: body
-          name: schedule
-          required: true
-          schema:
-            $ref: '#/definitions/models.Schedule'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: playbook ID
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: add schedule
+        in: body
+        name: schedule
+        required: true
+        schema:
+          $ref: '#/definitions/models.Schedule'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: playbook ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -3069,37 +4445,37 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Creates a new Schedule
       tags:
-        - Schedules
+      - Schedules
       x-cobra-command:
         use: create
   /workspace/{ws_id}/table/{table}:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns table records by a filter
       operationId: TableFindRecord
       parameters:
-        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
+      - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
-          in: query
-          name: q
-          required: true
-          type: string
-        - description: table name
-          in: path
-          name: table
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+        in: query
+        name: q
+        required: true
+        type: string
+      - description: table name
+        in: path
+        name: table
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -3110,36 +4486,36 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns table records by a filter
       tags:
-        - Table
+      - Table
     post:
       consumes:
-        - application/json
+      - application/json
       description: Creates a new record
       operationId: TableCreateRecord
       parameters:
-        - description: table name
-          in: path
-          name: table
-          required: true
-          type: string
-        - description: record json
-          in: body
-          name: record
-          required: true
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: table name
+        in: path
+        name: table
+        required: true
+        type: string
+      - description: record json
+        in: body
+        name: record
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -3150,34 +4526,34 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Creates a new record
       tags:
-        - Table
+      - Table
   /workspace/{ws_id}/table/{table}/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Deletes a record
       operationId: TableDeleteRecord
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: table name
-          in: path
-          name: table
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: table name
+        in: path
+        name: table
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -3192,33 +4568,33 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Deletes a record
       tags:
-        - Table
+      - Table
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns a record by id
       operationId: TableGetRecord
       parameters:
-        - description: record id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: table name
-          in: path
-          name: table
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: record id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: table name
+        in: path
+        name: table
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -3234,39 +4610,39 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns a record by id
       tags:
-        - Table
+      - Table
     put:
       consumes:
-        - application/json
+      - application/json
       description: Updates a record
       operationId: TableUpdateRecord
       parameters:
-        - description: table name
-          in: path
-          name: table
-          required: true
+      - description: table name
+        in: path
+        name: table
+        required: true
+        type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: record json
+        in: body
+        name: record
+        required: true
+        schema:
           type: string
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: record json
-          in: body
-          name: record
-          required: true
-          schema:
-            type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -3281,29 +4657,29 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Updates a record
       tags:
-        - Table
+      - Table
   /workspace/{ws_id}/tags/{table}:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Returns a list of unique tags used by provided table
       operationId: GetTags
       parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: table name
-          in: path
-          name: table
-          required: true
-          type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: table name
+        in: path
+        name: table
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -3316,31 +4692,31 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Returns a list of unique tags used by provided table
       tags:
-        - Resources
+      - Resources
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/webhooks/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Deletes a webhook
       operationId: WebhookDelete
       parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: webhook id
@@ -3351,30 +4727,30 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Deletes a webhook
       tags:
-        - Webhooks
+      - Webhooks
       x-cobra-command:
         use: delete
     get:
       consumes:
-        - application/json
+      - application/json
       description: Gets a webhook by id
       operationId: WebhookGetById
       parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -3385,36 +4761,36 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Gets a webhook by id
       tags:
-        - Webhooks
+      - Webhooks
       x-cobra-command:
         use: get
     post:
       consumes:
-        - application/json
+      - application/json
       description: Creates a new Webhook
       operationId: WebhookCreate
       parameters:
-        - description: add webhook
-          in: body
-          name: webhook
-          required: true
-          schema:
-            $ref: '#/definitions/models.Webhook'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: playbook ID
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: add webhook
+        in: body
+        name: webhook
+        required: true
+        schema:
+          $ref: '#/definitions/models.Webhook'
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: playbook ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -3425,27 +4801,150 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Creates a new Webhook
       tags:
-        - Webhooks
+      - Webhooks
       x-cobra-command:
         use: create
+  /workspace/{ws_id}/webhooks/temp_sample/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Prepares webhook for temp sample capture
+      operationId: ListenForTempSample
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: workspace ID
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.Webhook'
+        "404":
+          description: Can not find Webhook
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Prepares webhook for temp sample capture
+      tags:
+      - Webhooks
+      x-cobra-command:
+        use: get
+  /workspace/playbooks/{id}/triggers/sample:
+    delete:
+      consumes:
+      - application/json
+      description: Save sample event on the playbook's trigger
+      operationId: DeleteEventSample
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Save sample event
+      x-cobra-command:
+        hidden: true
+    get:
+      consumes:
+      - application/json
+      description: Get sample event saved with the playbook
+      operationId: GetEventSample
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: sample
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Get sample event
+      x-cobra-command:
+        hidden: true
+    post:
+      consumes:
+      - application/json
+      description: Save sample event on the playbook's trigger
+      operationId: SaveEventSample
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: sample json
+        in: body
+        name: sample
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api_responses.ErrorWrapper'
+      security:
+      - ApiKeyAuth: []
+      summary: Save sample event
+      x-cobra-command:
+        hidden: true
   /workspaces:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Creates a new workspace
       operationId: CreateWorkspace
       parameters:
-        - description: add workspace
-          in: body
-          name: workspace
-          required: true
-          schema:
-            $ref: '#/definitions/models.Workspace'
+      - description: add workspace
+        in: body
+        name: workspace
+        required: true
+        schema:
+          $ref: '#/definitions/models.Workspace'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ok
@@ -3456,26 +4955,26 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Creates a new workspace
       tags:
-        - Workspaces
+      - Workspaces
       x-cobra-command:
         use: create
   /workspaces/{id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Delete a workspace
       operationId: DeleteWorkspace
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: connection id
@@ -3486,65 +4985,65 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Delete a workspace
       tags:
-        - Workspaces
+      - Workspaces
       x-cobra-command:
         use: delete
     get:
       consumes:
-        - application/json
+      - application/json
       description: Describe Workspace
       operationId: DescribeWorkspace
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/v1.WorkspaceDescription'
+            $ref: '#/definitions/api.WorkspaceDescription'
         "400":
           description: failed to set user role
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Describe Workspace
       tags:
-        - Workspaces
+      - Workspaces
       x-cobra-command:
         use: describe
   /workspaces/{id}/{entity_type}/{entity_id}:
     delete:
       consumes:
-        - application/json
+      - application/json
       description: Remove entity from workspace
       operationId: WorkspaceRemoveEntity
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: entity type (User / Group)
-          in: path
-          name: entity_type
-          required: true
-          type: string
-        - description: entity id
-          in: path
-          name: entity_id
-          required: true
-          type: string
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: entity type (User / Group)
+        in: path
+        name: entity_type
+        required: true
+        type: string
+      - description: entity id
+        in: path
+        name: entity_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ""
@@ -3553,80 +5052,80 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Remove entity from workspace
       tags:
-        - Workspaces
+      - Workspaces
       x-cobra-command:
         use: remove-entity
     post:
       consumes:
-        - application/json
+      - application/json
       description: List shared resources on workspace
       operationId: GetSharedResourceInformation
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: entity type
-          in: path
-          name: entity_type
-          required: true
-          type: string
-        - description: entity id
-          in: path
-          name: entity_id
-          required: true
-          type: string
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: entity type
+        in: path
+        name: entity_type
+        required: true
+        type: string
+      - description: entity id
+        in: path
+        name: entity_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/v1.SharedResourcesInformation'
+            $ref: '#/definitions/structures.SharedResourcesInformation'
         "400":
           description: failed to list resources
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: List shared resources on workspace
       tags:
-        - Workspaces
+      - Workspaces
       x-cobra-command:
         use: get-shared-resources
   /workspaces/{id}/{entity_type}/{entity_id}/role/{role}:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Set user role in workspace
       operationId: WorkspaceSetUserRole
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: entity type
-          in: path
-          name: entity_type
-          required: true
-          type: string
-        - description: entity id
-          in: path
-          name: entity_id
-          required: true
-          type: string
-        - description: role
-          in: path
-          name: role
-          required: true
-          type: string
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: entity type
+        in: path
+        name: entity_type
+        required: true
+        type: string
+      - description: entity id
+        in: path
+        name: entity_id
+        required: true
+        type: string
+      - description: role
+        in: path
+        name: role
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ""
@@ -3635,32 +5134,32 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Set user role in workspace
       tags:
-        - Workspaces
+      - Workspaces
       x-cobra-command:
         use: set-role
   /workspaces/{id}/entities:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Add entities to workspace
       operationId: WorkspaceAddEntities
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: entity list
-          in: body
-          name: entities
-          required: true
-          schema:
-            $ref: '#/definitions/v1.EntityList'
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: entity list
+        in: body
+        name: entities
+        required: true
+        schema:
+          $ref: '#/definitions/workspace_entity.EntityList'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ""
@@ -3669,26 +5168,26 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Add entities to workspace
       tags:
-        - Workspaces
+      - Workspaces
       x-cobra-command:
         use: add-entity
   /workspaces/{id}/share:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Share resource on workspace with other targets
       operationId: ShareResource
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -3699,26 +5198,26 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Share resource on workspace
       tags:
-        - Workspaces
+      - Workspaces
       x-cobra-command:
         use: share-resource
   /workspaces/{id}/unshare:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Un-share resource on workspace with other targets
       operationId: UnShareResource
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -3729,10 +5228,10 @@ paths:
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
-        - ApiKeyAuth: []
+      - ApiKeyAuth: []
       summary: Un-share resource on workspace
       tags:
-        - Workspaces
+      - Workspaces
       x-cobra-command:
         use: unshare-resource
 securityDefinitions:
@@ -3742,28 +5241,28 @@ securityDefinitions:
     type: apiKey
 swagger: "2.0"
 tags:
-  - description: Manage your connections
-    name: Connections
-  - description: Controller health and stats
-    name: Controller
-  - description: Manage your integrations
-    name: Integrations
-  - description: Manage your invites
-    name: Invites
-  - description: Create and execute your playbooks
-    name: Playbooks
-  - description: Configure your runners
-    name: Runners
-  - description: Manage your tables
-    name: Table
-  - description: Manage user settings
-    name: User Settings
-  - description: Send to webhook
-    name: Webhook
-  - description: Manage your workspaces
-    name: workspaces
-  - description: Get Information on current user
-    name: User Info
+- description: Manage your connections
+  name: Connections
+- description: Controller health and stats
+  name: Controller
+- description: Manage your integrations
+  name: Integrations
+- description: Manage your invites
+  name: Invites
+- description: Create and execute your playbooks
+  name: Playbooks
+- description: Configure your runners
+  name: Runners
+- description: Manage your tables
+  name: Table
+- description: Manage user settings
+  name: User Settings
+- description: Send to webhook
+  name: Webhook
+- description: Manage your workspaces
+  name: workspaces
+- description: Get Information on current user
+  name: User Info
 x-cobra-command-operations:
   Connections:
     example: ""
