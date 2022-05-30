@@ -43,6 +43,9 @@ func createAutomationPack(packName, wsID string) (string, error) {
 	request, err := utils.NewRequest(http.MethodPost, GetCreateAutomationPackURL(wsID), bytes.NewBuffer(creationPayloadBytes), map[string]string{
 		"Content-Type": "application/json",
 	})
+	if err != nil {
+		return "", err
+	}
 	resp, err := http.DefaultClient.Do(request)
 	if err != nil {
 		return "", err
