@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    tags:
+      - '*'
+      
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file build/Dockerfile --tag blink-cli:${{github.ref_name}}
+    - name: Login into DockerHub
+      env: 
+        DOCKER_USER: ${{secrets.DH_USER}}
+        DOCKER_PASSWORD: ${{secrets.DH_PASSWORD}}
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: Push the Docker image to DockerHub
+      run: docker push ${{secrets.DH_USER}}/blinkops
+      
