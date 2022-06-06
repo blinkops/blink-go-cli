@@ -9,17 +9,17 @@ class BlinkCli < Formula
   license "MIT"
 
   on_macos do
-    if Hardware::CPU.intel?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.15/blink-cli_0.3.15_darwin_amd64.tar.gz"
-      sha256 "18b1087679fe96103bd8b6699ade3b1a9bed85919319178111e2b25ae4b4818a"
+    if Hardware::CPU.arm?
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.15/blink-cli_0.3.15_darwin_arm64.tar.gz"
+      sha256 "4254b761f2ae8f8af83e72dfc9f4f8621c59b7fce7d04ff4bebc7150b4dceec6"
 
       def install
         bin.install "blink-cli"
       end
     end
-    if Hardware::CPU.arm?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.15/blink-cli_0.3.15_darwin_arm64.tar.gz"
-      sha256 "9e16f5d6ecb719141c88ce6b0a848243a56fac0987f38735fa95eda3b6910b0e"
+    if Hardware::CPU.intel?
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.15/blink-cli_0.3.15_darwin_amd64.tar.gz"
+      sha256 "ce74e77f6e6a1222d7229f738024c42ebf897b6383d7c552f6331ee71313e373"
 
       def install
         bin.install "blink-cli"
@@ -30,7 +30,7 @@ class BlinkCli < Formula
   on_linux do
     if Hardware::CPU.intel?
       url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.15/blink-cli_0.3.15_linux_amd64.tar.gz"
-      sha256 "44d0a8bdcfeafde0f4b116833be73d24ddb45f12998dc94237970d5c80a30baf"
+      sha256 "ee6605fa9f2d2a1761d29e76a250d3c842fa049ef00c7aa6f2f65034e9d5086c"
 
       def install
         bin.install "blink-cli"
@@ -38,7 +38,7 @@ class BlinkCli < Formula
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.15/blink-cli_0.3.15_linux_arm64.tar.gz"
-      sha256 "3dbc3ec341015c981bf07f4c7d88f21f63f134ef7eda8e9e8a2d5abbce255aac"
+      sha256 "565600a379fe3b3249c7f26139d15e4eec87f878e021242f07b7b798e977c92a"
 
       def install
         bin.install "blink-cli"
