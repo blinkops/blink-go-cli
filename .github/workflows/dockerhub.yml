@@ -17,9 +17,8 @@ jobs:
       run: docker build . --file Dockerfile -t blinkops/blink-cli:${{github.ref_name}} -t blinkops/blink-cli:latest
     - name: Login into DockerHub
       env: 
-        DOCKER_USER: ${{secrets.DH_USER}}
         DOCKER_PASSWORD: ${{secrets.DH_PASSWORD}}
       run: docker login -u blinkops -p $DOCKER_PASSWORD
     - name: Push the Docker image to DockerHub
-      run: docker push blinkops/blink-cli:${{github.ref_name}}
+      run: docker push --all-tags blinkops/blink-cli
       
