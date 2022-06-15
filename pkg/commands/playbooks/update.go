@@ -2,8 +2,8 @@ package playbooks
 
 import (
 	"fmt"
-
 	"github.com/blinkops/blink-go-cli/pkg/utils"
+	"github.com/spf13/pflag"
 
 	"github.com/blinkops/blink-go-cli/gen/client"
 	"github.com/blinkops/blink-go-cli/gen/client/playbooks"
@@ -23,6 +23,7 @@ func UpdatePlaybooksCommand() *cobra.Command {
 	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
 	command.Flags().StringP(consts.FileFlagName, "f", "", "The path to the playbook file")
 	command.Flags().StringP(consts.AutomationPackFlag, consts.AutomationPackShortFlag, "", "Name of an automation pack to put the updated playbook in")
+	command.Flags().BoolP(consts.PublishFlag, "a", true, "Publish and Activate the playbook")
 
 	return command
 }
@@ -64,8 +65,19 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 	for _, val := range playbookResponse.Payload.Results {
 		if val.Name == playbookObj.Name {
 			playbookObj.ID = val.ID
+			playbookObj.Active = val.Active
 			break
 		}
+	}
+
+	// handle publish case
+	isSet := isFlagPassed(command, consts.PublishFlag)
+	if isSet {
+		published, err := command.Flags().GetBool(consts.PublishFlag)
+		if err != nil {
+			return err
+		}
+		playbookObj.Active = published
 	}
 
 	if playbookObj.ID == "" {
@@ -94,4 +106,14 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 	fmt.Println(updateParam.ID)
 
 	return nil
+}
+
+func isFlagPassed(command *cobra.Command, name string) bool {
+	found := false
+	command.Flags().Visit(func(f *pflag.Flag) {
+		if f.Name == name {
+			found = true
+		}
+	})
+	return found
 }
