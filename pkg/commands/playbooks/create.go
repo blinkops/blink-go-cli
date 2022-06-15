@@ -27,16 +27,18 @@ func CreatePlaybookCommand() *cobra.Command {
 	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
 	command.Flags().StringP(consts.FileFlagName, "f", "", "The path to the playbook file")
 	command.Flags().StringP(consts.AutomationPackFlag, consts.AutomationPackShortFlag, "", "Name of an automation pack to create the playbook in")
+	command.Flags().BoolP(consts.PublishFlag, "a", true, "Publish and Activate the playbook")
 
 	return command
 }
 
-func performCreatePlaybook(filePath, wsID, packName string) error {
+func performCreatePlaybook(filePath, wsID, packName string, publish bool) error {
 	playbook, err := readPlaybookFile(filePath)
 	if err != nil {
 		return err
 	}
 
+	playbook.Active = publish
 	packId, err := resolveAutomationPackId(packName, wsID)
 	if err != nil {
 		return err
@@ -103,7 +105,8 @@ func createPlaybook(command *cobra.Command, _ []string) error {
 		return err
 	}
 
-	if err := performCreatePlaybook(filePath, wsID, packName); err != nil {
+	published, err := command.Flags().GetBool(consts.PublishFlag)
+	if err := performCreatePlaybook(filePath, wsID, packName, published); err != nil {
 		return err
 	}
 

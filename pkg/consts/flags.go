@@ -11,6 +11,7 @@ const (
 	APIKeyCobraKey             = "blink-api-key"
 	FileFlagName               = "file"
 	AutomationPackFlag         = "pack-name"
+	PublishFlag                = "publish"
 	AutomationPackShortFlag    = "p"
 	NameFlagName               = "name"
 	DescriptionFlagName        = "description"
