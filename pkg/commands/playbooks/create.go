@@ -106,6 +106,10 @@ func createPlaybook(command *cobra.Command, _ []string) error {
 	}
 
 	published, err := command.Flags().GetBool(consts.PublishFlag)
+	if err != nil {
+		return err
+	}
+
 	if err := performCreatePlaybook(filePath, wsID, packName, published); err != nil {
 		return err
 	}
