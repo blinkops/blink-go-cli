@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/blinkops/blink-go-cli/gen/models"
 	"github.com/blinkops/blink-go-cli/pkg/api_responses"
@@ -13,7 +14,7 @@ import (
 )
 
 func checkExistingAutomationPack(packName, wsID string) (*api_responses.GetIdByNameResponse, error) {
-	query := fmt.Sprintf(consts.GetAutomationPackByDisplayNameQueryFormat, packName)
+	query := url.QueryEscape(fmt.Sprintf(consts.GetAutomationPackByDisplayNameQueryFormat, packName))
 	request, err := utils.NewRequest(http.MethodGet, GetFindAutomationPackURL(wsID, query), nil, nil)
 	if err != nil {
 		return nil, err
