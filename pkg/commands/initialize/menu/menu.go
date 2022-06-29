@@ -130,7 +130,7 @@ func Setup(_ *cobra.Command, _ []string) (err error) {
 
 	fmt.Printf("\nWrote conflig file to %s\n\n", viper.ConfigFileUsed())
 	fmt.Println("Try it out - list your playbooks by running the following:")
-	fmt.Println("\tblink-cli playbooks list")
+	fmt.Println("\tblink playbooks list")
 
 	return nil
 }
