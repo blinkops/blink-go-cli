@@ -21,7 +21,7 @@ Blink CLI is available on macOS via [Homebrew](https://brew.sh/):
 
 ```sh
 brew tap blinkops/blink-go-cli https://github.com/blinkops/blink-go-cli
-brew install blink-cli
+brew install blink
 ```
 
 ### Linux (Under Development)
@@ -48,19 +48,19 @@ WIP
 ## Usage
 
 ```sh-session
-blink-cli [command]
+blink [command]
 
 # Run `--help` for detailed information about CLI commands
-blink-cli [command] --help
+blink [command] --help
 ```
 
 ### Configuration
 
-By default, blink-cli looks for a file named ``config.json`` in the ``$HOME/.config/blink-cli/config.json`` directory.
+By default, blink looks for a file named ``config.json`` in the ``$HOME/.config/blink/config.json`` directory.
 You can specify a different file path by setting the ``--config`` flag.
 
 ```sh-session
-blink-cli [command] --config ./config.json
+blink [command] --config ./config.json
 ```
 
 At a minimum you should set the following values in your config file.
@@ -75,12 +75,12 @@ At a minimum you should set the following values in your config file.
 
 ### Workspaces
 
-By default, blink-cli uses the workspace specified in your config file.
+By default, blink uses the workspace specified in your config file.
 If a workspace is not set in your config file, or you would like to use a different workspace
 than the one set, use the ``--workspace`` flag.
 
 ```sh-session
-blink-cli [command] --workspace my_workspace
+blink [command] --workspace my_workspace
 ```
 
 

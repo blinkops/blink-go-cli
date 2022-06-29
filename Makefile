@@ -4,7 +4,7 @@ gen:
 	go generate ./...
 
 build: 
-	go build -o blink-cli . 
+	go build -o blink .
 
 clean:
 	rm -rf gen/*
