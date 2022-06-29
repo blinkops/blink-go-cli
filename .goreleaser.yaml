@@ -1,4 +1,4 @@
-project_name: blink-cli
+project_name: blink
 before:
   hooks:
   - go generate ./...

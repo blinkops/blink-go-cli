@@ -8,10 +8,10 @@ RUN make gen
 RUN make build
 
 ##################
-FROM alpine:3.15 AS blink-cli
+FROM alpine:3.15 AS blink
 
-WORKDIR /blink-cli
+WORKDIR /blink
 
-COPY --from=base /go/src/github.com/blinkops/blink-go-cli/blink-cli .
+COPY --from=base /go/src/github.com/blinkops/blink-go-cli/blink .
 
-ENTRYPOINT ["./blink-cli"]
+ENTRYPOINT ["./blink"]

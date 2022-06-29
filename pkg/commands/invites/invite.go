@@ -14,7 +14,7 @@ func InviteCommand() *cobra.Command {
 		Use:     "invite",
 		Short:   `Inviting a user`,
 		RunE:    runOperationInvitesInvite,
-		Example: `blink-cli invites invite --invite '[{"email":"user1@company.com"}, {"email":"user2@company.com"}]'`,
+		Example: `blink invites invite --invite '[{"email":"user1@company.com"}, {"email":"user2@company.com"}]'`,
 	}
 
 	_ = cmd.PersistentFlags().String("invite", "", "json string for [invites]")
