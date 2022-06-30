@@ -28,6 +28,10 @@ func GetFindAutomationPackURL(workspaceID, query string) string {
 	return fmt.Sprintf("%s/api/v1/workspace/%s/table/automation_packs?q=%s", utils.GetBaseURL(), workspaceID, query)
 }
 
+func GetFindWorkspaceURL(workspaceID string) string {
+	return fmt.Sprintf("%s/api/v1/workspaces/%s", utils.GetBaseURL(), workspaceID)
+}
+
 func GetCreateAutomationPackURL(workspaceID string) string {
 	return fmt.Sprintf("%s/api/v1/workspace/%s/automation_packs", utils.GetBaseURL(), workspaceID)
 }
