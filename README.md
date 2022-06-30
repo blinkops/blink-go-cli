@@ -53,7 +53,7 @@ You will be prompted to add a hostname (will be https://app.blinkops.com by defa
 and an API-key
 ```sh-session
 ✔ Hostname: https://app.dev.blinkops.com
-✔ Blink API Key (Obtain key by accessing https://app.dev.blinkops.com/api/v1/apikey in your webbrowser)
+✔ Blink API Key (Obtain key by accessing https://app.dev.blinkops.com/api/v1/apikey in your browser)
 ```
 If you wish to use a pre-defined configuration, you can specify a file path by setting the ``--config`` flag when running blink init
 Example:
