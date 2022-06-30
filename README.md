@@ -44,23 +44,21 @@ docker run --rm -it blinkops/blink-cli version
 
 WIP
 
-
-## Usage
-
+## Init
+To first initialize your credentials after installing run:
 ```sh-session
-blink [command]
-
-# Run `--help` for detailed information about CLI commands
-blink [command] --help
+blink init
 ```
-
-### Configuration
-
-By default, blink looks for a file named ``config.json`` in the ``$HOME/.config/blink/config.json`` directory.
-You can specify a different file path by setting the ``--config`` flag.
-
+You will be prompted to add a hostname (will be https://app.blinkops.com by defauly)
+and an API-key
 ```sh-session
-blink [command] --config ./config.json
+✔ Hostname: https://app.dev.blinkops.com
+✔ Blink API Key (Obtain key by accessing https://app.dev.blinkops.com/api/v1/apikey in your webbrowser)█
+```
+If you wish to use a pre-defined configuration, you can specify a file path by setting the ``--config`` flag when running blink init
+Example:
+```sh-session
+blink init --config ./config.json
 ```
 
 At a minimum you should set the following values in your config file.
@@ -72,6 +70,16 @@ At a minimum you should set the following values in your config file.
   "scheme": "https"
 }
 ```
+
+## Usage
+
+```sh-session
+blink [command]
+
+# Run `--help` for detailed information about CLI commands
+blink [command] --help
+```
+
 
 ### Workspaces
 
