@@ -49,7 +49,7 @@ To first initialize your credentials after installing run:
 ```sh-session
 blink init
 ```
-You will be prompted to add a hostname (will be https://app.blinkops.com by defauly)
+You will be prompted to add a hostname (will be https://app.blinkops.com by default unless Blink is run locally within the org)
 and an API-key
 ```sh-session
 ✔ Hostname: https://app.dev.blinkops.com
