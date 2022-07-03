@@ -1,0 +1,16 @@
+name: t1
+type: Flow
+automation_type: on_demand
+inputs: {}
+outputs: {}
+runner: ""
+triggers: {}
+workflow:
+  - section: New Section
+    steps:
+      - id: S1
+        name: "#Action #1"
+        action: core.python
+        inputs:
+          code: print("hello world2")
+counting_steps: 0
