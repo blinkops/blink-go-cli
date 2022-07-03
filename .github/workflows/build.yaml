@@ -7,6 +7,14 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
+      - name: Build the Docker Image
+        run: docker build . --file Dockerfile -t blinkops/blink-cli:latest
+      - name: Backwards Compatibility Tests
+        env:
+          BLINK_USER_API_KEY: ${{secrets.BLINK_USER_API_KEY}}
+          E2E_CTRL_ADDR: ${{secrets.E2E_CTRL_ADDR}}
+        run: ./test/backwards_compatible/cli_tests.sh
+        shell: sh
       - name: Setup go
         uses: actions/setup-go@v2
         with:
