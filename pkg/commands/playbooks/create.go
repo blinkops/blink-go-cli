@@ -33,11 +33,6 @@ func CreatePlaybookCommand() *cobra.Command {
 }
 
 func performCreatePlaybook(filePath, wsID, packName string, publish bool) error {
-	err := checkExistingWorkspace(wsID)
-	if err != nil {
-		return fmt.Errorf("workspace with Id '%s' not found", wsID)
-	}
-
 	playbook, err := readPlaybookFile(filePath)
 	if err != nil {
 		return err
@@ -96,11 +91,14 @@ func performCreatePlaybook(filePath, wsID, packName string, publish bool) error 
 func createPlaybook(command *cobra.Command, _ []string) error {
 	wsID, err := command.Flags().GetString(consts.WorkspaceNameFlagName)
 	if err != nil {
-		wsID, err = command.Flags().GetString(consts.WorkspaceIDAutoGenFlagName)
+		return err
+	} else if wsID != "" {
+		err = checkExistingWorkspace(wsID)
 		if err != nil {
 			return err
 		}
 	}
+
 	filePath, err := command.Flags().GetString(consts.FileFlagName)
 	if err != nil {
 		return err
@@ -136,7 +134,7 @@ func checkExistingWorkspace(wsID string) error {
 		return err
 	}
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("invalid status code %d returned", resp.StatusCode)
+		return fmt.Errorf("failed to find workspace with ID %s, status code %d returned", wsID, resp.StatusCode)
 	}
 	return nil
 }
