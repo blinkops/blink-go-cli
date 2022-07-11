@@ -41,7 +41,7 @@ func makeOperationGroupTableCmd(tableName string, usage, desc string) *cobra.Com
 
 func MakeUpdate(tableName string) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "delete",
+		Use:   "update",
 		Short: `Update a record`,
 		RunE:  makeUpdateExec(tableName),
 	}
