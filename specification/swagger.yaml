@@ -3446,37 +3446,6 @@ paths:
         - Webhooks
       x-cobra-command:
         use: create
-  /workspaces:
-    post:
-      consumes:
-        - application/json
-      description: Creates a new workspace
-      operationId: CreateWorkspace
-      parameters:
-        - description: add workspace
-          in: body
-          name: workspace
-          required: true
-          schema:
-            $ref: '#/definitions/models.Workspace'
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.Workspace'
-        "400":
-          description: Can not create workspace
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Creates a new workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: create
   /workspaces/{id}:
     delete:
       consumes:
