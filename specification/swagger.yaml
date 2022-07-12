@@ -1064,7 +1064,7 @@ paths:
         - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
           in: query
-          name: q
+          name: query
           required: true
           type: string
       produces:
@@ -1750,7 +1750,7 @@ paths:
         - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
           in: query
-          name: q
+          name: query
           required: true
           type: string
         - description: workspace ID
@@ -1975,7 +1975,7 @@ paths:
         - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
           in: query
-          name: q
+          name: query
           required: true
           type: string
         - description: workspace ID
@@ -2449,7 +2449,7 @@ paths:
         - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
           in: query
-          name: q
+          name: query
           required: true
           type: string
         - description: workspace ID
@@ -3100,7 +3100,7 @@ paths:
         - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
           in: query
-          name: q
+          name: query
           required: true
           type: string
         - description: table name
