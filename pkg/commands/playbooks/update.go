@@ -53,7 +53,7 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 	r := utils.NewTransport()
 
 	searchParam := playbooks.NewPlaybookFindByFilterParams()
-	searchParam.Q = fmt.Sprintf(`{"search":{"text":"%s","fields":["name"]}}`, playbookObj.Name)
+	searchParam.Query = fmt.Sprintf(`{"search":{"text":"%s","fields":["name"]}}`, playbookObj.Name)
 	searchParam.WsID = wsID
 
 	playbookResponse, err := client.New(r, strfmt.Default).
@@ -93,7 +93,7 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 	updateParam := playbooks.NewUpdatePlaybookParams()
 	updateParam.ID = playbookObj.ID
 	updateParam.WsID = wsID
-	updateParam.Playbook = &playbookObj
+	updateParam.Automation = &playbookObj
 
 	_, err = client.New(r, strfmt.Default).
 		Playbooks.UpdatePlaybook(updateParam, nil)

@@ -123,7 +123,7 @@ func makeFindExec(tableName string) func(cmd *cobra.Command, args []string) erro
 		params := table.NewTableFindRecordParams()
 		params.Table = tableName
 		params.WsID = wsID
-		params.Q = qFlag
+		params.Query = qFlag
 
 		record, err := tableService.TableFindRecord(params, nil)
 		if err != nil {

@@ -9,7 +9,7 @@ The Blink CLI helps you build and manage your Blink operations right from the te
 **With the CLI, you can:**
 
 - Create, retrieve, update, or delete API objects.
-- Run playbooks.
+- Run automations.
 
 ## Installation
 
@@ -95,7 +95,7 @@ blink [command] --workspace my_workspace
 ## Commands
 
 The Blink CLI supports a broad range of commands. Below is some of the most used ones:
-- `playbooks`
+- `automations`
 - `runner-groups`
 - `connections`
 
