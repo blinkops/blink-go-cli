@@ -5,7 +5,6 @@ import (
 	"github.com/blinkops/blink-go-cli/pkg/commands/invites"
 	"github.com/blinkops/blink-go-cli/pkg/commands/playbooks"
 	"github.com/blinkops/blink-go-cli/pkg/commands/runner-groups"
-	"github.com/blinkops/blink-go-cli/pkg/commands/table"
 	"github.com/blinkops/blink-go-cli/pkg/commands/workspaces"
 	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"github.com/spf13/cobra"
@@ -38,7 +37,6 @@ func GetRegisteredChildCommands() map[string][]*cobra.Command {
 func GetRegisteredStandaloneCommands() []*cobra.Command {
 	commands := []*cobra.Command{
 		initialize.Command(),
-		table.CRUD("connection_types", "connection-types", "Manage your connection types"),
 	}
 
 	for _, command := range commands {
