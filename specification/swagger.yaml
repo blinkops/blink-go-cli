@@ -2514,51 +2514,6 @@ paths:
         - Playbooks
       x-cobra-command:
         use: execute
-  /workspace/{ws_id}/automations/{id}/start:
-    post:
-      consumes:
-        - application/json
-      description: Starts an automation execution
-      operationId: PlaybookStartExecution
-      parameters:
-        - description: automation id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: automation and its input params
-          in: body
-          name: execution
-          required: true
-          schema:
-            $ref: '#/definitions/types.StartExecutionRequest'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.PlaybookExecution'
-        "400":
-          description: Execution creation failed
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-        "404":
-          description: Can not find automation
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Starts an automation execution
-      tags:
-        - Playbooks
-      x-cobra-command:
-        use: start
   /workspace/{ws_id}/runner/{id}:
     delete:
       consumes:
@@ -2701,46 +2656,6 @@ paths:
         - Runners
       x-cobra-command:
         use: delete
-    post:
-      consumes:
-        - application/json
-      description: Update an existing runner group
-      operationId: UpdateRunnerGroup
-      parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: runner group ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: Update runner group
-          in: body
-          name: name
-          required: true
-          schema:
-            $ref: '#/definitions/api_requests.CreateRunnerGroupRequest'
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/RGroup'
-        "400":
-          description: Cannot update runner group
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Update an existing runner group
-      tags:
-        - Runners
-      x-cobra-command:
-        use: update
   /workspace/{ws_id}/runners:
     get:
       consumes:
