@@ -1,6 +1,6 @@
 name: t1
 type: Flow
-automation_type: on_demand
+playbook_type: on_demand
 inputs: {}
 outputs: {}
 runner: ""
