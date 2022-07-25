@@ -1,4 +1,4 @@
-package playbooks
+package automations
 
 import (
 	"bytes"
@@ -63,7 +63,7 @@ func createAutomationPack(packName, wsID string) (string, error) {
 
 func resolveAutomationPackId(packName, wsID string) (string, error) {
 	if packName == "" {
-		// no pack name so let the logic on the controller put the playbook in a 'default' pack in case of creation
+		// no pack name so let the logic on the controller put the automation in a 'default' pack in case of creation
 		// or keep it in the same pack in case of update
 		return "", nil
 	}

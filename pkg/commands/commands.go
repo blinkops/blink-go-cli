@@ -1,9 +1,9 @@
 package commands
 
 import (
+	"github.com/blinkops/blink-go-cli/pkg/commands/automations"
 	"github.com/blinkops/blink-go-cli/pkg/commands/initialize"
 	"github.com/blinkops/blink-go-cli/pkg/commands/invites"
-	"github.com/blinkops/blink-go-cli/pkg/commands/playbooks"
 	"github.com/blinkops/blink-go-cli/pkg/commands/runner-groups"
 	"github.com/blinkops/blink-go-cli/pkg/commands/workspaces"
 	"github.com/blinkops/blink-go-cli/pkg/consts"
@@ -15,12 +15,12 @@ import (
 // be grouped a part of the generated operation
 func GetRegisteredChildCommands() map[string][]*cobra.Command {
 	return map[string][]*cobra.Command{
-		"playbooks": {
-			playbooks.ListPlaybooksCommand(),
-			playbooks.CreatePlaybookCommand(),
-			playbooks.UpdatePlaybooksCommand(),
-			playbooks.GetPlaybookCommand(),
-			playbooks.DeletePlaybookCommand(),
+		"automations": {
+			automations.ListAutomationsCommand(),
+			automations.CreateAutomationCommand(),
+			automations.UpdateAutomationsCommand(),
+			automations.GetAutomationCommand(),
+			automations.DeleteAutomationCommand(),
 		},
 		"invites": {
 			invites.InviteCommand(),
