@@ -1434,26 +1434,6 @@ paths:
       summary: Set invitation role on company
       tags:
         - Invitation
-  /uninvite/:email:
-    post:
-      description: Uninviting a user
-      operationId: UnInvite
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ""
-        "400":
-          description: Failed to un invite user
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Uninviting a user
-      tags:
-        - Invites
-      x-cobra-command:
-        use: uninvite
   /user:
     get:
       description: Returns my user info
