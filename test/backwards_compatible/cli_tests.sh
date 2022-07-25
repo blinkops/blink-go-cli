@@ -23,18 +23,18 @@ assert() { # $1: test case description
 
 # tests begin here
 echo
-echo "create automations:\n"
+echo "create playbooks:\n"
 automation_id=$(blink automations create -f $inputs_dir/cli_automation_case_1.yaml -p "test pack" $flags)
-assert "create automation"
+assert "create playbook"
 echo $automation_id
 automation_id2=$(blink automations create -f $inputs_dir/cli_automation_case_2.yaml -p "test pack" $flags)
-assert "create automation"
+assert "create playbook"
 echo $automation_id2
 
 echo
-echo "execute automation:\n"
+echo "execute playbook:\n"
 execution_id=$(blink automations execute --id $automation_id $flags)
-assert "execute automation"
+assert "execute playbook"
 echo $execution_id
 
 execution_id=$(echo $execution_id | egrep '[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}' -o)
