@@ -1434,26 +1434,6 @@ paths:
       summary: Set invitation role on company
       tags:
         - Invitation
-  /uninvite/:email:
-    post:
-      description: Uninviting a user
-      operationId: UnInvite
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ""
-        "400":
-          description: Failed to un invite user
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Uninviting a user
-      tags:
-        - Invites
-      x-cobra-command:
-        use: uninvite
   /user:
     get:
       description: Returns my user info
@@ -2288,157 +2268,6 @@ paths:
         - Executions
       x-cobra-command:
         use: details
-  /workspace/{ws_id}/integrations:
-    post:
-      consumes:
-        - application/json
-      description: Register new integration
-      operationId: IntegrationRegister
-      parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: integration
-          in: body
-          name: integration
-          required: true
-          schema:
-            $ref: '#/definitions/api_requests.CreateIntegrationRequest'
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.Plugin'
-      security:
-        - ApiKeyAuth: []
-      summary: Register new integration
-      tags:
-        - Integrations
-      x-cobra-command:
-        use: register
-  /workspace/{ws_id}/integrations/{id}:
-    delete:
-      consumes:
-        - application/json
-      description: Delete an integration pack with all its actions, params etc.
-      operationId: IntegrationDelete
-      parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: integration pack id
-          schema:
-            type: string
-        "400":
-          description: Can not delete integration pack
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-        "404":
-          description: Can not find integration pack
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Delete an integration pack
-      tags:
-        - Integrations
-      x-cobra-command:
-        use: delete
-  /workspace/{ws_id}/integrations/name/{name}:
-    delete:
-      consumes:
-        - application/json
-      description: Delete an integration pack with all its actions, params etc.
-      operationId: IntegrationDeleteByName
-      parameters:
-        - description: name
-          in: path
-          name: name
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: integration pack id
-          schema:
-            type: string
-        "400":
-          description: Can not delete integration pack
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-        "404":
-          description: Can not find integration pack
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Delete an integration pack
-      tags:
-        - Integrations
-      x-cobra-command:
-        use: delete-by-name
-  /workspace/{ws_id}/integrations/sync_to_runner/{id}/{name}:
-    post:
-      description: Sync an integration to a given runner
-      operationId: SyncIntegrationToRunner
-      parameters:
-        - description: Runner Id to push to
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: Integration name
-          in: path
-          name: name
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      responses:
-        "200":
-          description: integration pack id
-          schema:
-            type: string
-        "400":
-          description: Can not push integration pack
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-        "404":
-          description: Can not find integration pack
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Sync an integration to a given runner
-      tags:
-        - Integrations
-        - Runners
-      x-cobra-command:
-        hidden: true
   /workspace/{ws_id}/playbooks:
     get:
       consumes:
@@ -2685,51 +2514,6 @@ paths:
         - Playbooks
       x-cobra-command:
         use: execute
-  /workspace/{ws_id}/playbooks/{id}/start:
-    post:
-      consumes:
-        - application/json
-      description: Starts a playbook execution
-      operationId: PlaybookStartExecution
-      parameters:
-        - description: playbook id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: playbook and its input params
-          in: body
-          name: execution
-          required: true
-          schema:
-            $ref: '#/definitions/types.StartExecutionRequest'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.PlaybookExecution'
-        "400":
-          description: Execution creation failed
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-        "404":
-          description: Can not find Playbook
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Starts a playbook execution
-      tags:
-        - Playbooks
-      x-cobra-command:
-        use: start
   /workspace/{ws_id}/runner/{id}:
     delete:
       consumes:
@@ -2872,46 +2656,6 @@ paths:
         - Runners
       x-cobra-command:
         use: delete
-    post:
-      consumes:
-        - application/json
-      description: Update an existing runner group
-      operationId: UpdateRunnerGroup
-      parameters:
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: runner group ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: Update runner group
-          in: body
-          name: name
-          required: true
-          schema:
-            $ref: '#/definitions/api_requests.CreateRunnerGroupRequest'
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/RGroup'
-        "400":
-          description: Cannot update runner group
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Update an existing runner group
-      tags:
-        - Runners
-      x-cobra-command:
-        use: update
   /workspace/{ws_id}/runners:
     get:
       consumes:
@@ -3761,8 +3505,6 @@ tags:
     name: Connections
   - description: Controller health and stats
     name: Controller
-  - description: Manage your integrations
-    name: Integrations
   - description: Manage your invites
     name: Invites
   - description: Create and execute your playbooks
@@ -3791,10 +3533,6 @@ x-cobra-command-operations:
   Executions:
     short: Manage and track your playbook executions
     use: executions
-  Integrations:
-    example: ""
-    short: Manage your integrations
-    use: integrations
   Invites:
     example: ""
     short: Manage your invites
