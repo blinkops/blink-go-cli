@@ -1,4 +1,4 @@
-package playbooks
+package automations
 
 import (
 	"bytes"
@@ -14,44 +14,44 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func CreatePlaybookCommand() *cobra.Command {
+func CreateAutomationCommand() *cobra.Command {
 	command := &cobra.Command{
 		Use:     "create",
 		Aliases: []string{"c", "cr"},
-		Short:   "Create playbook by file",
-		Long:    `The following command will create a playbook from a given YAML file`,
-		Example: "create -f /path/to/playbook.yaml",
-		RunE:    createPlaybook,
+		Short:   "Create automation by file",
+		Long:    `The following command will create an automation from a given YAML file`,
+		Example: "create -f /path/to/automation.yaml",
+		RunE:    createAutomation,
 	}
 
 	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
-	command.Flags().StringP(consts.FileFlagName, "f", "", "The path to the playbook file")
-	command.Flags().StringP(consts.AutomationPackFlag, consts.AutomationPackShortFlag, "", "Name of an automation pack to create the playbook in")
-	command.Flags().BoolP(consts.PublishFlag, "a", true, "Publish and Activate the playbook")
+	command.Flags().StringP(consts.FileFlagName, "f", "", "The path to the automation file")
+	command.Flags().StringP(consts.AutomationPackFlag, consts.AutomationPackShortFlag, "", "Name of an automation pack to create the automation in")
+	command.Flags().BoolP(consts.PublishFlag, "a", true, "Publish and Activate the automation")
 
 	return command
 }
 
-func performCreatePlaybook(filePath, wsID, packName string, publish bool) error {
-	playbook, err := readPlaybookFile(filePath)
+func performCreateAutomation(filePath, wsID, packName string, publish bool) error {
+	automation, err := readAutomationFile(filePath)
 	if err != nil {
 		return err
 	}
 
-	playbook.Active = publish
+	automation.Active = publish
 	packId, err := resolveAutomationPackId(packName, wsID)
 	if err != nil {
 		return err
 	}
-	playbook.PackID = packId
+	automation.PackID = packId
 
-	playbookData, err := json.Marshal(playbook)
+	automationData, err := json.Marshal(automation)
 	if err != nil {
-		return fmt.Errorf("Failed to create playbook data: %s ", err)
+		return fmt.Errorf("Failed to create automation data: %s ", err)
 	}
 
-	request, err := utils.NewRequest(http.MethodPost, GetPlaybookURL(wsID),
-		bytes.NewBuffer(playbookData), map[string]string{
+	request, err := utils.NewRequest(http.MethodPost, GetAutomationURL(wsID),
+		bytes.NewBuffer(automationData), map[string]string{
 			"Content-Type": "application/json",
 		})
 	if err != nil {
@@ -75,12 +75,12 @@ func performCreatePlaybook(filePath, wsID, packName string, publish bool) error 
 		if err != nil {
 			return err
 		}
-		var playbookResponse api_responses.CreateResponseWithId
-		if err := json.Unmarshal(responseBody, &playbookResponse); err != nil {
+		var automationResponse api_responses.CreateResponseWithId
+		if err := json.Unmarshal(responseBody, &automationResponse); err != nil {
 			return err
 		}
-		if playbookResponse.Id != "" {
-			fmt.Printf(playbookResponse.Id)
+		if automationResponse.Id != "" {
+			fmt.Printf(automationResponse.Id)
 		}
 		return nil
 	}
@@ -88,7 +88,7 @@ func performCreatePlaybook(filePath, wsID, packName string, publish bool) error 
 	return fmt.Errorf(string(responseBody))
 }
 
-func createPlaybook(command *cobra.Command, _ []string) error {
+func createAutomation(command *cobra.Command, _ []string) error {
 	wsID, err := command.Flags().GetString(consts.WorkspaceNameFlagName)
 	if err != nil {
 		return err
@@ -104,7 +104,7 @@ func createPlaybook(command *cobra.Command, _ []string) error {
 		return err
 	}
 	if filePath == "" {
-		return fmt.Errorf("no file input is supplied for the playbook creation")
+		return fmt.Errorf("no file input is supplied for the automation creation")
 	}
 	packName, err := command.Flags().GetString(consts.AutomationPackFlag)
 	if err != nil {
@@ -116,7 +116,7 @@ func createPlaybook(command *cobra.Command, _ []string) error {
 		return err
 	}
 
-	if err := performCreatePlaybook(filePath, wsID, packName, published); err != nil {
+	if err := performCreateAutomation(filePath, wsID, packName, published); err != nil {
 		return err
 	}
 

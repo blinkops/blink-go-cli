@@ -43,11 +43,11 @@ func runOperationInvitesInvite(cmd *cobra.Command, args []string) error {
 
 func retrieveOperationInvitesInviteInvitationFlag(m *invites.InviteParams, cmd *cobra.Command) error {
 
-	playbookFlagValue, err := cmd.Flags().GetString("invite")
+	automationFlagValue, err := cmd.Flags().GetString("invite")
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal([]byte(playbookFlagValue), &m.Invitation)
+	err = json.Unmarshal([]byte(automationFlagValue), &m.Invitation)
 	if err != nil {
 		return err
 	}

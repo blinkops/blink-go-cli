@@ -1,4 +1,4 @@
-package playbooks
+package automations
 
 import (
 	"encoding/json"
@@ -13,15 +13,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func ListPlaybooksCommand() *cobra.Command {
+func ListAutomationsCommand() *cobra.Command {
 
 	command := &cobra.Command{
 		Use:     "list",
 		Aliases: []string{"ls"},
-		Short:   "Get all the available playbooks",
-		Long:    `The following command will request Blink's system to list all available playbooks`,
+		Short:   "Get all the available automations",
+		Long:    `The following command will request Blink's system to list all available automations`,
 		Example: "list",
-		RunE:    listPlaybooks,
+		RunE:    listAutomations,
 	}
 
 	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
@@ -29,9 +29,9 @@ func ListPlaybooksCommand() *cobra.Command {
 	return command
 }
 
-func performListPlaybooks(wsID string) (string, error) {
+func performListAutomations(wsID string) (string, error) {
 
-	request, err := utils.NewRequest(http.MethodGet, GetPlaybookURL(wsID), nil, nil)
+	request, err := utils.NewRequest(http.MethodGet, GetAutomationURL(wsID), nil, nil)
 	if err != nil {
 		return "", err
 	}
@@ -59,7 +59,7 @@ func performListPlaybooks(wsID string) (string, error) {
 	}
 
 	if responseObject.Results == nil {
-		return "No playbooks are available", nil
+		return "No automations are available", nil
 	}
 
 	marshaled, err := json.Marshal(responseObject.Results)
@@ -71,10 +71,10 @@ func performListPlaybooks(wsID string) (string, error) {
 
 }
 
-func listPlaybooks(command *cobra.Command, _ []string) error {
+func listAutomations(command *cobra.Command, _ []string) error {
 
 	wsID, err := command.Flags().GetString("ws_id")
-	pagingInfo, err := performListPlaybooks(wsID)
+	pagingInfo, err := performListAutomations(wsID)
 	if err != nil {
 		return err
 	}
