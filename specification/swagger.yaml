@@ -142,7 +142,7 @@ definitions:
       id:
         type: string
       name:
-        description: Connection names are unique per tenant as they are used in automation
+        description: Connection names are unique per tenant as they are used in playbook
           YAML
         type: string
       tags:
@@ -189,7 +189,7 @@ definitions:
       is_shared:
         type: boolean
       name:
-        description: Connection names are unique per tenant as they are used in automation
+        description: Connection names are unique per tenant as they are used in playbook
           YAML
         type: string
       shared_with:
@@ -342,7 +342,7 @@ definitions:
       updated_by:
         type: string
     type: object
-  models.Automation:
+  models.Playbook:
     properties:
       created_at:
         type: integer
@@ -354,7 +354,7 @@ definitions:
         type: boolean
       name:
         type: string
-      automation:
+      playbook:
         type: string
       tags:
         items:
@@ -377,7 +377,7 @@ definitions:
       active:
         type: boolean
     type: object
-  models.AutomationExecution:
+  models.PlaybookExecution:
     properties:
       cancel_reason:
         type: string
@@ -391,15 +391,15 @@ definitions:
         type: integer
       id:
         type: string
-      last_automation_name:
-        description: LastAutomationName Holds last automation name after automation deletion
+      last_playbook_name:
+        description: LastPlaybookName Holds last playbook name after playbook deletion
           to be used in display names for past executions
         type: string
       name:
         type: string
-      automation:
+      playbook:
         type: string
-      automation_id:
+      playbook_id:
         type: string
       runner_id:
         type: string
@@ -424,7 +424,7 @@ definitions:
       workspace_id:
         type: string
     type: object
-  models.AutomationInputParams:
+  models.PlaybookInputParams:
     additionalProperties: true
     type: object
   models.Plugin:
@@ -531,10 +531,10 @@ definitions:
       id:
         type: string
       inputs:
-        $ref: '#/definitions/models.AutomationInputParams'
+        $ref: '#/definitions/models.PlaybookInputParams'
       name:
         type: string
-      automation_id:
+      playbook_id:
         type: string
       tenant_id:
         type: string
@@ -619,12 +619,12 @@ definitions:
       id:
         type: string
       inputs:
-        $ref: '#/definitions/models.AutomationInputParams'
+        $ref: '#/definitions/models.PlaybookInputParams'
       last_event:
         type: integer
       name:
         type: string
-      automation_id:
+      playbook_id:
         type: string
       tenant_id:
         type: string
@@ -677,7 +677,7 @@ definitions:
       user_count:
         type: integer
     type: object
-  automation_inputs.AutomationInputParamValues:
+  playbook_inputs.PlaybookInputParamValues:
     properties:
       input_values:
         additionalProperties: true
@@ -692,13 +692,13 @@ definitions:
       id:
         type: string
       input_values:
-        $ref: '#/definitions/models.AutomationInputParams'
-        description: automation input values that's passed as user input
+        $ref: '#/definitions/models.PlaybookInputParams'
+        description: playbook input values that's passed as user input
       is_request:
         type: boolean
       name:
         type: string
-      automation:
+      playbook:
         type: string
       tags:
         items:
@@ -732,17 +732,17 @@ definitions:
       id:
         type: string
       input_values:
-        $ref: '#/definitions/models.AutomationInputParams'
-        description: automation input values that's passed as user input
-      last_automation_name:
-        description: LastAutomationName Holds last automation name after automation deletion
+        $ref: '#/definitions/models.PlaybookInputParams'
+        description: playbook input values that's passed as user input
+      last_playbook_name:
+        description: LastPlaybookName Holds last playbook name after playbook deletion
           to be used in display names for past executions
         type: string
       name:
         type: string
-      automation:
+      playbook:
         type: string
-      automation_id:
+      playbook_id:
         type: string
       runner_id:
         type: string
@@ -860,11 +860,11 @@ definitions:
       workspace_name:
         type: string
     type: object
-  v1.SharedAutomation:
+  v1.SharedPlaybook:
     properties:
-      automation_id:
+      playbook_id:
         type: string
-      automation_name:
+      playbook_name:
         type: string
       workspace_name:
         type: string
@@ -877,7 +877,7 @@ definitions:
         type: array
       used_by:
         items:
-          $ref: '#/definitions/v1.SharedAutomation'
+          $ref: '#/definitions/v1.SharedPlaybook'
         type: array
     type: object
   v1.SharedTarget:
@@ -1597,8 +1597,8 @@ paths:
     get:
       consumes:
         - application/json
-      description: Returns automations execution by a filter
-      operationId: AutomationExecutionFindByFilter
+      description: Returns playbooks execution by a filter
+      operationId: PlaybookExecutionFindByFilter
       parameters:
         - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
@@ -1622,7 +1622,7 @@ paths:
               - properties:
                   results:
                     items:
-                      $ref: '#/definitions/models.AutomationExecution'
+                      $ref: '#/definitions/models.PlaybookExecution'
                     type: array
                 type: object
         "404":
@@ -1631,7 +1631,7 @@ paths:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Returns automations execution by a filter
+      summary: Returns playbooks execution by a filter
       tags:
         - Executions
       x-cobra-command:
@@ -1640,8 +1640,8 @@ paths:
     get:
       consumes:
         - application/json
-      description: Gets an automation execution session by id
-      operationId: AutomationExecutionGetById
+      description: Gets a playbook execution session by id
+      operationId: PlaybookExecutionGetById
       parameters:
         - description: ID
           in: path
@@ -1659,14 +1659,14 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/models.AutomationExecution'
+            $ref: '#/definitions/models.PlaybookExecution'
         "404":
-          description: Can not find Automation execution
+          description: Can not find Playbook execution
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Gets an automation execution session by id
+      summary: Gets a playbook execution session by id
       tags:
         - Executions
       x-cobra-command:
@@ -1675,7 +1675,7 @@ paths:
       consumes:
         - application/json
       description: Updates an execution and its input params
-      operationId: AutomationExecutionUpdate
+      operationId: PlaybookExecutionUpdate
       parameters:
         - description: execution id
           in: path
@@ -1699,7 +1699,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.AutomationExecution'
+            $ref: '#/definitions/models.PlaybookExecution'
         "400":
           description: Cannot complete execution, it is not in a running state
           schema:
@@ -1712,7 +1712,7 @@ paths:
         - ApiKeyAuth: []
       summary: Updates an execution
       tags:
-        - Automations
+        - Playbooks
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/executions/{id}/action_history:
@@ -1758,7 +1758,7 @@ paths:
         - ApiKeyAuth: []
       summary: Returns the list of audit commands per an execution
       tags:
-        - Automations
+        - Playbooks
       x-cobra-command:
         use: history
   /workspace/{ws_id}/executions/{id}/cancel:
@@ -1766,7 +1766,7 @@ paths:
       consumes:
         - application/json
       description: Cancels/Aborts an execution
-      operationId: AutomationExecutionCancel
+      operationId: PlaybookExecutionCancel
       parameters:
         - description: execution id
           in: path
@@ -1805,7 +1805,7 @@ paths:
       consumes:
         - application/json
       description: Completes/Finished an execution
-      operationId: AutomationExecutionComplete
+      operationId: PlaybookExecutionComplete
       parameters:
         - description: execution id
           in: path
@@ -1823,7 +1823,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.AutomationExecution'
+            $ref: '#/definitions/models.PlaybookExecution'
         "400":
           description: Cannot complete execution, it is not in a running state
           schema:
@@ -1836,15 +1836,15 @@ paths:
         - ApiKeyAuth: []
       summary: Completes/Finished an execution
       tags:
-        - Automations
+        - Playbooks
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/executions/{id}/outputs:
     get:
       consumes:
         - application/json
-      description: Gets automation outputs by id
-      operationId: AutomationExecutionGetOutputs
+      description: Gets playbook outputs by id
+      operationId: PlaybookExecutionGetOutputs
       parameters:
         - description: ID
           in: path
@@ -1862,14 +1862,14 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/models.AutomationExecution'
+            $ref: '#/definitions/models.PlaybookExecution'
         "404":
-          description: Can not find Automation execution
+          description: Can not find Playbook execution
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Gets automation outputs by id
+      summary: Gets playbook outputs by id
       tags:
         - Executions
       x-cobra-command:
@@ -1878,7 +1878,7 @@ paths:
     get:
       consumes:
         - application/json
-      description: Returns an automation execution steps details (inputs/outputs)
+      description: Returns a playbook execution steps details (inputs/outputs)
       operationId: GetStepsExecutionDetails
       parameters:
         - description: execution id
@@ -1911,17 +1911,17 @@ paths:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Returns an automation execution steps details (inputs/outputs)
+      summary: Returns a playbook execution steps details (inputs/outputs)
       tags:
         - Executions
       x-cobra-command:
         use: details
-  /workspace/{ws_id}/automations:
+  /workspace/{ws_id}/playbooks:
     get:
       consumes:
         - application/json
-      description: Returns automations by a filter
-      operationId: AutomationFindByFilter
+      description: Returns playbooks by a filter
+      operationId: PlaybookFindByFilter
       parameters:
         - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
           ''k8s''}}}'' filter is optional'
@@ -1945,35 +1945,35 @@ paths:
               - properties:
                   results:
                     items:
-                      $ref: '#/definitions/models.Automation'
+                      $ref: '#/definitions/models.Playbook'
                     type: array
                 type: object
         "404":
-          description: Can not find Automations
+          description: Can not find Playbooks
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Returns automations by a filter
+      summary: Returns playbooks by a filter
       tags:
-        - Automations
+        - Playbooks
       x-cobra-command:
         use: search
     post:
       consumes:
         - application/json
-      description: Creates a new Automation
-      operationId: CreateAutomation
+      description: Creates a new Playbook
+      operationId: CreatePlaybook
       parameters:
-        - description: add automation
+        - description: add playbook
           in: body
-          name: automation
+          name: playbook
           required: true
           schema:
-            $ref: '#/definitions/models.Automation'
+            $ref: '#/definitions/models.Playbook'
         - description: http://someurl/somefile.yaml
           in: query
-          name: automation_content_url
+          name: playbook_content_url
           required: true
           type: string
         - description: workspace ID
@@ -1987,24 +1987,24 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/models.Automation'
+            $ref: '#/definitions/models.Playbook'
         "400":
-          description: Can not create Automation
+          description: Can not create Playbook
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Creates a new Automation
+      summary: Creates a new Playbook
       tags:
-        - Automations
+        - Playbooks
       x-cobra-command:
         hidden: true
-  /workspace/{ws_id}/automations/{id}:
+  /workspace/{ws_id}/playbooks/{id}:
     delete:
       consumes:
         - application/json
-      description: Deletes an Automation
-      operationId: DeleteAutomation
+      description: Deletes a Playbook
+      operationId: DeletePlaybook
       parameters:
         - description: ID
           in: path
@@ -2020,29 +2020,29 @@ paths:
         - application/json
       responses:
         "200":
-          description: automation id
+          description: playbook id
           schema:
             type: string
         "400":
-          description: Can not delete Automation
+          description: Can not delete Playbook
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
-          description: Can not find Automation
+          description: Can not find Playbook
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Deletes an Automation
+      summary: Deletes a Playbook
       tags:
-        - Automations
+        - Playbooks
       x-cobra-command:
         hidden: true
     get:
       consumes:
         - application/json
-      description: Gets an automation by id
-      operationId: AutomationGetById
+      description: Gets a playbook by id
+      operationId: PlaybookGetById
       parameters:
         - description: ID
           in: path
@@ -2060,30 +2060,30 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/models.Automation'
+            $ref: '#/definitions/models.Playbook'
         "404":
-          description: Can not find Automation
+          description: Can not find Playbook
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Gets an automation by id
+      summary: Gets a playbook by id
       tags:
-        - Automations
+        - Playbooks
       x-cobra-command:
         hidden: true
     put:
       consumes:
         - application/json
-      description: Updates an Automation
-      operationId: UpdateAutomation
+      description: Updates a Playbook
+      operationId: UpdatePlaybook
       parameters:
-        - description: add automation
+        - description: add playbook
           in: body
-          name: automation
+          name: playbook
           required: true
           schema:
-            $ref: '#/definitions/models.Automation'
+            $ref: '#/definitions/models.Playbook'
         - description: ID
           in: path
           name: id
@@ -2100,28 +2100,28 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/models.Automation'
+            $ref: '#/definitions/models.Playbook'
         "400":
-          description: Can not update Automation
+          description: Can not update Playbook
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
-          description: Can not find Automation
+          description: Can not find Playbook
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Updates an Automation
+      summary: Updates a Playbook
       tags:
-        - Automations
+        - Playbooks
       x-cobra-command:
         hidden: true
-  /workspace/{ws_id}/automations/{id}/execute:
+  /workspace/{ws_id}/playbooks/{id}/execute:
     post:
       consumes:
         - application/json
-      description: Executes a complete automation - in a sync or async mode
-      operationId: ExecuteAutomation
+      description: Executes a complete playbook - in a sync or async mode
+      operationId: ExecutePlaybook
       parameters:
         - description: ID
           in: path
@@ -2137,7 +2137,7 @@ paths:
           in: body
           name: inputs
           schema:
-            $ref: '#/definitions/automation_inputs.AutomationInputParamValues'
+            $ref: '#/definitions/playbook_inputs.PlaybookInputParamValues'
       produces:
         - application/json
       responses:
@@ -2148,18 +2148,18 @@ paths:
               type: string
             type: object
         "400":
-          description: Can not execute automation
+          description: Can not execute playbook
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
         "404":
-          description: Can not find Automation
+          description: Can not find Playbook
           schema:
             $ref: '#/definitions/api_responses.ErrorWrapper'
       security:
         - ApiKeyAuth: []
-      summary: Executes a complete automation - in a sync or async mode
+      summary: Executes a complete playbook - in a sync or async mode
       tags:
-        - Automations
+        - Playbooks
       x-cobra-command:
         use: execute
   /workspace/{ws_id}/runner/{id}:
@@ -2459,7 +2459,7 @@ paths:
           name: ws_id
           required: true
           type: string
-        - description: automation ID
+        - description: playbook ID
           in: path
           name: id
           required: true
@@ -2815,7 +2815,7 @@ paths:
           name: ws_id
           required: true
           type: string
-        - description: automation ID
+        - description: playbook ID
           in: path
           name: id
           required: true
@@ -2849,8 +2849,8 @@ tags:
     name: Controller
   - description: Manage your invites
     name: Invites
-  - description: Create and execute your automations
-    name: Automations
+  - description: Create and execute your playbooks
+    name: Playbooks
   - description: Manage your tables
     name: Table
   - description: Manage user settings
@@ -2865,16 +2865,16 @@ x-cobra-command-operations:
     hidden: true
     use: controller
   Executions:
-    short: Manage and track your automation executions
+    short: Manage and track your playbook executions
     use: executions
   Invites:
     example: ""
     short: Manage your invites
     use: invites
-  Automations:
+  Playbooks:
     example: ""
-    short: Create and execute your automations
-    use: automations
+    short: Create and execute your playbooks
+    use: playbooks
   Settings:
     example: ""
     use: user-settings

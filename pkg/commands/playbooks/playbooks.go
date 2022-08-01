@@ -1,4 +1,4 @@
-package automations
+package playbooks
 
 import (
 	"bytes"
@@ -19,9 +19,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func GetAutomationURL(workspaceID string) string {
+func GetPlaybookURL(workspaceID string) string {
 	return utils.GetBaseURL() +
-		fmt.Sprintf("/api/v1/workspace/%s/automations", workspaceID)
+		fmt.Sprintf("/api/v1/workspace/%s/playbooks", workspaceID)
 }
 
 func GetFindAutomationPackURL(workspaceID, query string) string {
@@ -40,28 +40,28 @@ func getWorkspaceParamFlags(cmd *cobra.Command) string {
 	return viper.GetString(consts.WorkspaceIDCobraKey)
 }
 
-func readAutomationFile(filePath string) (automation models.ModelsAutomation, err error) {
-	automationPayload := make(map[string]interface{})
+func readPlaybookFile(filePath string) (playbook models.ModelsPlaybook, err error) {
+	playbookPayload := make(map[string]interface{})
 
 	if _, err := os.Stat(filePath); err != nil {
-		return automation, fmt.Errorf("%s does not exist", filePath)
+		return playbook, fmt.Errorf("%s does not exist", filePath)
 	}
 
 	data, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		return automation, err
+		return playbook, err
 	}
 
-	// this needs to be the automation object from the server
-	// automationObject := &models.ModelsAutomation{}
-	if err := yaml.NewDecoder(bytes.NewBuffer(data)).Decode(automationPayload); err != nil {
-		return automation, fmt.Errorf("invalid automation file: %s", err)
+	// this needs to be the playbook object from the server
+	// playbookObject := &models.ModelsPlaybook{}
+	if err := yaml.NewDecoder(bytes.NewBuffer(data)).Decode(playbookPayload); err != nil {
+		return playbook, fmt.Errorf("invalid playbook file: %s", err)
 	}
 
-	version, _ := automationPayload["version"].(string)
-	tagsI, _ := automationPayload["tags"].([]interface{})
-	name, _ := automationPayload["name"].(string)
-	automationType, _ := automationPayload["type"].(string)
+	version, _ := playbookPayload["version"].(string)
+	tagsI, _ := playbookPayload["tags"].([]interface{})
+	name, _ := playbookPayload["name"].(string)
+	playbookType, _ := playbookPayload["type"].(string)
 
 	var tags []string
 	for _, tagI := range tagsI {
@@ -70,18 +70,18 @@ func readAutomationFile(filePath string) (automation models.ModelsAutomation, er
 		}
 	}
 
-	automation = models.ModelsAutomation{
-		Type:       automationType,
-		Version:    version,
-		Automation: string(data),
-		Tags:       tags,
-		Name:       name,
+	playbook = models.ModelsPlaybook{
+		Type:     playbookType,
+		Version:  version,
+		Playbook: string(data),
+		Tags:     tags,
+		Name:     name,
 	}
 
-	return automation, nil
+	return playbook, nil
 }
 
-func extractAutomationIdFromResponse(responseBody []byte, automationName string) (string, error) {
+func extractPlaybookIdFromResponse(responseBody []byte, playbookName string) (string, error) {
 	var result api_responses.GetIdByNameResponse
 	if err := json.Unmarshal(responseBody, &result); err != nil {
 		return "", err
@@ -91,12 +91,12 @@ func extractAutomationIdFromResponse(responseBody []byte, automationName string)
 		return result.Results[0].Id, nil
 	}
 
-	return "", fmt.Errorf("cannot find automation id for automation [%s]", automationName)
+	return "", fmt.Errorf("cannot find playbook id for playbook [%s]", playbookName)
 }
 
-func getAutomationIdByName(automationName string, workspaceID string) (string, error) {
-	filter := fmt.Sprintf(`{"limit": 1, "offset": 0, "filter": {"name": {"$eq": "%s"}}, "select": ["id"]}`, automationName)
-	url := utils.GetBaseURL() + fmt.Sprintf("/api/v1/workspace/%s/automations?q=%s", workspaceID, url.QueryEscape(filter))
+func getPlaybookIdByName(playbookName string, workspaceID string) (string, error) {
+	filter := fmt.Sprintf(`{"limit": 1, "offset": 0, "filter": {"name": {"$eq": "%s"}}, "select": ["id"]}`, playbookName)
+	url := utils.GetBaseURL() + fmt.Sprintf("/api/v1/workspace/%s/playbooks?q=%s", workspaceID, url.QueryEscape(filter))
 	request, err := utils.NewRequest(http.MethodGet, url, nil, nil)
 	if err != nil {
 		return "", err
@@ -123,5 +123,5 @@ func getAutomationIdByName(automationName string, workspaceID string) (string, e
 		return "", nil
 	}
 
-	return extractAutomationIdFromResponse(responseBody, automationName)
+	return extractPlaybookIdFromResponse(responseBody, playbookName)
 }

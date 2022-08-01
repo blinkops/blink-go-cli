@@ -1,4 +1,4 @@
-package automations
+package playbooks
 
 import (
 	"errors"
@@ -12,26 +12,26 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func GetAutomationCommand() *cobra.Command {
+func GetPlaybookCommand() *cobra.Command {
 	command := &cobra.Command{
 		Use:     "get",
 		Aliases: []string{"g"},
-		Short:   "Get automation by name or id",
-		Long:    `The following command will get an automation by name or id`,
-		Example: "get --name my_automation",
-		RunE:    getAutomation,
+		Short:   "Get playbook by name or id",
+		Long:    `The following command will get a playbook by name or id`,
+		Example: "get --name my_playbook",
+		RunE:    getPlaybook,
 	}
 
 	command.PersistentFlags().String(consts.WorkspaceIDAutoGenFlagName, "", "Required. workspace ID")
-	command.Flags().StringP(consts.NameFlagName, "n", "", "The name of the automation")
-	command.Flags().StringP(consts.IDFlagName, "i", "", "The id of the automation")
+	command.Flags().StringP(consts.NameFlagName, "n", "", "The name of the playbook")
+	command.Flags().StringP(consts.IDFlagName, "i", "", "The id of the playbook")
 
 	return command
 }
 
-func performGetAutomationById(automationID, wsID string) error {
+func performGetPlaybookById(playbookID, wsID string) error {
 
-	url := utils.GetBaseURL() + fmt.Sprintf("/api/v1/workspace/%s/automations/%s", wsID, automationID)
+	url := utils.GetBaseURL() + fmt.Sprintf("/api/v1/workspace/%s/playbooks/%s", wsID, playbookID)
 	request, err := utils.NewRequest(http.MethodGet, url, nil, nil)
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func performGetAutomationById(automationID, wsID string) error {
 
 }
 
-func getAutomation(command *cobra.Command, _ []string) error {
+func getPlaybook(command *cobra.Command, _ []string) error {
 
 	wsID, err := command.Flags().GetString(consts.WorkspaceIDAutoGenFlagName)
 	name, err := command.Flags().GetString(consts.NameFlagName)
@@ -74,12 +74,12 @@ func getAutomation(command *cobra.Command, _ []string) error {
 
 	// if both name and id are supplied, name takes priority
 	if name != "" {
-		if id, err = getAutomationIdByName(name, wsID); err != nil {
+		if id, err = getPlaybookIdByName(name, wsID); err != nil {
 			return err
 		}
 	}
 
-	if err := performGetAutomationById(id, wsID); err != nil {
+	if err := performGetPlaybookById(id, wsID); err != nil {
 		return err
 	}
 

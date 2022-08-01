@@ -24,16 +24,16 @@ assert() { # $1: test case description
 # tests begin here
 echo
 echo "create automations:\n"
-automation_id=$(blink automations create -f $inputs_dir/cli_automation_case_1.yaml -p "test pack" $flags)
+automation_id=$(blink playbooks create -f $inputs_dir/cli_automation_case_1.yaml -p "test pack" $flags)
 assert "create automation"
 echo $automation_id
-automation_id2=$(blink automations create -f $inputs_dir/cli_automation_case_2.yaml -p "test pack" $flags)
+automation_id2=$(blink playbooks create -f $inputs_dir/cli_automation_case_2.yaml -p "test pack" $flags)
 assert "create automation"
 echo $automation_id2
 
 echo
 echo "execute automation:\n"
-execution_id=$(blink automations execute --id $automation_id $flags)
+execution_id=$(blink playbooks execute --id $automation_id $flags)
 assert "execute automation"
 echo $execution_id
 
@@ -48,16 +48,16 @@ assert "get automation"
 
 echo
 echo "update automation:\n"
-blink automations update -f $inputs_dir/cli_automation_case_1_update.yaml $flags
+blink playbooks update -f $inputs_dir/cli_automation_case_1_update.yaml $flags
 assert "update automation"
 
 echo
 echo "delete automations:\n"
-blink automations delete --id $automation_id $flags
+blink playbooks delete --id $automation_id $flags
 assert "delete automation"
 
 echo
-blink automations delete --id $automation_id2 $flags
+blink playbooks delete --id $automation_id2 $flags
 assert "delete automation"
 
 unalias blink

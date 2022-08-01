@@ -22,15 +22,15 @@ var exeName = filepath.Base(os.Args[0])
 
 func Setup(_ *cobra.Command, _ []string) (err error) {
 	type config struct {
-		hostname      string
-		apiKey        string
-		workspaceId   string
+		hostname  string
+		apiKey    string
+		workspaceId string
 		workspaceName string
 	}
 
 	configValues := config{
-		hostname:    consts.DefaultBlinkHostname,
-		apiKey:      "",
+		hostname:  consts.DefaultBlinkHostname,
+		apiKey:    "",
 		workspaceId: "",
 	}
 
@@ -129,8 +129,8 @@ func Setup(_ *cobra.Command, _ []string) (err error) {
 	}
 
 	fmt.Printf("\nWrote conflig file to %s\n\n", viper.ConfigFileUsed())
-	fmt.Println("Try it out - list your automations by running the following:")
-	fmt.Println("\tblink automations list")
+	fmt.Println("Try it out - list your playbooks by running the following:")
+	fmt.Println("\tblink playbooks list")
 
 	return nil
 }
