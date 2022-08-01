@@ -1054,133 +1054,6 @@ paths:
       summary: Generate api key for user
       tags:
         - APIKey
-  /connection_types:
-    get:
-      consumes:
-        - application/json
-      description: Returns connection types by a filter
-      operationId: ConnectionTypeFindByFilter
-      parameters:
-        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
-          ''k8s''}}}'' filter is optional'
-          in: query
-          name: q
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            allOf:
-              - $ref: '#/definitions/api_responses.PagingInfo'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.ConnectionType'
-                    type: array
-                type: object
-        "404":
-          description: Can not find Connection Types
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Returns connection types by a filter
-      tags:
-        - Connections
-      x-cobra-command:
-        hidden: true
-    post:
-      consumes:
-        - application/json
-      description: Creates a new Connection type
-      operationId: ConnectionTypeCreate
-      parameters:
-        - description: add connection type
-          in: body
-          name: connection_type
-          required: true
-          schema:
-            $ref: '#/definitions/models.ConnectionType'
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.ConnectionType'
-        "400":
-          description: Cannot create Connection type
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Creates a new Connection type
-      tags:
-        - Connections
-      x-cobra-command:
-        hidden: true
-  /connection_types/{id}:
-    delete:
-      consumes:
-        - application/json
-      description: Deletes a Connection type
-      operationId: ConnectionTypeDelete
-      parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: connection type id
-          schema:
-            type: string
-        "400":
-          description: Cannot delete Connection type
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Deletes a Connection type
-      tags:
-        - Connections
-      x-cobra-command:
-        hidden: true
-    get:
-      consumes:
-        - application/json
-      description: Gets a Connection type by id
-      operationId: ConnectionTypeGetById
-      parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.ConnectionType'
-        "404":
-          description: Cannot find Connection type
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Gets a Connection type by id
-      tags:
-        - Connections
-      x-cobra-command:
-        hidden: true
   /group/{id}:
     delete:
       consumes:
@@ -1720,231 +1593,6 @@ paths:
         - Webhook
       x-cobra-command:
         use: execute
-  /workspace/{ws_id}/connections:
-    get:
-      consumes:
-        - application/json
-      description: Returns connections by a filter
-      operationId: ConnectionFindByFilter
-      parameters:
-        - description: '''{''limit'': 25, ''offset'': 0, ''filter'': {''name'': {''$gt'':
-          ''k8s''}}}'' filter is optional'
-          in: query
-          name: q
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            allOf:
-              - $ref: '#/definitions/api_responses.ResponseWrapper'
-              - properties:
-                  results:
-                    items:
-                      $ref: '#/definitions/models.ConnectionEnhanced'
-                    type: array
-                type: object
-        "404":
-          description: Can not find Connections
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Returns connections by a filter
-      tags:
-        - Connections
-      x-cobra-command:
-        use: search
-    post:
-      consumes:
-        - application/json
-      description: Creates a new Connection
-      operationId: ConnectionCreate
-      parameters:
-        - description: add connection
-          in: body
-          name: connection
-          required: true
-          schema:
-            $ref: '#/definitions/models.Connection'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.Connection'
-        "400":
-          description: Cannot create Connection
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Creates a new Connection
-      tags:
-        - Connections
-      x-cobra-command:
-        use: create
-  /workspace/{ws_id}/connections/{id}:
-    delete:
-      consumes:
-        - application/json
-      description: Deletes a Connection
-      operationId: ConnectionDelete
-      parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: connection id
-          schema:
-            type: string
-        "400":
-          description: Cannot delete Connection
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Deletes a Connection
-      tags:
-        - Connections
-      x-cobra-command:
-        use: delete
-    get:
-      consumes:
-        - application/json
-      description: Gets a Connection by id
-      operationId: ConnectionGetById
-      parameters:
-        - description: ID
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            items:
-              $ref: '#/definitions/models.Connection'
-            type: array
-        "404":
-          description: Cannot find Connection
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Gets a Connection by id
-      tags:
-        - Connections
-      x-cobra-command:
-        use: get
-    post:
-      consumes:
-        - application/json
-      description: Edit an existing Connection
-      operationId: ConnectionEdit
-      parameters:
-        - description: connection edit request
-          in: body
-          name: connection
-          required: true
-          schema:
-            $ref: '#/definitions/v1.ConnectionEditRequest'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-        - description: connection ID
-          in: path
-          name: id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.Connection'
-        "400":
-          description: Cannot create Connection
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Edit an existing Connection
-      tags:
-        - Connections
-      x-cobra-command:
-        use: edit
-  /workspace/{ws_id}/connections/test:
-    post:
-      consumes:
-        - application/json
-      description: Tests a new Connection
-      operationId: TestConnection
-      parameters:
-        - description: test connection
-          in: body
-          name: connection
-          required: true
-          schema:
-            $ref: '#/definitions/v1.TestConnectionRequest'
-        - description: workspace ID
-          in: path
-          name: ws_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-        "400":
-          description: Cannot create Connection
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Tests a new Connection
-      tags:
-        - Connections
-      x-cobra-command:
-        use: test
   /workspace/{ws_id}/executions:
     get:
       consumes:
@@ -2064,7 +1712,7 @@ paths:
         - ApiKeyAuth: []
       summary: Updates an execution
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/executions/{id}/action_history:
@@ -2110,7 +1758,7 @@ paths:
         - ApiKeyAuth: []
       summary: Returns the list of audit commands per an execution
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         use: history
   /workspace/{ws_id}/executions/{id}/cancel:
@@ -2188,7 +1836,7 @@ paths:
         - ApiKeyAuth: []
       summary: Completes/Finished an execution
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/executions/{id}/outputs:
@@ -2308,7 +1956,7 @@ paths:
         - ApiKeyAuth: []
       summary: Returns playbooks by a filter
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         use: search
     post:
@@ -2348,7 +1996,7 @@ paths:
         - ApiKeyAuth: []
       summary: Creates a new Playbook
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/playbooks/{id}:
@@ -2387,7 +2035,7 @@ paths:
         - ApiKeyAuth: []
       summary: Deletes a Playbook
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
     get:
@@ -2421,7 +2069,7 @@ paths:
         - ApiKeyAuth: []
       summary: Gets a playbook by id
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
     put:
@@ -2465,7 +2113,7 @@ paths:
         - ApiKeyAuth: []
       summary: Updates a Playbook
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/playbooks/{id}/execute:
@@ -2511,7 +2159,7 @@ paths:
         - ApiKeyAuth: []
       summary: Executes a complete playbook - in a sync or async mode
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         use: execute
   /workspace/{ws_id}/runner/{id}:
@@ -3190,310 +2838,6 @@ paths:
         - Webhooks
       x-cobra-command:
         use: create
-  /workspaces:
-    post:
-      consumes:
-        - application/json
-      description: Creates a new workspace
-      operationId: CreateWorkspace
-      parameters:
-        - description: add workspace
-          in: body
-          name: workspace
-          required: true
-          schema:
-            $ref: '#/definitions/models.Workspace'
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            $ref: '#/definitions/models.Workspace'
-        "400":
-          description: Can not create workspace
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Creates a new workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: create
-  /workspaces/{id}:
-    delete:
-      consumes:
-        - application/json
-      description: Delete a workspace
-      operationId: DeleteWorkspace
-      parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: connection id
-          schema:
-            type: string
-        "400":
-          description: Can not create workspace
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Delete a workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: delete
-    get:
-      consumes:
-        - application/json
-      description: Describe Workspace
-      operationId: DescribeWorkspace
-      parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/v1.WorkspaceDescription'
-        "400":
-          description: failed to set user role
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Describe Workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: describe
-  /workspaces/{id}/{entity_type}/{entity_id}:
-    delete:
-      consumes:
-        - application/json
-      description: Remove entity from workspace
-      operationId: WorkspaceRemoveEntity
-      parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: entity type (User / Group)
-          in: path
-          name: entity_type
-          required: true
-          type: string
-        - description: entity id
-          in: path
-          name: entity_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ""
-        "400":
-          description: failed to remove user from workspace
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Remove entity from workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: remove-entity
-    post:
-      consumes:
-        - application/json
-      description: List shared resources on workspace
-      operationId: GetSharedResourceInformation
-      parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: entity type
-          in: path
-          name: entity_type
-          required: true
-          type: string
-        - description: entity id
-          in: path
-          name: entity_id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/v1.SharedResourcesInformation'
-        "400":
-          description: failed to list resources
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: List shared resources on workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: get-shared-resources
-  /workspaces/{id}/{entity_type}/{entity_id}/role/{role}:
-    post:
-      consumes:
-        - application/json
-      description: Set user role in workspace
-      operationId: WorkspaceSetUserRole
-      parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: entity type
-          in: path
-          name: entity_type
-          required: true
-          type: string
-        - description: entity id
-          in: path
-          name: entity_id
-          required: true
-          type: string
-        - description: role
-          in: path
-          name: role
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ""
-        "400":
-          description: failed to set user role
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Set user role in workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: set-role
-  /workspaces/{id}/entities:
-    post:
-      consumes:
-        - application/json
-      description: Add entities to workspace
-      operationId: WorkspaceAddEntities
-      parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: entity list
-          in: body
-          name: entities
-          required: true
-          schema:
-            $ref: '#/definitions/v1.EntityList'
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: ""
-        "400":
-          description: Can not add user
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Add entities to workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: add-entity
-  /workspaces/{id}/share:
-    post:
-      consumes:
-        - application/json
-      description: Share resource on workspace with other targets
-      operationId: ShareResource
-      parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: failed to share resource
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Share resource on workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: share-resource
-  /workspaces/{id}/unshare:
-    post:
-      consumes:
-        - application/json
-      description: Un-share resource on workspace with other targets
-      operationId: UnShareResource
-      parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: failed to share resource
-          schema:
-            $ref: '#/definitions/api_responses.ErrorWrapper'
-      security:
-        - ApiKeyAuth: []
-      summary: Un-share resource on workspace
-      tags:
-        - Workspaces
-      x-cobra-command:
-        use: unshare-resource
 securityDefinitions:
   ApiKeyAuth:
     in: header
@@ -3501,50 +2845,36 @@ securityDefinitions:
     type: apiKey
 swagger: "2.0"
 tags:
-  - description: Manage your connections
-    name: Connections
   - description: Controller health and stats
     name: Controller
   - description: Manage your invites
     name: Invites
-  - description: Create and execute your playbooks
-    name: Playbooks
-  - description: Configure your runners
-    name: Runners
+  - description: Create and execute your automations
+    name: Automations
   - description: Manage your tables
     name: Table
   - description: Manage user settings
     name: User Settings
   - description: Send to webhook
     name: Webhook
-  - description: Manage your workspaces
-    name: workspaces
   - description: Get Information on current user
     name: User Info
 x-cobra-command-operations:
-  Connections:
-    example: ""
-    short: Manage your connections
-    use: connections
   Controller:
     example: ""
     hidden: true
     use: controller
   Executions:
-    short: Manage and track your playbook executions
+    short: Manage and track your automation executions
     use: executions
   Invites:
     example: ""
     short: Manage your invites
     use: invites
-  Playbooks:
+  Automations:
     example: ""
-    short: Create and execute your playbooks
-    use: playbooks
-  Runners:
-    example: ""
-    short: Configure your runners
-    use: runner-groups
+    short: Create and execute your automations
+    use: automations
   Settings:
     example: ""
     use: user-settings
@@ -3559,7 +2889,3 @@ x-cobra-command-operations:
     example: ""
     hidden: true
     use: webhook
-  Workspaces:
-    example: ""
-    short: Manage your workspaces
-    use: workspaces

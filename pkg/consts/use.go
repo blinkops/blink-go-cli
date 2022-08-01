@@ -13,4 +13,4 @@ func AddAllowedOperation(name string) {
 	allowedList = append(allowedList, name)
 }
 
-var allowedList = []string{CompletionAutoGen, HelpAutoGen}
+var allowedList = []string{}
