@@ -1712,7 +1712,7 @@ paths:
         - ApiKeyAuth: []
       summary: Updates an execution
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/executions/{id}/action_history:
@@ -1758,7 +1758,7 @@ paths:
         - ApiKeyAuth: []
       summary: Returns the list of audit commands per an execution
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         use: history
   /workspace/{ws_id}/executions/{id}/cancel:
@@ -1836,7 +1836,7 @@ paths:
         - ApiKeyAuth: []
       summary: Completes/Finished an execution
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/executions/{id}/outputs:
@@ -1956,7 +1956,7 @@ paths:
         - ApiKeyAuth: []
       summary: Returns playbooks by a filter
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         use: search
     post:
@@ -1996,7 +1996,7 @@ paths:
         - ApiKeyAuth: []
       summary: Creates a new Playbook
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/playbooks/{id}:
@@ -2035,7 +2035,7 @@ paths:
         - ApiKeyAuth: []
       summary: Deletes a Playbook
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
     get:
@@ -2069,7 +2069,7 @@ paths:
         - ApiKeyAuth: []
       summary: Gets a playbook by id
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
     put:
@@ -2113,7 +2113,7 @@ paths:
         - ApiKeyAuth: []
       summary: Updates a Playbook
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         hidden: true
   /workspace/{ws_id}/playbooks/{id}/execute:
@@ -2159,7 +2159,7 @@ paths:
         - ApiKeyAuth: []
       summary: Executes a complete playbook - in a sync or async mode
       tags:
-        - Playbooks
+        - Automations
       x-cobra-command:
         use: execute
   /workspace/{ws_id}/runner/{id}:
@@ -2849,8 +2849,8 @@ tags:
     name: Controller
   - description: Manage your invites
     name: Invites
-  - description: Create and execute your playbooks
-    name: Playbooks
+  - description: Create and execute your automations
+    name: Automations
   - description: Manage your tables
     name: Table
   - description: Manage user settings
@@ -2865,16 +2865,16 @@ x-cobra-command-operations:
     hidden: true
     use: controller
   Executions:
-    short: Manage and track your playbook executions
+    short: Manage and track your automation executions
     use: executions
   Invites:
     example: ""
     short: Manage your invites
     use: invites
-  Playbooks:
+  Automations:
     example: ""
-    short: Create and execute your playbooks
-    use: playbooks
+    short: Create and execute your automations
+    use: automations
   Settings:
     example: ""
     use: user-settings

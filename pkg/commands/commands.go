@@ -13,7 +13,7 @@ import (
 // be grouped a part of the generated operation
 func GetRegisteredChildCommands() map[string][]*cobra.Command {
 	return map[string][]*cobra.Command{
-		"playbooks": {
+		"automations": {
 			playbooks.ListPlaybooksCommand(),
 			playbooks.CreatePlaybookCommand(),
 			playbooks.UpdatePlaybooksCommand(),

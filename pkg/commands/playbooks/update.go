@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"github.com/blinkops/blink-go-cli/gen/client"
-	"github.com/blinkops/blink-go-cli/gen/client/playbooks"
+	"github.com/blinkops/blink-go-cli/gen/client/automations"
 	"github.com/blinkops/blink-go-cli/pkg/consts"
 	"github.com/go-openapi/strfmt"
 	"github.com/spf13/cobra"
@@ -52,12 +52,12 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 
 	r := utils.NewTransport()
 
-	searchParam := playbooks.NewPlaybookFindByFilterParams()
+	searchParam := automations.NewPlaybookFindByFilterParams()
 	searchParam.Q = fmt.Sprintf(`{"search":{"text":"%s","fields":["name"]}}`, playbookObj.Name)
 	searchParam.WsID = wsID
 
 	playbookResponse, err := client.New(r, strfmt.Default).
-		Playbooks.PlaybookFindByFilter(searchParam, nil)
+		Automations.PlaybookFindByFilter(searchParam, nil)
 	if err != nil {
 		return err
 	}
@@ -90,13 +90,13 @@ func updatePlaybooks(command *cobra.Command, _ []string) error {
 	}
 	playbookObj.PackID = packId
 
-	updateParam := playbooks.NewUpdatePlaybookParams()
+	updateParam := automations.NewUpdatePlaybookParams()
 	updateParam.ID = playbookObj.ID
 	updateParam.WsID = wsID
 	updateParam.Playbook = &playbookObj
 
 	_, err = client.New(r, strfmt.Default).
-		Playbooks.UpdatePlaybook(updateParam, nil)
+		Automations.UpdatePlaybook(updateParam, nil)
 
 	if err != nil {
 		return err
