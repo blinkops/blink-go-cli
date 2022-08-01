@@ -32,7 +32,7 @@ func DeleteAutomationCommand() *cobra.Command {
 
 func performDeleteAutomationById(automationID, wsID string) error {
 
-	url := utils.GetBaseURL() + fmt.Sprintf("/api/v1/workspace/%s/playbooks/%s", wsID, automationID)
+	url := utils.GetBaseURL() + fmt.Sprintf("/api/v1/workspace/%s/automations/%s", wsID, automationID)
 	request, err := utils.NewRequest(http.MethodDelete, url, nil, nil)
 	if err != nil {
 		return err

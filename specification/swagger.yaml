@@ -1916,7 +1916,7 @@ paths:
         - Executions
       x-cobra-command:
         use: details
-  /workspace/{ws_id}/playbooks:
+  /workspace/{ws_id}/automations:
     get:
       consumes:
         - application/json
@@ -1999,7 +1999,7 @@ paths:
         - Automations
       x-cobra-command:
         hidden: true
-  /workspace/{ws_id}/playbooks/{id}:
+  /workspace/{ws_id}/automations/{id}:
     delete:
       consumes:
         - application/json
@@ -2116,7 +2116,7 @@ paths:
         - Automations
       x-cobra-command:
         hidden: true
-  /workspace/{ws_id}/playbooks/{id}/execute:
+  /workspace/{ws_id}/automations/{id}/execute:
     post:
       consumes:
         - application/json

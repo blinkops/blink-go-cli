@@ -21,7 +21,7 @@ import (
 
 func GetAutomationURL(workspaceID string) string {
 	return utils.GetBaseURL() +
-		fmt.Sprintf("/api/v1/workspace/%s/playbooks", workspaceID)
+		fmt.Sprintf("/api/v1/workspace/%s/automations", workspaceID)
 }
 
 func GetFindAutomationPackURL(workspaceID, query string) string {
@@ -96,7 +96,7 @@ func extractAutomationIdFromResponse(responseBody []byte, automationName string)
 
 func getAutomationIdByName(automationName string, workspaceID string) (string, error) {
 	filter := fmt.Sprintf(`{"limit": 1, "offset": 0, "filter": {"name": {"$eq": "%s"}}, "select": ["id"]}`, automationName)
-	url := utils.GetBaseURL() + fmt.Sprintf("/api/v1/workspace/%s/playbooks?q=%s", workspaceID, url.QueryEscape(filter))
+	url := utils.GetBaseURL() + fmt.Sprintf("/api/v1/workspace/%s/automations?q=%s", workspaceID, url.QueryEscape(filter))
 	request, err := utils.NewRequest(http.MethodGet, url, nil, nil)
 	if err != nil {
 		return "", err
