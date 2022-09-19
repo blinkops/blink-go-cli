@@ -5,21 +5,21 @@
 class Blink < Formula
   desc "Awesome CLI for the blink ops platform"
   homepage "https://www.blinkops.com/"
-  version "0.3.22"
+  version "0.3.23"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.22/blink_0.3.22_darwin_amd64.tar.gz"
-      sha256 "dace6ede91674817423881694d8fc79dadea2e93774cfc1e546f1f3827e442db"
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.23/blink_0.3.23_darwin_amd64.tar.gz"
+      sha256 "24ddbdc792a799f821dc2ec981af02bede881c36a8a020830cde7780f38f21e4"
 
       def install
         bin.install "blink"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.22/blink_0.3.22_darwin_arm64.tar.gz"
-      sha256 "d747a619f4bda329e142acd9079c7a3da620769e4a8826c2846e132c266b29d1"
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.23/blink_0.3.23_darwin_arm64.tar.gz"
+      sha256 "c32a817ba68c2c319e9439488a7b015c379fa3c520f47a8e4b852ee8b12e2546"
 
       def install
         bin.install "blink"
@@ -29,16 +29,16 @@ class Blink < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.22/blink_0.3.22_linux_arm64.tar.gz"
-      sha256 "4c6ac658d652cd8d2a26f658a532e8c35b5ab2957ae7c04f330fa713c48a7287"
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.23/blink_0.3.23_linux_arm64.tar.gz"
+      sha256 "2411368090125ef46c105b03786b5c68c6c61596502f91480cdae475294c3870"
 
       def install
         bin.install "blink"
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.22/blink_0.3.22_linux_amd64.tar.gz"
-      sha256 "ece34843f119aa363eab8d3c1615f5e8348e837edb25bd7ddf4b9a125c67d350"
+      url "https://github.com/blinkops/blink-go-cli/releases/download/v0.3.23/blink_0.3.23_linux_amd64.tar.gz"
+      sha256 "bc4b0e0de0d59749289669ba64bf00430a4f4eea431aba0171c0ce0e54ba785d"
 
       def install
         bin.install "blink"
