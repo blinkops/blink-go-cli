@@ -22,15 +22,15 @@ var exeName = filepath.Base(os.Args[0])
 
 func Setup(_ *cobra.Command, _ []string) (err error) {
 	type config struct {
-		hostname  string
-		apiKey    string
-		workspaceId string
+		hostname      string
+		apiKey        string
+		workspaceId   string
 		workspaceName string
 	}
 
 	configValues := config{
-		hostname:  consts.DefaultBlinkHostname,
-		apiKey:    "",
+		hostname:    consts.DefaultBlinkHostname,
+		apiKey:      "",
 		workspaceId: "",
 	}
 
@@ -55,9 +55,7 @@ func Setup(_ *cobra.Command, _ []string) (err error) {
 	}
 
 	prompt = promptui.Prompt{
-		Label: fmt.Sprintf(
-			"Blink API Key (Obtain key by accessing %s/api/v1/apikey in your webbrowser), leave blank to use previously configured value", fullHostname,
-		),
+		Label: "Blink API Key (For help on how the obtain the API key: https://www.docs.blinkops.com/docs/Integrations/Blink/Connection%20Creation#obtaining-the-credentials), leave blank to use previously configured value",
 	}
 	apiKey, err := prompt.Run()
 	if err != nil {
