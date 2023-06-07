@@ -8,7 +8,7 @@ RUN make gen
 RUN make build
 
 ##################
-FROM alpine:3.15 AS blink
+FROM alpine:3 AS blink
 
 WORKDIR /blink
 
